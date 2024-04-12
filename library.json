@@ -1,8 +1,8 @@
 {
     "id": "{0FD76DFF-025C-F13E-15FA-0C6084FE11BA}",
-    "name": "TileVisu Kachelsammlung",
+    "name": "TileVisu Room Header Tile",
     "author": "Stephan Sprick",
-    "url": "https://github.com/da8ter/TileVisu-Kachelsammlung.git",
+    "url": "https://github.com/da8ter/TileVisu-Raum-Kachel/blob/ac4ed7cee6dc6a7dc002b32d6fd119c346ce92fe/RoomHeader/README.md",
     "compatibility": {
         "version": "7.1"
     },
