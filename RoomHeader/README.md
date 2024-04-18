@@ -86,5 +86,3 @@ Icon anzeigen|Icon aus dem Variablenprofil anzeigen
 Variablenicon verwenden|Zeigt das Icon der Variable an
 Wert anzeigen|Zeigt den Variablenwert an
 Variablenname überschreiben|Zeigt den hier eingegebenen Text anstelle des Variablennamen an
-
->>>>>>> c8b880f92cdd22c186a3f23dfe8820b09330b149
