@@ -15,6 +15,11 @@
 * Die Geräte-Status Kachel bildet den aktuellen Status eines Gerätes ab mit Restlaufzeit, Energieverbrauch, Gerätestatus und Programm. (ideal für Waschmaschine, Trockner, Spülmaschine etc.)
 * Weiterer Einsatz kann die Anzeige eines Leistungswertes sein wie z.B. die momentane Leistung einer PV-Anlage. Voraussetzung ist eine Variable die einen Wert zwischen 0 und 100% liefert.
 
+![Kachelaufteilung](https://github.com/da8ter/images/blob/87a84c8b2d70f1f68b169b1b117ccbd687415eda/header_tile_bereiche.jpg)
+
+
+
+
 ### 2. Voraussetzungen
 
 - IP-Symcon ab Version 7.1
