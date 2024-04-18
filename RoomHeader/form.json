@@ -126,7 +126,7 @@
                                                     {
                                                         "type": "ValidationTextBox",
                                                         "name": "InfoLinksAltName",
-                                                        "caption": "Overwrite variable name::"
+                                                        "caption": "Overwrite variable name:"
                                                     }
                                                 ]
                                             }
