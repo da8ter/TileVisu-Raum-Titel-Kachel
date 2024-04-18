@@ -12,13 +12,9 @@
 
 ### 1. Funktionsumfang
 
-* Die Geräte-Status Kachel bildet den aktuellen Status eines Gerätes ab mit Restlaufzeit, Energieverbrauch, Gerätestatus und Programm. (ideal für Waschmaschine, Trockner, Spülmaschine etc.)
-* Weiterer Einsatz kann die Anzeige eines Leistungswertes sein wie z.B. die momentane Leistung einer PV-Anlage. Voraussetzung ist eine Variable die einen Wert zwischen 0 und 100% liefert.
+* Die Header-Kachel ermöglicht es ein Bild und einen Rumnamen abzubilden. Links und Rechts können jeweils zwei Variable eingeblendet werden (z.B. die Raumtemperatur) Im unteren Bereich können links 5 Informationen und rechts 5 Button eingeblendet werden. (z.B. Zentral AUS oder Lichtszene starten)
 
 ![Kachelaufteilung](https://github.com/da8ter/images/blob/87a84c8b2d70f1f68b169b1b117ccbd687415eda/header_tile_bereiche.jpg)
-
-
-
 
 ### 2. Voraussetzungen
 
@@ -28,12 +24,12 @@
 
 * Über den Module Store
 * Über das Module Control folgende URL hinzufügen
-https://github.com/da8ter/TileVisu-Geraete-Status-Kachel.git
+https://github.com/da8ter/TileVisu-Raum-Titel-Kachel.git
 
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
- Unter 'Instanz hinzufügen' kann die Wallbox-Kachel mithilfe des Schnellfilters gefunden werden. (Suchbegriff: Wallbox, TileVisu oder Kachel)  
+ Unter 'Instanz hinzufügen' kann die Wallbox-Kachel mithilfe des Schnellfilters gefunden werden. (Suchbegriff: Raum-Titel, TileVisu oder Kachel)  
 	- Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
 
 ### 5. Kachelkonfiguration
@@ -41,50 +37,52 @@ https://github.com/da8ter/TileVisu-Geraete-Status-Kachel.git
 Grundsätzlicher Hinweis:
 Standardmäßig sind alle Objekte in der Kachelansicht ausgeblendet. Sie werden nur angezeigt, wenn du sie entsprechend konfigurierst. Bitte beachte, dass nicht alle Änderungen an der Konfiguration automatisch in der Kachelansicht sichtbar sind. Sollten Änderungen nicht sofort erscheinen, lade bitte die Seite oder den iFrame neu.
 
-__Kacheldesign__
+__Raumname und Bild__
 Name     | Beschreibung
 -------- | ------------------
-Standard-Hintergrundbild|Ein-/Ausschalten des Standard-Hintergrundbildes.
-Hintergrundbild|Auswahl eines eigenen Medienobjekts als Hintergrund.
-Transparenz Bild|Einstellung der Transparenz des Hintergrundbildes, um es abzudunkeln oder farblich anzupassen. 
+Foto|Hintergrundbild der Kachel (Medienobjekt Typ Bild).
+Transparenz Foto|Einstellung der Transparenz des Hintergrundbildes, um es abzudunkeln oder farblich anzupassen. 
 Kachelhintergrundfarbe|Farbe des Kachelhintergrunds (wird nur bei eingestellter Bildtransparenz sichtbar)
+Raumname|Der Raumname welcher in der Kachelmitte angezeigt wird.
+Schriftfarbe|Schriftfarbe Raumname
+Schriftgröße|Schriftgröße Raumname in em
 
-__Bild__
+__Infobereich__
 Name     | Beschreibung
 -------- | ------------------
-Bildauswahl|Optionen für die Bildauswahl wie eine Waschmaschine, Wäschetrocker oder eigene Bilder.
-Bildbreite|Breite des Wallbox-Bildes, in Prozent der Kachelbreite.
-Eigenes Bild: Status AN|Auswahl eines eigenen Bildes für den Gerätestatus "An".
-Eigenes Bild: Status AUS|Auswahl eines eigenen Bildes für den Gerätestatus "Aus".
+Variable links 1|Die erste anzuzeigende Variable im linken Infobereich
+Variable links 2|Die zweite anzuzeigende Variable im linken Infobereich
+Variable rechts 1|Die erste anzuzeigende Variable im rechten Infobereich
+Variable rechts 2|Die zweite anzuzeigende Variable im rechten Infobereich
+Schriftfarbe|Schriftfarbe Infobereich
+Schriftgröße|Schriftgröße Infobereich in em
 
-__Gerätestatus__
+__Einstellungen (Variablenanzeige)__
 Name     | Beschreibung
 -------- | ------------------
-Statusvariable|Variable, die den aktuellen Status des Geräts wiedergibt. Erfordert eine Integer-Variable mit einem Variablenprofil mit Zustandsassoziationen.
-Schriftgröße|Schriftgröße des Statustextes in EM.
-Zuordnung|Zuweisung von Farbe Bild und Statusbalken aktiv je nach Gerätestatus-Status.
+Variablenname|Variablenname anzeigen
+Icon anzeigen|Icon aus dem Variablenprofil anzeigen
+Variablenicon verwenden|Zeigt das Icon der Variable an
+Wert anzeigen|Zeigt den Variablenwert an
+Variablenname überschreiben|Zeigt den hier eingegebenen Text anstelle des Variablennamen an
 
-__Programm__
+
+__Menüleiste__
 Name     | Beschreibung
 -------- | ------------------
-Programmvariable|Variable, die das aktuelle Programm (z.B. bei einer Waschmaschine das aktuelle Waschprogramm) des Geräts wiedergibt.
+Info 1-5|Variablen die im linken Bereich der Menüleiste angezeigt werden sollen
+Schalter 1-5|Variablen die im rechten Bereich der Menüleiste als Button angezeigt werden sollen. Anforderung: Bool-Variable mit einem Variablenprofil mit Assoziationen. Die Buttonfarbe ist die Farbe welche im Profil eingestellt ist.
+Schriftfarbe|Schriftfarbe Info und Button
+Schriftgröße|Schriftgröße Infobereich und Button in em
+Hintergrund Transparenz|Transparenz der Menüleiste
+Hintergrund Farbe|Hintergrundfarbe Menüleiste
 
-__Fortschrittsbalken__
-
-Stellt den aktuellen Programmfortschritt grafisch dar. Kann prinzipiell jede Variable abbilden die einen wert zwischen 0-100% liefert.
+__Einstellungen (Infovariablen und Button)__
 Name     | Beschreibung
 -------- | ------------------
-Programmfortschritt|Eine Variable, die einen Wert zwischen 0-100% liefert.
-Restlaufzeit|Eine Variable, die eine Restlaufzeit in Sekunden liefert.
-Schriftgröße|Die Schriftgröße der Balkenbeschriftung in em.
-Farbe 1|Farbe 1 des Balken-Farbverlaufs.
-Farbe 2|Farbe 2 des Balken-Farbverlaufs.
-
-__Engergieverbrauch/Kosten__
-
-Name     | Beschreibung
--------- | ------------------
-Aktuelle Leistungsaufnahme|Eine Variable, die die aktuelle Leistungsaufnahme liefert.
-Verbrauch Heute:|Eine Variable, die den heutigen Energieverbrauch liefert.
-Kosten heute:|Eine Variable, die die Stromkosten des aktuellen Tages liefert.
-Schriftgröße:|Schriftgröße der Energieverbrauchanzeige in em
+Breite (nur Button)|Die Breite des Button in px
+Variablenname|Variablenname anzeigen
+Icon anzeigen|Icon aus dem Variablenprofil anzeigen
+Variablenicon verwenden|Zeigt das Icon der Variable an
+Wert anzeigen|Zeigt den Variablenwert an
+Variablenname überschreiben|Zeigt den hier eingegebenen Text anstelle des Variablennamen an
