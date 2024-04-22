@@ -1,6 +1,8 @@
 # Raum-Titel Kachel
 ![Raum-Titel Kachel](https://github.com/da8ter/images/blob/1c5fe63e9757e81e6d8c4c84a63e0b39fa00247c/raum_header.jpg)
 
+Support: https://community.symcon.de/t/html-kachelsammlung-bewohnerstatus-waermepumpe-etc/
+
 
 ### Inhaltsverzeichnis
 
