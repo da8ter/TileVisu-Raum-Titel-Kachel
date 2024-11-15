@@ -373,8 +373,8 @@
                         break;
                     case 'infolinksicon':
                         if (decodedData[parameter] !== "Transparent") {
-                        icon.className = 'iconlinks';
-                        element.classList.add('fa-' + decodedData[parameter]); 
+                        icon1linksdiv.className = 'iconlinks';
+                        infolinksicon1.classList.add('fa-' + decodedData[parameter]); 
                         
                         }
                         break;
@@ -397,8 +397,8 @@
                         break;
                     case 'infolinks2icon':
                         if (decodedData[parameter] !== "Transparent") {
-                        icon.className = 'iconlinks';
-                        element.classList.add('fa-' + decodedData[parameter]); 
+                            icon2linksdiv.className = 'iconlinks';
+                            infolinksicon2.classList.add('fa-' + decodedData[parameter]); 
                         }
                         break;
                     case 'infolinks2name':
@@ -420,8 +420,8 @@
                         break;
                     case 'inforechtsicon':
                         if (decodedData[parameter] !== "Transparent") {
-                            icon.className = 'iconrechts';
-                            element.classList.add('fa-' + decodedData[parameter]); 
+                            icon1rechtsdiv.className = 'iconlinks';
+                            inforechtsicon1.classList.add('fa-' + decodedData[parameter]); 
                         }
                         break;
                     case 'inforechtsname':
@@ -443,8 +443,8 @@
                         break;
                     case 'inforechts2icon':
                         if (decodedData[parameter] !== "Transparent") {
-                            icon.className = 'iconrechts';
-                            element.classList.add('fa-' + decodedData[parameter]); 
+                            icon2rechtsdiv.className = 'iconlinks';
+                            inforechtsicon2.classList.add('fa-' + decodedData[parameter]); 
                         }
                         break;
                     case 'inforechts2name':
@@ -782,7 +782,7 @@
     <div class="maindiv2">
       <div class="left-aligned">
         <div class="left-aligned2" style="align-items: flex-start">
-        <div class="hidden" id="icon"><i class="fa-light" id="infolinksicon"></i></div>
+        <div class="hidden" id="icon1linksdiv"><i class="fa-light" id="infolinksicon1"></i></div>
         <div class="infotext">
             <span class="hidden" id="infolinksname"></span>
             <span class="hidden" id="infolinksdoppelpunkt">:&nbsp;</span>
@@ -791,7 +791,7 @@
     </div>
 
     <div class="left-aligned2" style="align-items: center">
-        <div class="hidden" id="icon"><i class="fa-light" id="infolinksicon"></i></div>
+        <div class="hidden" id="icon2linksdiv"><i class="fa-light" id="infolinksicon2"></i></div>
         <div class="infotext">
             <span class="hidden" id="infolinks2name"></span>
             <span class="hidden" id="infolinks2doppelpunkt">:&nbsp;</span>
@@ -802,7 +802,7 @@
       <div class="center-aligned"><p class="raumname" id="raumname">Info</p></div>
       <div class="right-aligned">
         <div  class="right-aligned2" style="align-items: center">
-            <div class="hidden" id="icon"><i class="fa-light" id="inforechtsicon"></i></div>
+            <div class="hidden" id="icon1rechtsdiv"><i class="fa-light" id="inforechtsicon1"></i></div>
             <div class="infotext">
                 <span class="hidden" id="inforechtsname"></span>
                 <span class="hidden" id="inforechtsdoppelpunkt">:&nbsp;</span>
@@ -810,7 +810,7 @@
             </div>
         </div>
         <div  class="right-aligned2" style="align-items: flex-end">
-            <div class="hidden" id="icon"><i class="fa-light" id="inforechtsicon"></i></div>
+            <div class="hidden" id="icon2rechtsdiv"><i class="fa-light" id="inforechtsicon2"></i></div>
         <div class="infotext">
             <span class="hidden" id="inforechts2name"></span>
             <span class="hidden" id="inforechts2doppelpunkt">:&nbsp;</span>
