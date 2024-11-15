@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <script src="https://kit.fontawesome.com/7da29d74de.js" crossorigin="anonymous"></script>
 
+    <script src="./icons.js"></script>
 
     <style>
         /* Ich passe margin vom Body an und überschreibe somit das Standardpadding der Darstellung zu den Seiten */
@@ -372,7 +372,8 @@
                     case 'infolinksicon':
                         if (decodedData[parameter] !== "Transparent") {
                         element.className = 'iconlinks';
-                        element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
+                        element.classList.add(decodedData[parameter]);
+                        
                         }
                         break;
                     case 'infolinksname':
@@ -779,7 +780,7 @@
     <div class="maindiv2">
       <div class="left-aligned">
         <div class="left-aligned2" style="align-items: flex-start">
-        <div class="iconlinksdiv"><img class="hidden" id="infolinksicon" src=""></div>
+        <div class="iconlinksdiv"><i class="fa-light"></i></div>
         <div class="infotext">
             <span class="hidden" id="infolinksname"></span>
             <span class="hidden" id="infolinksdoppelpunkt">:&nbsp;</span>
