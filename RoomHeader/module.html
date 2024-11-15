@@ -661,7 +661,8 @@
                     case 'info1icon':
                         if (decodedData[parameter] !== "Transparent") {
                         element.className = 'infoicon';
-                        element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
+                        //element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
+                        element.classList.add('fa-' + decodedData[parameter]); 
                         if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") info1trenner.className = 'infotrenner';
                         }
                         break;
@@ -823,7 +824,7 @@
       <div class="menueleistelinks">
 
         <div class="hidden" id="info1trennerstart"></div>
-        <img class="hidden" id="info1icon" src="">
+        <i class="fa-light" id="info1icon"></i>
         <p class="hidden" id="info1name"></p>
         <p class="hidden" id="info1doppelpunkt">:&nbsp;</p>
         <p class="hidden" id="info1asso"></p>
