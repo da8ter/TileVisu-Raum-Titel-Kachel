@@ -839,7 +839,7 @@ const iconMapping = {
                             //element.className = 'iconrechts';
                             //iconrechts2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
                             const oldIconRechts2 = decodedData[parameter];
-                            if (oldIcon !== "Transparent") {
+                            if (oldIconRechts2 !== "Transparent") {
                             const newIcon = iconMapping[oldIconRechts2] || oldIconRechts2; // Fallback auf alten Namen, wenn kein Mapping vorhanden
                             element.className = 'iconrechts';
                             iconrechts2.classList.add(`fa-${newIcon}`);
