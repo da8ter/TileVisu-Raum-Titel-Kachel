@@ -372,7 +372,7 @@
                     case 'infolinksicon':
                         if (decodedData[parameter] !== "Transparent") {
                         element.className = 'iconlinks';
-                        iconlinks1.classList.add('fa-' + decodedData[parameter]); 
+                        iconlinks1.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
                         
                         }
                         break;
@@ -396,7 +396,7 @@
                     case 'infolinks2icon':
                         if (decodedData[parameter] !== "Transparent") {
                             element.className = 'iconlinks';
-                            iconlinks2.classList.add('fa-' + decodedData[parameter]); 
+                            iconlinks2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
                         }
                         break;
                     case 'infolinks2name':
@@ -419,7 +419,7 @@
                     case 'inforechtsicon':
                         if (decodedData[parameter] !== "Transparent") {
                             element.className = 'iconrechts';
-                            iconrechts1.classList.add('fa-' + decodedData[parameter]); 
+                            iconrechts1.classList.add('fa-' + decodedData[parameter].toLowerCase());
                         }
                         break;
                     case 'inforechtsname':
@@ -442,7 +442,7 @@
                     case 'inforechts2icon':
                         if (decodedData[parameter] !== "Transparent") {
                             element.className = 'iconrechts';
-                            iconrechts2.classList.add('fa-' + decodedData[parameter]); 
+                            iconrechts2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
                         }
                         break;
                     case 'inforechts2name':
