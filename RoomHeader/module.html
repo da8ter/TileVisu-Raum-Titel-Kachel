@@ -779,9 +779,15 @@ const iconMapping = {
                         if (!document.getElementById("infolinks2name").classList.contains("hidden")) infolinks2doppelpunkt.className = 'infolinksasso';
                         break;
                     case 'infolinks2icon':
-                        if (decodedData[parameter] !== "Transparent") {
+                        //if (decodedData[parameter] !== "Transparent") {
+                            //element.className = 'iconlinks';
+                            //iconlinks2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
+
+                            const oldIcon = decodedData[parameter];
+                            if (oldIcon !== "Transparent") {
+                            const newIcon = iconMapping[oldIcon] || oldIcon; // Fallback auf alten Namen, wenn kein Mapping vorhanden
                             element.className = 'iconlinks';
-                            iconlinks2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
+                            iconlinks2.classList.add(`fa-${newIcon}`);
                         }
                         break;
                     case 'infolinks2name':
@@ -802,9 +808,15 @@ const iconMapping = {
                         if (!document.getElementById("inforechtsname").classList.contains("hidden")) inforechtsdoppelpunkt.className = 'inforechtsasso';
                         break;
                     case 'inforechtsicon':
-                        if (decodedData[parameter] !== "Transparent") {
-                            element.className = 'iconrechts';
-                            iconrechts1.classList.add('fa-' + decodedData[parameter].toLowerCase());
+                        //if (decodedData[parameter] !== "Transparent") {
+                            //element.className = 'iconrechts';
+                            //iconrechts1.classList.add('fa-' + decodedData[parameter].toLowerCase());
+
+                            const oldIcon = decodedData[parameter];
+                            if (oldIcon !== "Transparent") {
+                            const newIcon = iconMapping[oldIcon] || oldIcon; // Fallback auf alten Namen, wenn kein Mapping vorhanden
+                            element.className = 'iconlinks';
+                            iconrechts1.classList.add(`fa-${newIcon}`);
                         }
                         break;
                     case 'inforechtsname':
@@ -825,9 +837,15 @@ const iconMapping = {
                         if (!document.getElementById("inforechts2name").classList.contains("hidden")) inforechts2doppelpunkt.className = 'inforechtsasso';
                         break;
                     case 'inforechts2icon':
-                        if (decodedData[parameter] !== "Transparent") {
-                            element.className = 'iconrechts';
-                            iconrechts2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
+                        //if (decodedData[parameter] !== "Transparent") {
+                            //element.className = 'iconrechts';
+                            //iconrechts2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
+                            const oldIcon = decodedData[parameter];
+                            if (oldIcon !== "Transparent") {
+                            const newIcon = iconMapping[oldIcon] || oldIcon; // Fallback auf alten Namen, wenn kein Mapping vorhanden
+                            element.className = 'iconlinks';
+                            iconrechts2.classList.add(`fa-${newIcon}`);
+                            
                         }
                         break;
                     case 'inforechts2name':
