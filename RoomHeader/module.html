@@ -754,9 +754,9 @@ const iconMapping = {
 
                         const oldIcon = decodedData[parameter];
                         if (oldIcon !== "Transparent") {
-                        const newIcon = iconMapping[oldIcon] || oldIcon.toLowerCase(); // Fallback auf alten Namen, wenn kein Mapping vorhanden
+                        const newIcon = iconMapping[oldIcon] || oldIcon; // Fallback auf alten Namen, wenn kein Mapping vorhanden
                         element.className = 'iconlinks';
-                        element.classList.add(`fa-${newIcon}`);
+                        iconlinks1.classList.add(`fa-${newIcon}`);
                         
                         
                         }
