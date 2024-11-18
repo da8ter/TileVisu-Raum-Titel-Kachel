@@ -757,8 +757,6 @@ const iconMapping = {
                         const newIcon = iconMapping[oldIcon] || oldIcon; // Fallback auf alten Namen, wenn kein Mapping vorhanden
                         element.className = 'iconlinks';
                         iconlinks1.classList.add(`fa-${newIcon}`);
-                        
-                        
                         }
                         break;
                     case 'infolinksname':
@@ -815,7 +813,7 @@ const iconMapping = {
                             const oldIcon = decodedData[parameter];
                             if (oldIcon !== "Transparent") {
                             const newIcon = iconMapping[oldIcon] || oldIcon; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                            element.className = 'iconlinks';
+                            element.className = 'iconrechts';
                             iconrechts1.classList.add(`fa-${newIcon}`);
                         }
                         break;
@@ -843,7 +841,7 @@ const iconMapping = {
                             const oldIcon = decodedData[parameter];
                             if (oldIcon !== "Transparent") {
                             const newIcon = iconMapping[oldIcon] || oldIcon; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                            element.className = 'iconlinks';
+                            element.className = 'iconrechts';
                             iconrechts2.classList.add(`fa-${newIcon}`);
                             
                         }
