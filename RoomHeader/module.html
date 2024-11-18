@@ -334,7 +334,27 @@
 
 
     <script>
-        function handleMessage(data) {
+
+async function loadIconMapping() {
+    try {
+        const response = await fetch('/assets/iconMapping.json');
+        if (!response.ok) throw new Error('Mapping JSON konnte nicht geladen werden.');
+        return await response.json();
+    } catch (error) {
+        console.error('Fehler beim Laden der Mapping JSON:', error);
+        return {};
+    }
+}
+
+let iconMapping = {};
+
+// Initialisiere das Mapping
+(async () => {
+    iconMapping = await loadIconMapping();
+})();
+
+
+        async function handleMessage(data) {
             //console.log('Rohdaten empfangen:', data);
 
             const decodedData = JSON.parse(data);
@@ -346,6 +366,8 @@
 
                 const element = document.getElementById(parameter.toLowerCase());
                 const parameter2 = String(parameter).toLowerCase();
+
+
                 //console.log('Aktueller Parameter:', parameter, 'Wert:', decodedData[parameter]);
                 var root = document.documentElement;
                 // Abhängig vom Parameter werden allerdings verschiedene Werte angepasst
@@ -370,9 +392,16 @@
                         if (!document.getElementById("infolinksname").classList.contains("hidden")) infolinksdoppelpunkt.className = 'infolinksasso';
                         break;
                     case 'infolinksicon':
-                        if (decodedData[parameter] !== "Transparent") {
+                        //if (decodedData[parameter] !== "Transparent") {
+                        //element.className = 'iconlinks';
+                        //iconlinks1.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
+
+                        const oldIcon = decodedData[parameter];
+                        if (oldIcon !== "Transparent") {
+                        const newIcon = iconMapping[oldIcon] || oldIcon.toLowerCase(); // Fallback auf alten Namen, wenn kein Mapping vorhanden
                         element.className = 'iconlinks';
-                        iconlinks1.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
+                        element.classList.add(`fa-${newIcon}`);
+                        
                         
                         }
                         break;
