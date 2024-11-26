@@ -1057,12 +1057,17 @@ const iconMapping = {
                         if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") info1trenner.className = 'infotrenner';
                         if (!document.getElementById("info1name").classList.contains("hidden")) info1doppelpunkt.className = 'info1asso';
                         break;
-                    case 'info1icon':
+                        case 'info1icon':
                         if (decodedData[parameter] !== "Transparent") {
-                        //element.className = 'infoicon';
-                        //element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
-                        element.classList.add('fa-' + decodedData[parameter]); 
-                        if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") info1trenner.className = 'infotrenner';
+                            // Element sichtbar und Klasse entsprechend hinzufügen
+                            element.classList.add('fa-' + decodedData[parameter]);
+                            
+                            if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") {
+                                info1trenner.className = 'infotrenner';
+                            }
+                        } else {
+                            // Element ausblenden, wenn Transparent
+                            element.classList.add('hidden');
                         }
                         break;
                     case 'info1name':
