@@ -1093,22 +1093,20 @@ const iconMapping = {
                         if (!document.getElementById("info2name").classList.contains("hidden")) info2doppelpunkt.className = 'info2asso';
                         break;
                     case 'info2icon':
-
                         if (decodedData[parameter] !== "Transparent") {
-                            // Element sichtbar und Klasse entsprechend hinzufügen
+                            // Element sichtbar machen
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + decodedData[parameter]);
-                            
-                            
-                            if (info3asso != "" || info4asso != "" || info5asso != "") info2trenner.className = 'infotrenner';
+
+                            // Trenner-Klasse nur setzen, wenn nötig
+                            if (info3asso !== "" || info4asso !== "" || info5asso !== "") {
                                 info2trenner.className = 'infotrenner';
                             }
-                         else {
-                            // Element ausblenden, wenn Transparent
+                        } else {
+                            // Element ausblenden
                             element.classList.add('hidden');
                         }
-
                         break;
                     case 'info2name':
                         element.className = 'info2name';
