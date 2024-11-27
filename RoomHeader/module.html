@@ -809,12 +809,12 @@ const iconMapping = {
                             //element.className = 'iconlinks';
                             //iconlinks2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
 
-                            const oldIconLinks2 = decodedData[parameter];
-                            if (oldIconLinks2 !== "Transparent") {
-                            const newIcon = iconMapping[oldIconLinks2] || oldIconLinks2; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                            element.className = 'iconlinks';
-                            iconlinks2.classList.add(`fa-${newIcon}`);
-                        }
+                        //    const oldIconLinks2 = decodedData[parameter];
+                         //   if (oldIconLinks2 !== "Transparent") {
+                         //   const newIcon = iconMapping[oldIconLinks2] || oldIconLinks2; // Fallback auf alten Namen, wenn kein Mapping vorhanden
+                         //   element.className = 'iconlinks';
+                         //   iconlinks2.classList.add(`fa-${newIcon}`);
+                       // }
 
 
 
@@ -1236,8 +1236,18 @@ const iconMapping = {
                         if (!document.getElementById("info3name").classList.contains("hidden")) info3doppelpunkt.className = 'info3asso';
                         break;
                     case 'info3icon':
-                        element.className = 'infoicon';
-                        element.src = '../../legacy/img/icons/'+decodedData[parameter]+'.svg';
+                    if (decodedData[parameter] !== "Transparent") {
+                            // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+                            // Element sichtbar machen und Klassen hinzufügen
+                            element.classList.remove('hidden');
+                            element.classList.add('fa-light');
+                            element.classList.add('fa-' + mappedIcon.toLowerCase());
+                        } else {
+                            // Element ausblenden
+                            element.classList.add('hidden');
+                        }
                         break;
                     case 'info3name':
                         element.className = 'info3name';
@@ -1258,8 +1268,18 @@ const iconMapping = {
                         if (!document.getElementById("info4name").classList.contains("hidden")) info4doppelpunkt.className = 'info4asso';
                         break;
                     case 'info4icon':
-                        element.className = 'infoicon';
-                        element.src = '../../legacy/img/icons/'+decodedData[parameter]+'.svg';
+                    if (decodedData[parameter] !== "Transparent") {
+                            // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+                            // Element sichtbar machen und Klassen hinzufügen
+                            element.classList.remove('hidden');
+                            element.classList.add('fa-light');
+                            element.classList.add('fa-' + mappedIcon.toLowerCase());
+                        } else {
+                            // Element ausblenden
+                            element.classList.add('hidden');
+                        }
                         break;
                     case 'info4name':
                         element.className = 'info4name';
@@ -1279,8 +1299,18 @@ const iconMapping = {
                         if (!document.getElementById("info5name").classList.contains("hidden")) info5doppelpunkt.className = 'info5asso';
                         break;
                     case 'info5icon':
-                        element.className = 'infoicon';
-                        element.src = '../../legacy/img/icons/'+decodedData[parameter]+'.svg';
+                        if (decodedData[parameter] !== "Transparent") {
+                            // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+                            // Element sichtbar machen und Klassen hinzufügen
+                            element.classList.remove('hidden');
+                            element.classList.add('fa-light');
+                            element.classList.add('fa-' + mappedIcon.toLowerCase());
+                        } else {
+                            // Element ausblenden
+                            element.classList.add('hidden');
+                        }
                         break;
                     case 'info5name':
                         element.className = 'info5name';
