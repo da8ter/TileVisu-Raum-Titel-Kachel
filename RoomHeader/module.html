@@ -1059,16 +1059,16 @@ const iconMapping = {
                         break;
                     case 'info1icon':
                         if (decodedData[parameter] !== "Transparent") {
-                            // Element sichtbar und Klasse entsprechend hinzufügen
+                            // Element sichtbar machen und Klassen hinzufügen
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + decodedData[parameter]);
-                            
-                            
-                            if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") {
+
+                            // Trenner-Klasse nur setzen, wenn mindestens ein assoziiertes Element vorhanden ist
+                            if (info2asso !== "" || info3asso !== "" || info4asso !== "" || info5asso !== "") {
                                 info1trenner.className = 'infotrenner';
                             }
-                         else {
+                        } else {
                             // Element ausblenden, wenn Transparent
                             element.classList.add('hidden');
                         }
