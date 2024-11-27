@@ -864,13 +864,33 @@ const iconMapping = {
                         //if (decodedData[parameter] !== "Transparent") {
                             //element.className = 'iconrechts';
                             //iconrechts2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
-                            const oldIconRechts2 = decodedData[parameter];
-                            if (oldIconRechts2 !== "Transparent") {
-                            const newIcon = iconMapping[oldIconRechts2] || oldIconRechts2; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                            element.className = 'iconrechts';
-                            iconrechts2.classList.add(`fa-${newIcon}`);
+                       //     const oldIconRechts2 = decodedData[parameter];
+                        //    if (oldIconRechts2 !== "Transparent") {
+                        //    const newIcon = iconMapping[oldIconRechts2] || oldIconRechts2; // Fallback auf alten Namen, wenn kein Mapping vorhanden
+                       //     element.className = 'iconrechts';
+                        //    iconrechts2.classList.add(`fa-${newIcon}`);
                             
+                       // }
+
+
+
+                        if (decodedData[parameter] !== "Transparent") {
+                            // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+
+                            // Element sichtbar machen und Klassen hinzufügen
+                            iconrechts2.classList.remove('hidden');
+                            iconrechts2.classList.add('fa-light');
+                            iconrechts2.classList.add('fa-' + mappedIcon.toLowerCase());
+
+
+                        } else {
+                            // Element ausblenden, wenn Transparent
+                            element.classList.add('hidden');
                         }
+
+
                         break;
                     case 'inforechts2name':
                         element.className = 'inforechtsname';
