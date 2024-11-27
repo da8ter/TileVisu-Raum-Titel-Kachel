@@ -752,12 +752,40 @@ const iconMapping = {
                         //element.className = 'iconlinks';
                         //iconlinks1.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
 
-                        const oldIconLinks1 = decodedData[parameter];
-                        if (oldIconLinks1 !== "Transparent") {
-                        const newIcon = iconMapping[oldIconLinks1] || oldIconLinks1; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                        element.className = 'iconlinks';
-                        iconlinks1.classList.add(`fa-${newIcon}`);
+                        //const oldIconLinks1 = decodedData[parameter];
+                        //if (oldIconLinks1 !== "Transparent") {
+                        //const newIcon = iconMapping[oldIconLinks1] || oldIconLinks1; // Fallback auf alten Namen, wenn kein Mapping vorhanden
+                        //element.className = 'iconlinks';
+                        //iconlinks1.classList.add(`fa-${newIcon}`);
+                       // }
+
+
+
+
+
+
+                        if (decodedData[parameter] !== "Transparent") {
+                            // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+
+                            // Element sichtbar machen und Klassen hinzufügen
+                            infolinks1icon.classList.remove('hidden');
+                            infolinks1icon.classList.add('iconrechts');
+                            iconlinks1.classList.add('fa-light');
+                            iconlinks1.classList.add('fa-' + mappedIcon.toLowerCase());
+
+
+                        } else {
+                            // Element ausblenden, wenn Transparent
+                            infolinks1icon.classList.add('hidden');
                         }
+
+
+
+
+
+
                         break;
                     case 'infolinksname':
                         element.className = 'infolinksname';
@@ -787,6 +815,32 @@ const iconMapping = {
                             element.className = 'iconlinks';
                             iconlinks2.classList.add(`fa-${newIcon}`);
                         }
+
+
+
+
+
+                        if (decodedData[parameter] !== "Transparent") {
+                            // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+
+                            // Element sichtbar machen und Klassen hinzufügen
+                            infolinks2icon.classList.remove('hidden');
+                            infolinks2icon.classList.add('iconrechts');
+                            iconlinks2.classList.add('fa-light');
+                            iconlinks2.classList.add('fa-' + mappedIcon.toLowerCase());
+
+
+                        } else {
+                            // Element ausblenden, wenn Transparent
+                            infolinks2icon.classList.add('hidden');
+                        }
+
+
+
+
+
                         break;
                     case 'infolinks2name':
                         element.className = 'infolinksname';
@@ -821,20 +875,21 @@ const iconMapping = {
 
 
 
-                        if (decodedData[parameter] !== "Transparent") {
+                       if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
 
                             // Element sichtbar machen und Klassen hinzufügen
-                            iconrechts1.classList.remove('hidden');
+                            inforechts1icon.classList.remove('hidden');
+                            inforechts1icon.classList.add('iconrechts');
                             iconrechts1.classList.add('fa-light');
                             iconrechts1.classList.add('fa-' + mappedIcon.toLowerCase());
 
 
                         } else {
                             // Element ausblenden, wenn Transparent
-                            element.classList.add('hidden');
+                            inforechts1icon.classList.add('hidden');
                         }
 
 
@@ -888,7 +943,7 @@ const iconMapping = {
 
                         } else {
                             // Element ausblenden, wenn Transparent
-                            iconrechts2.classList.add('hidden');
+                            inforechts2icon.classList.add('hidden');
                         }
 
 
