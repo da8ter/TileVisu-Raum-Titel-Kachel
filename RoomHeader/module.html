@@ -19,169 +19,173 @@
             width: 100%;
             height: 100%;
             background-color: var(--hintergrundfarbe);
-            
+
         }
-.hidden {
-    display: none;
-}
-.maindiv2 {
-  width: 100%;
-  height: 90%;
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-}
 
-.maindiv1 {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  align-content: flex-start;
-  box-sizing: border-box;
-  padding: 0px 0px 0px 0px;
-}
+        .hidden {
+            display: none;
+        }
 
+        .maindiv2 {
+            width: 100%;
+            height: 90%;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
 
-.maindiv1:before {
-  content: " ";
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  opacity: var(--transparenz);
-  background: var(--background-image, none) bottom / cover no-repeat;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-}
-
-.maindiv1 > * {
-  position: relative;
-  z-index: 1;
-}
-
-.left-aligned {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-  align-items: flex-end;
-  /* Inhalt nach links ausrichten */
-  text-align: left;
-  /* Text linksbündig */
-  padding: 0px 0px 10px 0px;
-  width: 20%;
-  height: 100%;
-  padding-left: 20px;
-  box-sizing: border-box;
-}
-
-.left-aligned2 {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  align-items: flex-end;
-  /* Inhalt nach links ausrichten */
-  text-align: left;
-  /* Text linksbündig */
-  padding: 0px 0px 10px 0px;
-
-  padding-right: 30px;
-  box-sizing: border-box;
-}
-
-.center-aligned {
-    display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Inhalt zentrieren (horizontal und vertikal) */
-  padding: 0px 0px 0px 0px;
-  width: 60%;
-  height: 100%;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.right-aligned {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-  align-items: flex-end;
-  /* Inhalt nach rechts ausrichten */
-  text-align: right;
-  /* Text rechtsbündig */
-  padding: 0px 0px 10px 0px;
-  width: 20%;
-  height: 100%;
-  padding-right: 20px;
-  box-sizing: border-box;
-}
-
-.right-aligned2 {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  align-items: flex-end;
-  /* Inhalt nach rechts ausrichten */
-  text-align: right;
-  /* Text rechtsbündig */
-  padding: 0px 0px 10px 0px;
-  padding-left: 30px;
-  box-sizing: border-box;
-}
-
-.menueleiste {
-  backdrop-filter: blur(10px) brightness(1);
-  -webkit-backdrop-filter: blur(10px) brightness(1);
-  background-color: var(--infomenuehintergrundfarbe);
-  width: 100%;
-
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  box-sizing: border-box;
-  border-top: 0px dotted #28cdab;
-    
-}
-.menueleistelinks {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-
-  padding: 0px;
-  text-align: left;
-  height: 100%;
-  box-sizing: border-box;
-}
-.menueleisterechts {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
- 
-  text-align: right;
-  height: 100%;
-  box-sizing: border-box;
-
-}
+        .maindiv1 {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            align-content: flex-start;
+            box-sizing: border-box;
+            padding: 0px 0px 0px 0px;
+        }
 
 
+        .maindiv1:before {
+            content: " ";
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: var(--transparenz);
+            background: var(--background-image, none) bottom / cover no-repeat;
+            background-repeat: no-repeat;
+            background-size: cover;
 
-        .infolinks, 
+        }
+
+        .maindiv1>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-aligned {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-end;
+            /* Inhalt nach links ausrichten */
+            text-align: left;
+            /* Text linksbündig */
+            padding: 0px 0px 10px 0px;
+            width: 20%;
+            height: 100%;
+            padding-left: 20px;
+            box-sizing: border-box;
+        }
+
+        .left-aligned2 {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            /* Inhalt nach links ausrichten */
+            text-align: left;
+            /* Text linksbündig */
+            padding: 0px 0px 10px 0px;
+
+            padding-right: 30px;
+            box-sizing: border-box;
+        }
+
+        .center-aligned {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Inhalt zentrieren (horizontal und vertikal) */
+            padding: 0px 0px 0px 0px;
+            width: 60%;
+            height: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .right-aligned {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: flex-end;
+            /* Inhalt nach rechts ausrichten */
+            text-align: right;
+            /* Text rechtsbündig */
+            padding: 0px 0px 10px 0px;
+            width: 20%;
+            height: 100%;
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+
+        .right-aligned2 {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            /* Inhalt nach rechts ausrichten */
+            text-align: right;
+            /* Text rechtsbündig */
+            padding: 0px 0px 10px 0px;
+            padding-left: 30px;
+            box-sizing: border-box;
+        }
+
+        .menueleiste {
+            backdrop-filter: blur(10px) brightness(1);
+            -webkit-backdrop-filter: blur(10px) brightness(1);
+            background-color: var(--infomenuehintergrundfarbe);
+            width: 100%;
+
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            box-sizing: border-box;
+            border-top: 0px dotted #28cdab;
+
+        }
+
+        .menueleistelinks {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+
+            padding: 0px;
+            text-align: left;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .menueleisterechts {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+
+            text-align: right;
+            height: 100%;
+            box-sizing: border-box;
+
+        }
+
+
+
+        .infolinks,
         .inforechts,
         .infolinksasso,
         .inforechtsasso,
@@ -193,29 +197,17 @@
             white-space: nowrap;
         }
 
-        .infotext{
+        .infotext {
             white-space: nowrap;
         }
 
 
-        .info1asso, 
-        .info2asso, 
-        .info3asso, 
-        .info4asso, 
+        .info1asso,
+        .info2asso,
+        .info3asso,
+        .info4asso,
         .info5asso {
-            
-            padding-right: 1px;
-            padding-left: 1px;
-            font-size: var(--infomenuefontsize);
-            color: var(--infomenueschriftfarbe);
-            white-space: nowrap;
-        }
-        .info1name, 
-        .info2name, 
-        .info3name, 
-        .info4name, 
-        .info5name {
-            
+
             padding-right: 1px;
             padding-left: 1px;
             font-size: var(--infomenuefontsize);
@@ -223,10 +215,23 @@
             white-space: nowrap;
         }
 
-        .schalter1name, 
-        .schalter2name, 
-        .schalter3name, 
-        .schalter4name, 
+        .info1name,
+        .info2name,
+        .info3name,
+        .info4name,
+        .info5name {
+
+            padding-right: 1px;
+            padding-left: 1px;
+            font-size: var(--infomenuefontsize);
+            color: var(--infomenueschriftfarbe);
+            white-space: nowrap;
+        }
+
+        .schalter1name,
+        .schalter2name,
+        .schalter3name,
+        .schalter4name,
         .schalter5name {
             font-size: var(--infomenuefontsize);
             padding-right: 1px;
@@ -235,27 +240,32 @@
         }
 
 
-        .schalter1name, 
-        .schalter2name, 
-        .schalter3name, 
-        .schalter4name, 
-        .schalter5name, 
-        .schalter1asso, 
-        .schalter2asso, 
-        .schalter3asso, 
-        .schalter4asso, 
+        .schalter1name,
+        .schalter2name,
+        .schalter3name,
+        .schalter4name,
+        .schalter5name,
+        .schalter1asso,
+        .schalter2asso,
+        .schalter3asso,
+        .schalter4asso,
         .schalter5asso {
             font-size: var(--infomenuefontsize);
             padding-right: 1px;
             padding-left: 1px;
             white-space: nowrap;
         }
-        .infoicon, .schaltericon {
+
+        .infoicon,
+        .schaltericon {
             color: #ffffff;
             font-size: calc(var(--infomenuefontsize) * 1);
             opacity: 1;
         }
-        .infotrenner, .infotrennerstart, .infolinkstrenner {
+
+        .infotrenner,
+        .infotrennerstart,
+        .infolinkstrenner {
             height: 60%;
             width: 1px;
             background-color: #28CDAB;
@@ -265,6 +275,7 @@
             overflow: visible;
             z-index: 10;
         }
+
         .infotrennerstart {
             margin-left: 0px;
         }
@@ -284,15 +295,22 @@
             font-size: 3em;
             opacity: 0.5;
         }
-        .iconlinks, .iconrechts {
 
-            font-size: calc(var(--infofontsize) * 2.0);;
-            color:white;
+        .iconlinks,
+        .iconrechts {
+
+            font-size: calc(var(--infofontsize) * 2.0);
+            ;
+            color: white;
 
         }
 
 
-        .schalter1, .schalter2, .schalter3, .schalter4, .schalter5 {
+        .schalter1,
+        .schalter2,
+        .schalter3,
+        .schalter4,
+        .schalter5 {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -309,419 +327,419 @@
             box-sizing: border-box;
             height: 100%;
             white-space: nowrap;
-            
+
         }
 
         .schalter1 {
             background-color: var(--schalter1color);
             min-width: var(--schalter1breite);
         }
+
         .schalter2 {
             background-color: var(--schalter2color);
             min-width: var(--schalter2breite);
         }
+
         .schalter3 {
             background-color: var(--schalter3color);
             min-width: var(--schalter3breite);
         }
+
         .schalter4 {
             background-color: var(--schalter4color);
             min-width: var(--schalter4breite);
         }
+
         .schalter5 {
             background-color: var(--schalter5color);
             min-width: var(--schalter5breite);
         }
-
-
-
-
-    </style> 
+    </style>
 
 
     <script>
 
-const iconMapping = {
-"Aircraft": "plane-up",
-"Alert": "bell-on",
-  "ArrowRight": "right-long",
-  "Backspace": "caret-left",
-  "Basement": "house",
-  "Bath": "bath",
-  "Battery": "car-battery",
-  "Bed": "bed",
-  "Bike": "bicycle",
-  "Book": "book",
-  "Bulb": "lightbulb",
-  "Calendar": "calendar-day",
-  "Camera": "camera",
-  "Car": "car-side",
-  "Caret": "i",
-  "Cat": "cat",
-  "Climate": "arrows-spin",
-  "Clock": "clock",
-  "Close": "xmark",
-  "CloseAll": "xmark-large",
-  "Cloud": "cloud",
-  "Cloudy": "clouds",
-  "Cocktail": "martini-glass",
-  "Cross": "xmark",
-  "Database": "database",
-  "Dining": "utensils",
-  "Distance": "arrows-left-right-to-line",
-  "DoctorBag": "briefcase-medical",
-  "Dog": "dog",
-  "Doll": "nesting-dolls",
-  "Dollar": "dollar-sign",
-  "Door": "door-closed",
-  "Download": "download",
-  "Drops": "raindrops",
-  "Duck": "duck",
-  "Edit": "pen",
-  "Electricity": "bolt",
-  "EnergyProduction": "circle-bolt",
-  "EnergySolar": "solar-panel",
-  "EnergyStorage": "square-bolt",
-  "ErlenmeyerFlask": "flask-round-potion",
-  "Euro": "euro-sign",
-  "Execute": "hand-back-point-up",
-  "Eyes": "eye",
-  "Factory": "industry",
-  "Favorite": "star",
-  "Female": "venus",
-  "Fitness": "dumbbell",
-  "Flag": "flag",
-  "Flame": "fire-flame-curved",
-  "FloorLamp": "lamp-floor",
-  "Flower": "flower",
-  "Fog": "cloud-fog",
-  "Garage": "garage",
-  "Gas": "gas-pump",
-  "Gauge": "gauge",
-  "Gear": "wrench-simple",
-  "Graph": "chart-line",
-  "GroundFloor": "house",
-  "Handicap": "wheelchair",
-  "Heart": "heart",
-  "Help": "note-medical",
-  "HollowArrowDown": "chevron-down",
-  "HollowArrowLeft": "chevron-left",
-  "HollowArrowRight": "chevron-right",
-  "HollowArrowUp": "chevron-up",
-  "HollowDoubleArrowDown": "chevrons-down",
-  "HollowDoubleArrowLeft": "chevrons-left",
-  "HollowDoubleArrowRight": "chevrons-right",
-  "HollowDoubleArrowUp": "chevrons-up",
-  "HollowLargeArrowDown": "angle-down",
-  "HollowLargeArrowLeft": "angle-left",
-  "HollowLargeArrowRight": "angle-right",
-  "HollowLargeArrowUp": "angle-up",
-  "Hourglass": "hourglass-half",
-  "HouseRemote": "house-signal",
-  "Image": "image",
-  "Information": "info",
-  "Intensity": "signal",
-  "Internet": "globe",
-  "IPS": "house",
-  "Jalousie": "shutters",
-  "Key": "key",
-  "Keyboard": "keyboard",
-  "Kitchen": "kitchen-set",
-  "Leaf": "leaf",
-  "Light": "lightbulb",
-  "Lightning": "cloud-bolt",
-  "Link": "share",
-  "Lock": "lock-keyhole",
-  "LockClosed": "lock",
-  "LockOpen": "lock-open",
-  "Macro": "puzzle",
-  "Mail": "envelope",
-  "Male": "mars",
-  "Melody": "music",
-  "Menu": "grid",
-  "Minus": "minus",
-  "Mobile": "mobile",
-  "Moon": "moon",
-  "Motion": "person-running",
-  "Move": "arrows-up-down-left-right",
-  "Music": "music",
-  "Network": "network-wired",
-  "Notebook": "laptop",
-  "Ok": "check",
-  "Pacifier": "baby",
-  "Paintbrush": "paintbrush",
-  "Pants": "",
-  "Party": "champagne-glass",
-  "People": "users",
-  "Plug": "plug",
-  "Plus": "plus",
-  "Popcorn": "popcorn",
-  "Power": "power-off",
-  "Presence": "house-user",
-  "Radiator": "heat",
-  "Raffstore": "blinds-open",
-  "Rainfall": "cloud-showers",
-  "Recycling": "recycle",
-  "Remote": "mobile-signal-out",
-  "Repeat": "rotate-right",
-  "Return": "arrow-turn-down-left",
-  "Robot": "robot",
-  "Rocket": "rocket",
-  "Script": "caret-right",
-  "Shift": "arrow-up",
-  "Shower": "shower",
-  "Shuffle": "shuffle",
-  "Shutter": "sort",
-  "Sink": "sink",
-  "Sleep": "snooze",
-  "Sleet": "cloud-sleet",
-  "Snow": "cloud-snow",
-  "Snowflake": "snowflake",
-  "Sofa": "couch",
-  "Speaker": "volume",
-  "Speedo": "gauge-simple",
-  "Stars": "stars",
-  "Sun": "sun",
-  "Sunny": "cloud-sun",
-  "Talk": "message-dots",
-  "Tap": "faucet-drip",
-  "Teddy": "teddy-bear",
-  "Tee": "shirt",
-  "Telephone": "phone",
-  "Temperature": "temperature-full",
-  "Thunder": "cloud-bolt",
-  "Title": "t",
-  "TopFloor": "house",
-  "Tree": "tree-deciduous",
-  "TurnLeft": "rotate-left",
-  "TurnRight": "rotate-right",
-  "TV": "tv",
-  "Umbrella": "umbrella",
-  "Unicorn": "unicorn",
-  "Ventilation": "fan",
-  "Warning": "triangle-exclamation",
-  "Wave": "water",
-  "WC": "toilet",
-  "Wellness": "tree-palm",
-  "WindDirection": "compass",
-  "Window": "window-frame",
-  "WindSpeed": "windsock",
-  "XBMC": "film",
-  "Battery-0": "battery-empty",
-  "Battery-50": "battery-half",
-  "Battery-100": "battery-full",
-  "Door-0": "door-open",
-  "Door-100": "door-closed",
-  "EnergyStorage-0": "square-bolt",
-  "EnergyStorage-25": "square-bolt",
-  "EnergyStorage-50": "square-bolt",
-  "EnergyStorage-75": "square-bolt",
-  "EnergyStorage-100": "square-bolt",
-  "Eyes-0": "eye-slash",
-  "Eyes-100": "eye",
-  "FloorLamp-0": "lamp-floor",
-  "FloorLamp-100": "lamp-floor",
-  "Garage-0": "garage-car",
-  "Garage-25": "garage-open",
-  "Garage-100": "garage",
-  "Hourglass-0": "hourglass-half",
-  "Hourglass-30": "hourglass-half",
-  "Hourglass-60": "hourglass-half",
-  "Hourglass-100": "hourglass-half",
-  "Intensity-0": "signal-weak",
-  "Intensity-25": "signal-fair",
-  "Intensity-50": "signal-good",
-  "Intensity-75": "signal-strong",
-  "Intensity-100": "signal",
-  "Jalousie-0": "blinds-raised",
-  "Jalousie-50": "blinds-raised",
-  "Jalousie-100": "blinds",
-  "Light-0": "lightbulb",
-  "Light-1": "lightbulb-on",
-  "Light-25": "lightbulb-on",
-  "Light-50": "lightbulb-on",
-  "Light-75": "lightbulb-on",
-  "Light-100": "lightbulb-on",
-  "Lock-0": "lock-keyhole-open",
-  "Lock-100": "lock-keyhole",
-  "Presence-0": "house-blank",
-  "Presence-100": "house-user",
-  "Raffstore-0": "blinds-raised",
-  "Raffstore-50": "blinds-raised",
-  "Raffstore-100": "blinds",
-  "Speaker-0": "volume-xmark",
-  "Speaker-1": "volume-off",
-  "Speaker-25": "volume-low",
-  "Speaker-50": "volume",
-  "Speaker-100": "volume-high",
-  "Speedo-0": "gauge-simple-min",
-  "Speedo-25": "gauge-simple-low",
-  "Speedo-50": "gauge-simple",
-  "Speedo-75": "gauge-simple-high",
-  "Speedo-100": "gauge-simple-max",
-  "Temperature-0": "temperature-empty",
-  "Temperature-25": "temperature-quarter",
-  "Temperature-50": "temperature-half",
-  "Temperature-75": "temperature-three-quarters",
-  "Temperature-100": "temperature-full",
-  "Window-0": "window-frame-open",
-  "Window-100": "window-frame",
-  "WindSpeed-0": "windsock",
-  "WindSpeed-30": "windsock",
-  "WindSpeed-60": "windsock",
-  "WindSpeed-100": "windsock",
-  "Clock-12-00": "clock-twelve",
-  "Clock-12-05": "clock-twelve",
-  "Clock-12-10": "clock-twelve",
-  "Clock-12-15": "clock-twelve",
-  "Clock-12-20": "clock-twelve",
-  "Clock-12-25": "clock-twelve",
-  "Clock-12-30": "clock-twelve-thirty",
-  "Clock-12-35": "clock-twelve-thirty",
-  "Clock-12-40": "clock-twelve-thirty",
-  "Clock-12-45": "clock-twelve-thirty",
-  "Clock-12-50": "clock-twelve-thirty",
-  "Clock-12-55": "clock-twelve-thirty",
-  "Clock-13-00": "clock-one",
-  "Clock-13-05": "clock-one",
-  "Clock-13-10": "clock-one",
-  "Clock-13-15": "clock-one",
-  "Clock-13-20": "clock-one",
-  "Clock-13-25": "clock-one",
-  "Clock-13-30": "clock-one-thirty",
-  "Clock-13-35": "clock-one-thirty",
-  "Clock-13-40": "clock-one-thirty",
-  "Clock-13-45": "clock-one-thirty",
-  "Clock-13-50": "clock-one-thirty",
-  "Clock-13-55": "clock-one-thirty",
-  "Clock-14-00": "clock-two",
-  "Clock-14-05": "clock-two",
-  "Clock-14-10": "clock-two",
-  "Clock-14-15": "clock-two",
-  "Clock-14-20": "clock-two",
-  "Clock-14-25": "clock-two",
-  "Clock-14-30": "clock-two-thirty",
-  "Clock-14-35": "clock-two-thirty",
-  "Clock-14-40": "clock-two-thirty",
-  "Clock-14-45": "clock-two-thirty",
-  "Clock-14-50": "clock-two-thirty",
-  "Clock-14-55": "clock-two-thirty",
-  "Clock-15-00": "clock-three",
-  "Clock-15-05": "clock-three",
-  "Clock-15-10": "clock-three",
-  "Clock-15-15": "clock-three",
-  "Clock-15-20": "clock-three",
-  "Clock-15-25": "clock-three",
-  "Clock-15-30": "clock-three-thirty",
-  "Clock-15-35": "clock-three-thirty",
-  "Clock-15-40": "clock-three-thirty",
-  "Clock-15-45": "clock-three-thirty",
-  "Clock-15-50": "clock-three-thirty",
-  "Clock-15-55": "clock-three-thirty",
-  "Clock-16-00": "clock-four",
-  "Clock-16-05": "clock-four",
-  "Clock-16-10": "clock-four",
-  "Clock-16-15": "clock-four",
-  "Clock-16-20": "clock-four",
-  "Clock-16-25": "clock-four",
-  "Clock-16-30": "clock-four-thirty",
-  "Clock-16-35": "clock-four-thirty",
-  "Clock-16-40": "clock-four-thirty",
-  "Clock-16-45": "clock-four-thirty",
-  "Clock-16-50": "clock-four-thirty",
-  "Clock-16-55": "clock-four-thirty",
-  "Clock-17-00": "clock-five",
-  "Clock-17-05": "clock-five",
-  "Clock-17-10": "clock-five",
-  "Clock-17-15": "clock-five",
-  "Clock-17-20": "clock-five",
-  "Clock-17-25": "clock-five",
-  "Clock-17-30": "clock-five-thirty",
-  "Clock-17-35": "clock-five-thirty",
-  "Clock-17-40": "clock-five-thirty",
-  "Clock-17-45": "clock-five-thirty",
-  "Clock-17-50": "clock-five-thirty",
-  "Clock-17-55": "clock-five-thirty",
-  "Clock-18-00": "clock-six",
-  "Clock-18-05": "clock-six",
-  "Clock-18-10": "clock-six",
-  "Clock-18-15": "clock-six",
-  "Clock-18-20": "clock-six",
-  "Clock-18-25": "clock-six",
-  "Clock-18-30": "clock-six-thirty",
-  "Clock-18-35": "clock-six-thirty",
-  "Clock-18-40": "clock-six-thirty",
-  "Clock-18-45": "clock-six-thirty",
-  "Clock-18-50": "clock-six-thirty",
-  "Clock-18-55": "clock-six-thirty",
-  "Clock-19-00": "clock-seven",
-  "Clock-19-05": "clock-seven",
-  "Clock-19-10": "clock-seven",
-  "Clock-19-15": "clock-seven",
-  "Clock-19-20": "clock-seven",
-  "Clock-19-25": "clock-seven",
-  "Clock-19-30": "clock-seven-thirty",
-  "Clock-19-35": "clock-seven-thirty",
-  "Clock-19-40": "clock-seven-thirty",
-  "Clock-19-45": "clock-seven-thirty",
-  "Clock-19-50": "clock-seven-thirty",
-  "Clock-19-55": "clock-seven-thirty",
-  "Clock-20-00": "clock-eight",
-  "Clock-20-05": "clock-eight",
-  "Clock-20-10": "clock-eight",
-  "Clock-20-15": "clock-eight",
-  "Clock-20-20": "clock-eight",
-  "Clock-20-25": "clock-eight",
-  "Clock-20-30": "clock-eight-thirty",
-  "Clock-20-35": "clock-eight-thirty",
-  "Clock-20-40": "clock-eight-thirty",
-  "Clock-20-45": "clock-eight-thirty",
-  "Clock-20-50": "clock-eight-thirty",
-  "Clock-20-55": "clock-eight-thirty",
-  "Clock-21-00": "clock-nine",
-  "Clock-21-05": "clock-nine",
-  "Clock-21-10": "clock-nine",
-  "Clock-21-15": "clock-nine",
-  "Clock-21-20": "clock-nine",
-  "Clock-21-25": "clock-nine",
-  "Clock-21-30": "clock-nine-thirty",
-  "Clock-21-35": "clock-nine-thirty",
-  "Clock-21-40": "clock-nine-thirty",
-  "Clock-21-45": "clock-nine-thirty",
-  "Clock-21-50": "clock-nine-thirty",
-  "Clock-21-55": "clock-nine-thirty",
-  "Clock-22-00": "clock-ten",
-  "Clock-22-05": "clock-ten",
-  "Clock-22-10": "clock-ten",
-  "Clock-22-15": "clock-ten",
-  "Clock-22-20": "clock-ten",
-  "Clock-22-25": "clock-ten",
-  "Clock-22-30": "clock-ten-thirty",
-  "Clock-22-35": "clock-ten-thirty",
-  "Clock-22-40": "clock-ten-thirty",
-  "Clock-22-45": "clock-ten-thirty",
-  "Clock-22-50": "clock-ten-thirty",
-  "Clock-22-55": "clock-ten-thirty",
-  "Clock-23-00": "clock-eleven",
-  "Clock-23-05": "clock-eleven",
-  "Clock-23-10": "clock-eleven",
-  "Clock-23-15": "clock-eleven",
-  "Clock-23-20": "clock-eleven",
-  "Clock-23-25": "clock-eleven",
-  "Clock-23-30": "clock-eleven-thirty",
-  "Clock-23-35": "clock-eleven-thirty",
-  "Clock-23-40": "clock-eleven-thirty",
-  "Clock-23-45": "clock-eleven-thirty",
-  "Clock-23-50": "clock-eleven-thirty",
-  "Clock-23-55": "clock-eleven-thirty"
-};
+        const iconMapping = {
+            "Aircraft": "plane-up",
+            "Alert": "bell-on",
+            "ArrowRight": "right-long",
+            "Backspace": "caret-left",
+            "Basement": "house",
+            "Bath": "bath",
+            "Battery": "car-battery",
+            "Bed": "bed",
+            "Bike": "bicycle",
+            "Book": "book",
+            "Bulb": "lightbulb",
+            "Calendar": "calendar-day",
+            "Camera": "camera",
+            "Car": "car-side",
+            "Caret": "i",
+            "Cat": "cat",
+            "Climate": "arrows-spin",
+            "Clock": "clock",
+            "Close": "xmark",
+            "CloseAll": "xmark-large",
+            "Cloud": "cloud",
+            "Cloudy": "clouds",
+            "Cocktail": "martini-glass",
+            "Cross": "xmark",
+            "Database": "database",
+            "Dining": "utensils",
+            "Distance": "arrows-left-right-to-line",
+            "DoctorBag": "briefcase-medical",
+            "Dog": "dog",
+            "Doll": "nesting-dolls",
+            "Dollar": "dollar-sign",
+            "Door": "door-closed",
+            "Download": "download",
+            "Drops": "raindrops",
+            "Duck": "duck",
+            "Edit": "pen",
+            "Electricity": "bolt",
+            "EnergyProduction": "circle-bolt",
+            "EnergySolar": "solar-panel",
+            "EnergyStorage": "square-bolt",
+            "ErlenmeyerFlask": "flask-round-potion",
+            "Euro": "euro-sign",
+            "Execute": "hand-back-point-up",
+            "Eyes": "eye",
+            "Factory": "industry",
+            "Favorite": "star",
+            "Female": "venus",
+            "Fitness": "dumbbell",
+            "Flag": "flag",
+            "Flame": "fire-flame-curved",
+            "FloorLamp": "lamp-floor",
+            "Flower": "flower",
+            "Fog": "cloud-fog",
+            "Garage": "garage",
+            "Gas": "gas-pump",
+            "Gauge": "gauge",
+            "Gear": "wrench-simple",
+            "Graph": "chart-line",
+            "GroundFloor": "house",
+            "Handicap": "wheelchair",
+            "Heart": "heart",
+            "Help": "note-medical",
+            "HollowArrowDown": "chevron-down",
+            "HollowArrowLeft": "chevron-left",
+            "HollowArrowRight": "chevron-right",
+            "HollowArrowUp": "chevron-up",
+            "HollowDoubleArrowDown": "chevrons-down",
+            "HollowDoubleArrowLeft": "chevrons-left",
+            "HollowDoubleArrowRight": "chevrons-right",
+            "HollowDoubleArrowUp": "chevrons-up",
+            "HollowLargeArrowDown": "angle-down",
+            "HollowLargeArrowLeft": "angle-left",
+            "HollowLargeArrowRight": "angle-right",
+            "HollowLargeArrowUp": "angle-up",
+            "Hourglass": "hourglass-half",
+            "HouseRemote": "house-signal",
+            "Image": "image",
+            "Information": "info",
+            "Intensity": "signal",
+            "Internet": "globe",
+            "IPS": "house",
+            "Jalousie": "shutters",
+            "Key": "key",
+            "Keyboard": "keyboard",
+            "Kitchen": "kitchen-set",
+            "Leaf": "leaf",
+            "Light": "lightbulb",
+            "Lightning": "cloud-bolt",
+            "Link": "share",
+            "Lock": "lock-keyhole",
+            "LockClosed": "lock",
+            "LockOpen": "lock-open",
+            "Macro": "puzzle",
+            "Mail": "envelope",
+            "Male": "mars",
+            "Melody": "music",
+            "Menu": "grid",
+            "Minus": "minus",
+            "Mobile": "mobile",
+            "Moon": "moon",
+            "Motion": "person-running",
+            "Move": "arrows-up-down-left-right",
+            "Music": "music",
+            "Network": "network-wired",
+            "Notebook": "laptop",
+            "Ok": "check",
+            "Pacifier": "baby",
+            "Paintbrush": "paintbrush",
+            "Pants": "",
+            "Party": "champagne-glass",
+            "People": "users",
+            "Plug": "plug",
+            "Plus": "plus",
+            "Popcorn": "popcorn",
+            "Power": "power-off",
+            "Presence": "house-user",
+            "Radiator": "heat",
+            "Raffstore": "blinds-open",
+            "Rainfall": "cloud-showers",
+            "Recycling": "recycle",
+            "Remote": "mobile-signal-out",
+            "Repeat": "rotate-right",
+            "Return": "arrow-turn-down-left",
+            "Robot": "robot",
+            "Rocket": "rocket",
+            "Script": "caret-right",
+            "Shift": "arrow-up",
+            "Shower": "shower",
+            "Shuffle": "shuffle",
+            "Shutter": "sort",
+            "Sink": "sink",
+            "Sleep": "snooze",
+            "Sleet": "cloud-sleet",
+            "Snow": "cloud-snow",
+            "Snowflake": "snowflake",
+            "Sofa": "couch",
+            "Speaker": "volume",
+            "Speedo": "gauge-simple",
+            "Stars": "stars",
+            "Sun": "sun",
+            "Sunny": "cloud-sun",
+            "Talk": "message-dots",
+            "Tap": "faucet-drip",
+            "Teddy": "teddy-bear",
+            "Tee": "shirt",
+            "Telephone": "phone",
+            "Temperature": "temperature-full",
+            "Thunder": "cloud-bolt",
+            "Title": "t",
+            "TopFloor": "house",
+            "Tree": "tree-deciduous",
+            "TurnLeft": "rotate-left",
+            "TurnRight": "rotate-right",
+            "TV": "tv",
+            "Umbrella": "umbrella",
+            "Unicorn": "unicorn",
+            "Ventilation": "fan",
+            "Warning": "triangle-exclamation",
+            "Wave": "water",
+            "WC": "toilet",
+            "Wellness": "tree-palm",
+            "WindDirection": "compass",
+            "Window": "window-frame",
+            "WindSpeed": "windsock",
+            "XBMC": "film",
+            "Battery-0": "battery-empty",
+            "Battery-50": "battery-half",
+            "Battery-100": "battery-full",
+            "Door-0": "door-open",
+            "Door-100": "door-closed",
+            "EnergyStorage-0": "square-bolt",
+            "EnergyStorage-25": "square-bolt",
+            "EnergyStorage-50": "square-bolt",
+            "EnergyStorage-75": "square-bolt",
+            "EnergyStorage-100": "square-bolt",
+            "Eyes-0": "eye-slash",
+            "Eyes-100": "eye",
+            "FloorLamp-0": "lamp-floor",
+            "FloorLamp-100": "lamp-floor",
+            "Garage-0": "garage-car",
+            "Garage-25": "garage-open",
+            "Garage-100": "garage",
+            "Hourglass-0": "hourglass-half",
+            "Hourglass-30": "hourglass-half",
+            "Hourglass-60": "hourglass-half",
+            "Hourglass-100": "hourglass-half",
+            "Intensity-0": "signal-weak",
+            "Intensity-25": "signal-fair",
+            "Intensity-50": "signal-good",
+            "Intensity-75": "signal-strong",
+            "Intensity-100": "signal",
+            "Jalousie-0": "blinds-raised",
+            "Jalousie-50": "blinds-raised",
+            "Jalousie-100": "blinds",
+            "Light-0": "lightbulb",
+            "Light-1": "lightbulb-on",
+            "Light-25": "lightbulb-on",
+            "Light-50": "lightbulb-on",
+            "Light-75": "lightbulb-on",
+            "Light-100": "lightbulb-on",
+            "Lock-0": "lock-keyhole-open",
+            "Lock-100": "lock-keyhole",
+            "Presence-0": "house-blank",
+            "Presence-100": "house-user",
+            "Raffstore-0": "blinds-raised",
+            "Raffstore-50": "blinds-raised",
+            "Raffstore-100": "blinds",
+            "Speaker-0": "volume-xmark",
+            "Speaker-1": "volume-off",
+            "Speaker-25": "volume-low",
+            "Speaker-50": "volume",
+            "Speaker-100": "volume-high",
+            "Speedo-0": "gauge-simple-min",
+            "Speedo-25": "gauge-simple-low",
+            "Speedo-50": "gauge-simple",
+            "Speedo-75": "gauge-simple-high",
+            "Speedo-100": "gauge-simple-max",
+            "Temperature-0": "temperature-empty",
+            "Temperature-25": "temperature-quarter",
+            "Temperature-50": "temperature-half",
+            "Temperature-75": "temperature-three-quarters",
+            "Temperature-100": "temperature-full",
+            "Window-0": "window-frame-open",
+            "Window-100": "window-frame",
+            "WindSpeed-0": "windsock",
+            "WindSpeed-30": "windsock",
+            "WindSpeed-60": "windsock",
+            "WindSpeed-100": "windsock",
+            "Clock-12-00": "clock-twelve",
+            "Clock-12-05": "clock-twelve",
+            "Clock-12-10": "clock-twelve",
+            "Clock-12-15": "clock-twelve",
+            "Clock-12-20": "clock-twelve",
+            "Clock-12-25": "clock-twelve",
+            "Clock-12-30": "clock-twelve-thirty",
+            "Clock-12-35": "clock-twelve-thirty",
+            "Clock-12-40": "clock-twelve-thirty",
+            "Clock-12-45": "clock-twelve-thirty",
+            "Clock-12-50": "clock-twelve-thirty",
+            "Clock-12-55": "clock-twelve-thirty",
+            "Clock-13-00": "clock-one",
+            "Clock-13-05": "clock-one",
+            "Clock-13-10": "clock-one",
+            "Clock-13-15": "clock-one",
+            "Clock-13-20": "clock-one",
+            "Clock-13-25": "clock-one",
+            "Clock-13-30": "clock-one-thirty",
+            "Clock-13-35": "clock-one-thirty",
+            "Clock-13-40": "clock-one-thirty",
+            "Clock-13-45": "clock-one-thirty",
+            "Clock-13-50": "clock-one-thirty",
+            "Clock-13-55": "clock-one-thirty",
+            "Clock-14-00": "clock-two",
+            "Clock-14-05": "clock-two",
+            "Clock-14-10": "clock-two",
+            "Clock-14-15": "clock-two",
+            "Clock-14-20": "clock-two",
+            "Clock-14-25": "clock-two",
+            "Clock-14-30": "clock-two-thirty",
+            "Clock-14-35": "clock-two-thirty",
+            "Clock-14-40": "clock-two-thirty",
+            "Clock-14-45": "clock-two-thirty",
+            "Clock-14-50": "clock-two-thirty",
+            "Clock-14-55": "clock-two-thirty",
+            "Clock-15-00": "clock-three",
+            "Clock-15-05": "clock-three",
+            "Clock-15-10": "clock-three",
+            "Clock-15-15": "clock-three",
+            "Clock-15-20": "clock-three",
+            "Clock-15-25": "clock-three",
+            "Clock-15-30": "clock-three-thirty",
+            "Clock-15-35": "clock-three-thirty",
+            "Clock-15-40": "clock-three-thirty",
+            "Clock-15-45": "clock-three-thirty",
+            "Clock-15-50": "clock-three-thirty",
+            "Clock-15-55": "clock-three-thirty",
+            "Clock-16-00": "clock-four",
+            "Clock-16-05": "clock-four",
+            "Clock-16-10": "clock-four",
+            "Clock-16-15": "clock-four",
+            "Clock-16-20": "clock-four",
+            "Clock-16-25": "clock-four",
+            "Clock-16-30": "clock-four-thirty",
+            "Clock-16-35": "clock-four-thirty",
+            "Clock-16-40": "clock-four-thirty",
+            "Clock-16-45": "clock-four-thirty",
+            "Clock-16-50": "clock-four-thirty",
+            "Clock-16-55": "clock-four-thirty",
+            "Clock-17-00": "clock-five",
+            "Clock-17-05": "clock-five",
+            "Clock-17-10": "clock-five",
+            "Clock-17-15": "clock-five",
+            "Clock-17-20": "clock-five",
+            "Clock-17-25": "clock-five",
+            "Clock-17-30": "clock-five-thirty",
+            "Clock-17-35": "clock-five-thirty",
+            "Clock-17-40": "clock-five-thirty",
+            "Clock-17-45": "clock-five-thirty",
+            "Clock-17-50": "clock-five-thirty",
+            "Clock-17-55": "clock-five-thirty",
+            "Clock-18-00": "clock-six",
+            "Clock-18-05": "clock-six",
+            "Clock-18-10": "clock-six",
+            "Clock-18-15": "clock-six",
+            "Clock-18-20": "clock-six",
+            "Clock-18-25": "clock-six",
+            "Clock-18-30": "clock-six-thirty",
+            "Clock-18-35": "clock-six-thirty",
+            "Clock-18-40": "clock-six-thirty",
+            "Clock-18-45": "clock-six-thirty",
+            "Clock-18-50": "clock-six-thirty",
+            "Clock-18-55": "clock-six-thirty",
+            "Clock-19-00": "clock-seven",
+            "Clock-19-05": "clock-seven",
+            "Clock-19-10": "clock-seven",
+            "Clock-19-15": "clock-seven",
+            "Clock-19-20": "clock-seven",
+            "Clock-19-25": "clock-seven",
+            "Clock-19-30": "clock-seven-thirty",
+            "Clock-19-35": "clock-seven-thirty",
+            "Clock-19-40": "clock-seven-thirty",
+            "Clock-19-45": "clock-seven-thirty",
+            "Clock-19-50": "clock-seven-thirty",
+            "Clock-19-55": "clock-seven-thirty",
+            "Clock-20-00": "clock-eight",
+            "Clock-20-05": "clock-eight",
+            "Clock-20-10": "clock-eight",
+            "Clock-20-15": "clock-eight",
+            "Clock-20-20": "clock-eight",
+            "Clock-20-25": "clock-eight",
+            "Clock-20-30": "clock-eight-thirty",
+            "Clock-20-35": "clock-eight-thirty",
+            "Clock-20-40": "clock-eight-thirty",
+            "Clock-20-45": "clock-eight-thirty",
+            "Clock-20-50": "clock-eight-thirty",
+            "Clock-20-55": "clock-eight-thirty",
+            "Clock-21-00": "clock-nine",
+            "Clock-21-05": "clock-nine",
+            "Clock-21-10": "clock-nine",
+            "Clock-21-15": "clock-nine",
+            "Clock-21-20": "clock-nine",
+            "Clock-21-25": "clock-nine",
+            "Clock-21-30": "clock-nine-thirty",
+            "Clock-21-35": "clock-nine-thirty",
+            "Clock-21-40": "clock-nine-thirty",
+            "Clock-21-45": "clock-nine-thirty",
+            "Clock-21-50": "clock-nine-thirty",
+            "Clock-21-55": "clock-nine-thirty",
+            "Clock-22-00": "clock-ten",
+            "Clock-22-05": "clock-ten",
+            "Clock-22-10": "clock-ten",
+            "Clock-22-15": "clock-ten",
+            "Clock-22-20": "clock-ten",
+            "Clock-22-25": "clock-ten",
+            "Clock-22-30": "clock-ten-thirty",
+            "Clock-22-35": "clock-ten-thirty",
+            "Clock-22-40": "clock-ten-thirty",
+            "Clock-22-45": "clock-ten-thirty",
+            "Clock-22-50": "clock-ten-thirty",
+            "Clock-22-55": "clock-ten-thirty",
+            "Clock-23-00": "clock-eleven",
+            "Clock-23-05": "clock-eleven",
+            "Clock-23-10": "clock-eleven",
+            "Clock-23-15": "clock-eleven",
+            "Clock-23-20": "clock-eleven",
+            "Clock-23-25": "clock-eleven",
+            "Clock-23-30": "clock-eleven-thirty",
+            "Clock-23-35": "clock-eleven-thirty",
+            "Clock-23-40": "clock-eleven-thirty",
+            "Clock-23-45": "clock-eleven-thirty",
+            "Clock-23-50": "clock-eleven-thirty",
+            "Clock-23-55": "clock-eleven-thirty"
+        };
 
         async function handleMessage(data) {
-            console.log('Rohdaten empfangen:', data);
+            //console.log('Rohdaten empfangen:', data);
 
             const decodedData = JSON.parse(data);
-            
-            console.log('Decodierte Daten:', decodedData);
+
+            //console.log('Decodierte Daten:', decodedData);
 
             for (const parameter in decodedData) {
                 //console.log('Aktueller Parameter:', parameter, 'Wert:', decodedData[parameter]);
@@ -739,14 +757,13 @@ const iconMapping = {
                         mainDiv.style.setProperty('--background-image', 'url(' + decodedData[parameter] + ')');
                         break;
                     case 'infomenueswitch':
-                        if(decodedData[parameter] == true){
-                        menueleiste.className = 'menueleiste'; 
+                        if (decodedData[parameter] == true) {
+                            menueleiste.className = 'menueleiste';
                         }
-                        else
-                        {
-                        menueleiste.className = 'hidden';
+                        else {
+                            menueleiste.className = 'hidden';
                         }
-                        break; 
+                        break;
                     case 'infolinksasso':
                         element.className = 'infolinksasso';
                         element.textContent = decodedData[parameter];
@@ -754,21 +771,6 @@ const iconMapping = {
                         if (!document.getElementById("infolinksname").classList.contains("hidden")) infolinksdoppelpunkt.className = 'infolinksasso';
                         break;
                     case 'infolinksicon':
-                        //if (decodedData[parameter] !== "Transparent") {
-                        //element.className = 'iconlinks';
-                        //iconlinks1.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
-
-                        //const oldIconLinks1 = decodedData[parameter];
-                        //if (oldIconLinks1 !== "Transparent") {
-                        //const newIcon = iconMapping[oldIconLinks1] || oldIconLinks1; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                        //element.className = 'iconlinks';
-                        //iconlinks1.classList.add(`fa-${newIcon}`);
-                       // }
-
-
-
-
-
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
@@ -787,44 +789,25 @@ const iconMapping = {
                             infolinks1icon.classList.add('hidden');
                         }
 
-
-
-
-
-
                         break;
                     case 'infolinksname':
                         element.className = 'infolinksname';
                         element.textContent = decodedData[parameter];
                         break;
                     case 'infolinksaltname':
-                        if(decodedData[parameter] != ''){
-                        infolinksname.className = 'infolinksname';
-                        infolinksname.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            infolinksname.className = 'infolinksname';
+                            infolinksname.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
 
-                        case 'infolinks2asso':
+                    case 'infolinks2asso':
                         element.className = 'infolinksasso';
                         element.textContent = decodedData[parameter];
                         if (infolinks2name != "" && infolinks2icon == "") infolinks2doppelpunkt.className = 'infolinksasso';
                         if (!document.getElementById("infolinks2name").classList.contains("hidden")) infolinks2doppelpunkt.className = 'infolinksasso';
                         break;
                     case 'infolinks2icon':
-                        //if (decodedData[parameter] !== "Transparent") {
-                            //element.className = 'iconlinks';
-                            //iconlinks2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
-
-                        //    const oldIconLinks2 = decodedData[parameter];
-                         //   if (oldIconLinks2 !== "Transparent") {
-                         //   const newIcon = iconMapping[oldIconLinks2] || oldIconLinks2; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                         //   element.className = 'iconlinks';
-                         //   iconlinks2.classList.add(`fa-${newIcon}`);
-                       // }
-
-
-
-
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
@@ -843,21 +826,17 @@ const iconMapping = {
                             infolinks2icon.classList.add('hidden');
                         }
 
-
-
-
-
                         break;
                     case 'infolinks2name':
                         element.className = 'infolinksname';
                         element.textContent = decodedData[parameter];
                         break;
                     case 'infolinks2altname':
-                        if(decodedData[parameter] != ''){
-                        infolinks2name.className = 'infolinksname';
-                        infolinks2name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            infolinks2name.className = 'infolinksname';
+                            infolinks2name.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
 
                     case 'inforechtsasso':
                         element.className = 'inforechtsasso';
@@ -866,22 +845,8 @@ const iconMapping = {
                         if (!document.getElementById("inforechtsname").classList.contains("hidden")) inforechtsdoppelpunkt.className = 'inforechtsasso';
                         break;
                     case 'inforechtsicon':
-                        //if (decodedData[parameter] !== "Transparent") {
-                            //element.className = 'iconrechts';
-                            //iconrechts1.classList.add('fa-' + decodedData[parameter].toLowerCase());
 
-                         //   const oldIconRechts1 = decodedData[parameter];
-                          //  if (oldIconRechts1 !== "Transparent") {
-                          //  const newIcon = iconMapping[oldIconRechts1] || oldIconRechts1; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                         //   element.className = 'iconrechts';
-                         //   iconrechts1.classList.add(`fa-${newIcon}`);
-                       // }
-
-
-
-
-
-                       if (decodedData[parameter] !== "Transparent") {
+                        if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
@@ -898,22 +863,17 @@ const iconMapping = {
                             inforechts1icon.classList.add('hidden');
                         }
 
-
-
-
-
-
                         break;
                     case 'inforechtsname':
                         element.className = 'inforechtsname';
                         element.textContent = decodedData[parameter];
                         break;
                     case 'inforechtsaltname':
-                        if(decodedData[parameter] != ''){
-                        inforechtsname.className = 'inforechtsname';
-                        inforechtsname.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            inforechtsname.className = 'inforechtsname';
+                            inforechtsname.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
 
                     case 'inforechts2asso':
                         element.className = 'inforechtsasso';
@@ -922,18 +882,6 @@ const iconMapping = {
                         if (!document.getElementById("inforechts2name").classList.contains("hidden")) inforechts2doppelpunkt.className = 'inforechtsasso';
                         break;
                     case 'inforechts2icon':
-                        //if (decodedData[parameter] !== "Transparent") {
-                            //element.className = 'iconrechts';
-                            //iconrechts2.classList.add('fa-' + decodedData[parameter].toLowerCase()); 
-                       //     const oldIconRechts2 = decodedData[parameter];
-                        //    if (oldIconRechts2 !== "Transparent") {
-                        //    const newIcon = iconMapping[oldIconRechts2] || oldIconRechts2; // Fallback auf alten Namen, wenn kein Mapping vorhanden
-                       //     element.className = 'iconrechts';
-                        //    iconrechts2.classList.add(`fa-${newIcon}`);
-                            
-                       // }
-
-
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
@@ -959,11 +907,11 @@ const iconMapping = {
                         element.textContent = decodedData[parameter];
                         break;
                     case 'inforechts2altname':
-                        if(decodedData[parameter] != ''){
-                        inforechts2name.className = 'inforechtsname';
-                        inforechts2name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            inforechts2name.className = 'inforechtsname';
+                            inforechts2name.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
 
 
 
@@ -974,14 +922,9 @@ const iconMapping = {
                         if (!document.getElementById("schalter1name").classList.contains("hidden")) schalter1doppelpunkt.className = 'schalter1asso';
                         break;
                     case 'schalter1icon':
-                       // if (decodedData[parameter] !== "Transparent") {
-                       // element.className = 'schaltericon';
-                       // element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
-                       // schalter1.className = 'schalter1';
-
 
                         if (decodedData[parameter] !== "Transparent") {
-                                                        // Hole das Icon-Mapping
+                            // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
@@ -993,7 +936,6 @@ const iconMapping = {
                             element.classList.add('hidden');
                         }
 
-                        //}
                         break;
                     case 'schalter1name':
                         element.className = 'schalter1name';
@@ -1001,10 +943,10 @@ const iconMapping = {
                         element.textContent = decodedData[parameter];
                         break;
                     case 'schalter1altname':
-                        if(decodedData[parameter] != ''){
-                        schalter1name.className = 'schalter1name';
-                        schalter1.className = 'schalter1';
-                        schalter1name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            schalter1name.className = 'schalter1name';
+                            schalter1.className = 'schalter1';
+                            schalter1name.textContent = decodedData[parameter];
                         }
                         break;
                     case 'schalter2asso':
@@ -1014,14 +956,9 @@ const iconMapping = {
                         if (!document.getElementById("schalter2name").classList.contains("hidden")) schalter2doppelpunkt.className = 'schalter2asso';
                         break;
                     case 'schalter2icon':
-                       // if (decodedData[parameter] !== "Transparent") {
-                       // element.className = 'schaltericon';
-                       // element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
-                       // schalter2.className = 'schalter2';
-                       // }
 
                         if (decodedData[parameter] !== "Transparent") {
-                                                        // Hole das Icon-Mapping
+                            // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
@@ -1033,20 +970,19 @@ const iconMapping = {
                             element.classList.add('hidden');
                         }
 
-
                         break;
                     case 'schalter2name':
                         element.className = 'schalter2name';
                         element.textContent = decodedData[parameter];
                         schalter2.className = 'schalter2';
-                        break;  
+                        break;
                     case 'schalter2altname':
-                        if(decodedData[parameter] != ''){
-                        schalter2name.className = 'schalter2name';
-                        schalter2.className = 'schalter2';
-                        schalter2name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            schalter2name.className = 'schalter2name';
+                            schalter2.className = 'schalter2';
+                            schalter2name.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
                     case 'schalter3asso':
                         element.className = 'schalter3asso';
                         schalter3.className = 'schalter3';
@@ -1054,14 +990,9 @@ const iconMapping = {
                         if (!document.getElementById("schalter3name").classList.contains("hidden")) schalter3doppelpunkt.className = 'schalter3asso';
                         break;
                     case 'schalter3icon':
-                       // if (decodedData[parameter] !== "Transparent") {
-                       // element.className = 'schaltericon';
-                       // element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
-                       // schalter3.className = 'schalter3';
-                       // }
 
-                       if (decodedData[parameter] !== "Transparent") {
-                                                        // Hole das Icon-Mapping
+                        if (decodedData[parameter] !== "Transparent") {
+                            // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
@@ -1079,10 +1010,10 @@ const iconMapping = {
                         element.textContent = decodedData[parameter];
                         break;
                     case 'schalter3altname':
-                        if(decodedData[parameter] != ''){
-                        schalter3name.className = 'schalter3name';
-                        schalter3.className = 'schalter3';
-                        schalter3name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            schalter3name.className = 'schalter3name';
+                            schalter3.className = 'schalter3';
+                            schalter3name.textContent = decodedData[parameter];
                         }
                         break;
                     case 'schalter4asso':
@@ -1092,14 +1023,9 @@ const iconMapping = {
                         if (!document.getElementById("schalter4name").classList.contains("hidden")) schalter4doppelpunkt.className = 'schalter4asso';
                         break;
                     case 'schalter4icon':
-                        //if (decodedData[parameter] !== "Transparent") {
-                        //element.className = 'schaltericon';
-                        //element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
-                        //schalter4.className = 'schalter4';
-                        //}
 
                         if (decodedData[parameter] !== "Transparent") {
-                                                        // Hole das Icon-Mapping
+                            // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
@@ -1116,12 +1042,12 @@ const iconMapping = {
                         element.className = 'schalter4name';
                         element.textContent = decodedData[parameter];
                         schalter4.className = 'schalter4';
-                        break;  
+                        break;
                     case 'schalter4altname':
-                        if(decodedData[parameter] != ''){
-                        schalter4name.className = 'schalter4name';
-                        schalter4.className = 'schalter4';
-                        schalter4name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            schalter4name.className = 'schalter4name';
+                            schalter4.className = 'schalter4';
+                            schalter4name.textContent = decodedData[parameter];
                         }
                         break;
                     case 'schalter5asso':
@@ -1131,15 +1057,9 @@ const iconMapping = {
                         if (!document.getElementById("schalter5name").classList.contains("hidden")) schalter5doppelpunkt.className = 'schalter5asso';
                         break;
                     case 'schalter5icon':
-                       // if (decodedData[parameter] !== "Transparent") {
-                        //element.className = 'schaltericon';
-                        //element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
-                        //schalter5.className = 'schalter5';
-                        //}
-                        //break;
 
                         if (decodedData[parameter] !== "Transparent") {
-                                                        // Hole das Icon-Mapping
+                            // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
@@ -1156,32 +1076,32 @@ const iconMapping = {
                         element.className = 'schalter5name';
                         schalter5.className = 'schalter5';
                         element.textContent = decodedData[parameter];
-                        break;  
+                        break;
                     case 'schalter5altname':
-                        if(decodedData[parameter] != ''){
-                        schalter5name.className = 'schalter5name';
-                        schalter5.className = 'schalter5';
-                        schalter5name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            schalter5name.className = 'schalter5name';
+                            schalter5.className = 'schalter5';
+                            schalter5name.textContent = decodedData[parameter];
                         }
                         break;
                     case 'schalterschriftgroesse':
                         root.style.setProperty('--schalterschriftgroesse', decodedData[parameter] + 'em');
-                        break;    
+                        break;
                     case 'schalter1breite':
                         root.style.setProperty('--schalter1breite', decodedData[parameter] + 'px');
-                        break; 
+                        break;
                     case 'schalter2breite':
                         root.style.setProperty('--schalter2breite', decodedData[parameter] + 'px');
-                        break; 
+                        break;
                     case 'schalter3breite':
                         root.style.setProperty('--schalter3breite', decodedData[parameter] + 'px');
-                        break; 
+                        break;
                     case 'schalter4breite':
                         root.style.setProperty('--schalter4breite', decodedData[parameter] + 'px');
-                        break; 
+                        break;
                     case 'schalter5breite':
                         root.style.setProperty('--schalter5breite', decodedData[parameter] + 'px');
-                        break; 
+                        break;
                     case 'schalter1color':
                         root.style.setProperty('--schalter1color', decodedData[parameter]);
                         break;
@@ -1216,7 +1136,7 @@ const iconMapping = {
                     case 'infomenuehintergrundfarbe':
                         root.style.setProperty('--infomenuehintergrundfarbe', decodedData[parameter]);
 
-                        break; 
+                        break;
                     case 'transparenz':
                         root.style.setProperty('--transparenz', decodedData[parameter]);
                         break;
@@ -1263,11 +1183,11 @@ const iconMapping = {
                         if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") info1trenner.className = 'infotrenner';
                         break;
                     case 'info1altname':
-                        if(decodedData[parameter] != ''){
-                        info1name.className = 'info1name';
-                        info1name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            info1name.className = 'info1name';
+                            info1name.textContent = decodedData[parameter];
                         }
-                        break;    
+                        break;
                     case 'info2asso':
                         element.className = 'info2asso';
                         element.textContent = decodedData[parameter];
@@ -1278,7 +1198,7 @@ const iconMapping = {
                         break;
                     case 'info2icon':
                         if (decodedData[parameter] !== "Transparent") {
-                                                        // Hole das Icon-Mapping
+                            // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
@@ -1300,11 +1220,11 @@ const iconMapping = {
                         element.textContent = decodedData[parameter];
                         break;
                     case 'info2altname':
-                        if(decodedData[parameter] != ''){
-                        info2name.className = 'info2name';
-                        info2name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            info2name.className = 'info2name';
+                            info2name.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
                     case 'info3asso':
                         element.className = 'info3asso';
                         element.textContent = decodedData[parameter];
@@ -1314,7 +1234,7 @@ const iconMapping = {
                         if (!document.getElementById("info3name").classList.contains("hidden")) info3doppelpunkt.className = 'info3asso';
                         break;
                     case 'info3icon':
-                    if (decodedData[parameter] !== "Transparent") {
+                        if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
@@ -1332,11 +1252,11 @@ const iconMapping = {
                         element.textContent = decodedData[parameter];
                         break;
                     case 'info3altname':
-                        if(decodedData[parameter] != ''){
-                        info3name.className = 'info3name';
-                        info3name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            info3name.className = 'info3name';
+                            info3name.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
                     case 'info4asso':
                         element.className = 'info4asso';
                         element.textContent = decodedData[parameter];
@@ -1346,7 +1266,7 @@ const iconMapping = {
                         if (!document.getElementById("info4name").classList.contains("hidden")) info4doppelpunkt.className = 'info4asso';
                         break;
                     case 'info4icon':
-                    if (decodedData[parameter] !== "Transparent") {
+                        if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
@@ -1364,11 +1284,11 @@ const iconMapping = {
                         element.textContent = decodedData[parameter];
                         break;
                     case 'info4altname':
-                        if(decodedData[parameter] != ''){
-                        info4name.className = 'info4name';
-                        info4name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            info4name.className = 'info4name';
+                            info4name.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
                     case 'info5asso':
                         element.className = 'info5asso';
                         element.textContent = decodedData[parameter];
@@ -1395,11 +1315,11 @@ const iconMapping = {
                         element.textContent = decodedData[parameter];
                         break;
                     case 'info5altname':
-                        if(decodedData[parameter] != ''){
-                        info5name.className = 'info5name';
-                        info5name.textContent = decodedData[parameter];
+                        if (decodedData[parameter] != '') {
+                            info5name.className = 'info5name';
+                            info5name.textContent = decodedData[parameter];
                         }
-                        break; 
+                        break;
                     default:
                         //console.log('Setze innerHTML für', parameter);
                         // Setze innerHTML nur, wenn das Element gefunden wurde
@@ -1412,116 +1332,119 @@ const iconMapping = {
     </script>
 
 
-<div class="maindiv1"> 
-    <div class="maindiv2">
-      <div class="left-aligned">
-        <div class="left-aligned2" style="align-items: flex-start">
-        <div class="hidden" id="infolinks1icon"><i class="fa-light" id="iconlinks1"></i></div>
-        <div class="infotext">
-            <span class="hidden" id="infolinksname"></span>
-            <span class="hidden" id="infolinksdoppelpunkt">:&nbsp;</span>
-            <span class="hidden" id="infolinksasso"></span>
-        </div>
-    </div>
+    <div class="maindiv1">
+        <div class="maindiv2">
+            <div class="left-aligned">
+                <div class="left-aligned2" style="align-items: flex-start">
+                    <div class="hidden" id="infolinks1icon"><i class="fa-light" id="iconlinks1"></i></div>
+                    <div class="infotext">
+                        <span class="hidden" id="infolinksname"></span>
+                        <span class="hidden" id="infolinksdoppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="infolinksasso"></span>
+                    </div>
+                </div>
 
-    <div class="left-aligned2" style="align-items: center">
-        <div class="hidden" id="infolinks2icon"><i class="fa-light" id="iconlinks2"></i></div>
-        <div class="infotext">
-            <span class="hidden" id="infolinks2name"></span>
-            <span class="hidden" id="infolinks2doppelpunkt">:&nbsp;</span>
-            <span class="hidden" id="infolinks2asso">test</span>
-        </div>
-    </div>  
-      </div>
-      <div class="center-aligned"><p class="raumname" id="raumname">Info</p></div>
-      <div class="right-aligned">
-        <div  class="right-aligned2" style="align-items: center">
-            <div class="hidden" id="inforechtsicon"><i class="fa-light" id="iconrechts1"></i></div>
-            <div class="infotext">
-                <span class="hidden" id="inforechtsname"></span>
-                <span class="hidden" id="inforechtsdoppelpunkt">:&nbsp;</span>
-                <span class="hidden" id="inforechtsasso"></span>
+                <div class="left-aligned2" style="align-items: center">
+                    <div class="hidden" id="infolinks2icon"><i class="fa-light" id="iconlinks2"></i></div>
+                    <div class="infotext">
+                        <span class="hidden" id="infolinks2name"></span>
+                        <span class="hidden" id="infolinks2doppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="infolinks2asso">test</span>
+                    </div>
+                </div>
+            </div>
+            <div class="center-aligned">
+                <p class="raumname" id="raumname">Info</p>
+            </div>
+            <div class="right-aligned">
+                <div class="right-aligned2" style="align-items: center">
+                    <div class="hidden" id="inforechtsicon"><i class="fa-light" id="iconrechts1"></i></div>
+                    <div class="infotext">
+                        <span class="hidden" id="inforechtsname"></span>
+                        <span class="hidden" id="inforechtsdoppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="inforechtsasso"></span>
+                    </div>
+                </div>
+                <div class="right-aligned2" style="align-items: flex-end">
+                    <div class="hidden" id="inforechts2icon"><i class="fa-light" id="iconrechts2"></i></div>
+                    <div class="infotext">
+                        <span class="hidden" id="inforechts2name"></span>
+                        <span class="hidden" id="inforechts2doppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="inforechts2asso">test</span>
+                    </div>
+                </div>
             </div>
         </div>
-        <div  class="right-aligned2" style="align-items: flex-end">
-            <div class="hidden" id="inforechts2icon"><i class="fa-light" id="iconrechts2"></i></div>
-        <div class="infotext">
-            <span class="hidden" id="inforechts2name"></span>
-            <span class="hidden" id="inforechts2doppelpunkt">:&nbsp;</span>
-            <span class="hidden" id="inforechts2asso">test</span>
+        <div class="hidden" id="menueleiste">
+            <div class="menueleistelinks">
+
+                <div class="hidden" id="info1trennerstart"></div>
+                <i class="hidden" id="info1icon" style="margin-right: 5px;"></i>
+                <p class="hidden" id="info1name"></p>
+                <p class="hidden" id="info1doppelpunkt">:&nbsp;</p>
+                <p class="hidden" id="info1asso"></p>
+                <div class="hidden" id="info1trenner"></div>
+
+                <i class="hidden" id="info2icon" style="margin-right: 5px;"></i>
+                <p class="hidden" id="info2name"></p>
+                <p class="hidden" id="info2doppelpunkt">:&nbsp;</p>
+                <p class="hidden" id="info2asso"></p>
+                <div class="hidden" id="info2trenner"></div>
+
+                <i class="hidden" id="info3icon" style="margin-right: 5px;"></i>
+                <p class="hidden" id="info3name"></p>
+                <p class="hidden" id="info3doppelpunkt">:&nbsp;</p>
+                <p class="hidden" id="info3asso"></p>
+                <div class="hidden" id="info3trenner"></div>
+
+                <i class="hidden" id="info4icon" style="margin-right: 5px;"></i>
+                <p class="hidden" id="info4name"></p>
+                <p class="hidden" id="info4doppelpunkt">:&nbsp;</p>
+                <p class="hidden" id="info4asso"></p>
+                <div class="hidden" id="info4trenner"></div>
+
+                <i class="hidden" id="info5icon" style="margin-right: 5px;"></i>
+                <p class="hidden" id="info5name"></p>
+                <p class="hidden" id="info5doppelpunkt">:&nbsp;</p>
+                <p class="hidden" id="info5asso"></p>
+            </div>
+
+            <div class="menueleisterechts">
+
+                <button id="schalter1" class="hidden" onclick="requestAction('Schalter1', 1);">
+                    <i class="hidden" id="schalter1icon" style="margin-right: 5px;"></i>
+                    <p class="hidden" id="schalter1name"></p>
+                    <p class="hidden" id="schalter1doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="schalter1asso"></p>
+                </button>
+
+                <button id="schalter2" class="hidden" onclick="requestAction('Schalter2', 1);">
+                    <i class="hidden" id="schalter2icon" style="margin-right: 5px;"></i>
+                    <p class="hidden" id="schalter2name"></p>
+                    <p class="hidden" id="schalter2doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="schalter2asso"></p>
+                </button>
+
+                <button id="schalter3" class="hidden" onclick="requestAction('Schalter3', 1);">
+                    <i class="hidden" id="schalter3icon" style="margin-right: 5px;"></i>
+                    <p class="hidden" id="schalter3name"></p>
+                    <p class="hidden" id="schalter3doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="schalter3asso"></p>
+                </button>
+
+                <button id="schalter4" class="hidden" onclick="requestAction('Schalter4', 1);">
+                    <i class="hidden" id="schalter4icon" style="margin-right: 5px;"></i>
+                    <p class="hidden" id="schalter4name"></p>
+                    <p class="hidden" id="schalter4doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="schalter4asso"></p>
+                </button>
+
+                <button id="schalter5" class="hidden" onclick="requestAction('Schalter5', 1);">
+                    <i class="hidden" id="schalter5icon" style="margin-right: 5px;"></i>
+                    <p class="hidden" id="schalter5name"></p>
+                    <p class="hidden" id="schalter5doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="schalter5asso"></p>
+                </button>
+            </div>
         </div>
-        </div>  
-      </div>
     </div>
-    <div class="hidden" id="menueleiste">
-      <div class="menueleistelinks">
-
-        <div class="hidden" id="info1trennerstart"></div>
-        <i class="hidden" id="info1icon" style="margin-right: 5px;"></i>
-        <p class="hidden" id="info1name"></p>
-        <p class="hidden" id="info1doppelpunkt">:&nbsp;</p>
-        <p class="hidden" id="info1asso"></p>
-        <div class="hidden" id="info1trenner"></div>
-
-        <i class="hidden" id="info2icon" style="margin-right: 5px;"></i>
-        <p class="hidden" id="info2name"></p>
-        <p class="hidden" id="info2doppelpunkt">:&nbsp;</p>
-        <p class="hidden" id="info2asso"></p>
-        <div class="hidden" id="info2trenner"></div>
-        
-        <i class="hidden" id="info3icon" style="margin-right: 5px;"></i>
-        <p class="hidden" id="info3name"></p>
-        <p class="hidden" id="info3doppelpunkt">:&nbsp;</p>
-        <p class="hidden" id="info3asso"></p>
-        <div class="hidden" id="info3trenner"></div>
-
-        <i class="hidden" id="info4icon" style="margin-right: 5px;"></i>
-        <p class="hidden" id="info4name"></p>
-        <p class="hidden" id="info4doppelpunkt">:&nbsp;</p>
-        <p class="hidden" id="info4asso"></p>
-        <div class="hidden" id="info4trenner"></div>
-
-        <i class="hidden" id="info5icon" style="margin-right: 5px;"></i>
-        <p class="hidden" id="info5name"></p>
-        <p class="hidden" id="info5doppelpunkt">:&nbsp;</p>
-        <p class="hidden" id="info5asso"></p></div>
-
-      <div class="menueleisterechts">
-
-        <button id="schalter1" class="hidden" onclick="requestAction('Schalter1', 1);">
-            <i class="hidden" id="schalter1icon" style="margin-right: 5px;"></i>
-            <p class="hidden" id="schalter1name"></p>
-            <p class="hidden" id="schalter1doppelpunkt">:&nbsp;</p>
-            <p class="hidden" id="schalter1asso"></p>
-        </button>
-
-        <button id="schalter2" class="hidden" onclick="requestAction('Schalter2', 1);">
-            <i class="hidden" id="schalter2icon" style="margin-right: 5px;"></i>
-            <p class="hidden" id="schalter2name"></p>
-            <p class="hidden" id="schalter2doppelpunkt">:&nbsp;</p>
-            <p class="hidden" id="schalter2asso"></p>
-        </button>
-
-        <button id="schalter3" class="hidden" onclick="requestAction('Schalter3', 1);">
-            <i class="hidden" id="schalter3icon" style="margin-right: 5px;"></i>
-            <p class="hidden" id="schalter3name"></p>
-            <p class="hidden" id="schalter3doppelpunkt">:&nbsp;</p>
-            <p class="hidden" id="schalter3asso"></p>
-        </button>
-
-        <button id="schalter4" class="hidden" onclick="requestAction('Schalter4', 1);">
-            <i class="hidden" id="schalter4icon" style="margin-right: 5px;"></i>
-            <p class="hidden" id="schalter4name"></p>
-            <p class="hidden" id="schalter4doppelpunkt">:&nbsp;</p>
-            <p class="hidden" id="schalter4asso"></p>
-        </button>
-
-        <button id="schalter5" class="hidden" onclick="requestAction('Schalter5', 1);">
-            <i class="hidden" id="schalter5icon" style="margin-right: 5px;"></i>
-            <p class="hidden" id="schalter5name"></p>
-            <p class="hidden" id="schalter5doppelpunkt">:&nbsp;</p>
-            <p class="hidden" id="schalter5asso"></p>
-        </button>
-    </div>
-    </div>
-  </div>
