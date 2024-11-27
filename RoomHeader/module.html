@@ -974,11 +974,31 @@ const iconMapping = {
                         if (!document.getElementById("schalter1name").classList.contains("hidden")) schalter1doppelpunkt.className = 'schalter1asso';
                         break;
                     case 'schalter1icon':
+                       // if (decodedData[parameter] !== "Transparent") {
+                       // element.className = 'schaltericon';
+                       // element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
+                       // schalter1.className = 'schalter1';
+
+
                         if (decodedData[parameter] !== "Transparent") {
-                        element.className = 'schaltericon';
-                        element.src = '../../legacy/img/icons/' + decodedData[parameter] + '.svg';
-                        schalter1.className = 'schalter1';
+                                                        // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+                            // Element sichtbar machen und Klassen hinzufügen
+                            element.classList.remove('hidden');
+                            element.classList.add('fa-light');
+                            element.classList.add('fa-' + mappedIcon.toLowerCase());
+
+                            // Trenner-Klasse nur setzen, wenn nötig
+                            if (info3asso !== "" || info4asso !== "" || info5asso !== "") {
+                                info2trenner.className = 'infotrenner';
+                            }
+                        } else {
+                            // Element ausblenden
+                            element.classList.add('hidden');
                         }
+
+                        //}
                         break;
                     case 'schalter1name':
                         element.className = 'schalter1name';
@@ -1417,8 +1437,7 @@ const iconMapping = {
       <div class="menueleisterechts">
 
         <button id="schalter1" class="hidden" onclick="requestAction('Schalter1', 1);">
-            <img class="hidden" id="schalter1icon" src="">
-            <i class="fa-light" id="info1icon"></i>
+            <i class="hidden" id="schalter1icon" style="margin-right: 5px;"></i>
             <p class="hidden" id="schalter1name"></p>
             <p class="hidden" id="schalter1doppelpunkt">:&nbsp;</p>
             <p class="hidden" id="schalter1asso"></p>
