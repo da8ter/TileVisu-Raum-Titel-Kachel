@@ -1057,7 +1057,7 @@ const iconMapping = {
                         if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") info1trenner.className = 'infotrenner';
                         if (!document.getElementById("info1name").classList.contains("hidden")) info1doppelpunkt.className = 'info1asso';
                         break;
-                        case 'info1icon':
+                    case 'info1icon':
                         if (decodedData[parameter] !== "Transparent") {
                             // Element sichtbar und Klasse entsprechend hinzufügen
                             element.classList.remove('hidden');
@@ -1068,7 +1068,7 @@ const iconMapping = {
                             if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") {
                                 info1trenner.className = 'infotrenner';
                             }
-                        } else {
+                         else {
                             // Element ausblenden, wenn Transparent
                             element.classList.add('hidden');
                         }
@@ -1104,7 +1104,7 @@ const iconMapping = {
                             if (info3asso != "" || info4asso != "" || info5asso != "") info2trenner.className = 'infotrenner';
                                 info2trenner.className = 'infotrenner';
                             }
-                        } else {
+                         else {
                             // Element ausblenden, wenn Transparent
                             element.classList.add('hidden');
                         }
