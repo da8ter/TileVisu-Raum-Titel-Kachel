@@ -1098,10 +1098,13 @@ const iconMapping = {
                         break;
                     case 'info2icon':
                         if (decodedData[parameter] !== "Transparent") {
-                            // Element sichtbar machen
+                                                        // Hole das Icon-Mapping
+                            const originalIcon = decodedData[parameter];
+                            const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
+                            // Element sichtbar machen und Klassen hinzufügen
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
-                            element.classList.add('fa-' + decodedData[parameter].toLowerCase());
+                            element.classList.add('fa-' + mappedIcon.toLowerCase());
 
                             // Trenner-Klasse nur setzen, wenn nötig
                             if (info3asso !== "" || info4asso !== "" || info5asso !== "") {
