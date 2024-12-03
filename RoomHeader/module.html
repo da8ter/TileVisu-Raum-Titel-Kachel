@@ -853,15 +853,15 @@
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
 
                             // Element sichtbar machen und Klassen hinzufügen
-                            inforechts1icon.classList.remove('hidden');
-                            inforechts1icon.classList.add('iconrechts');
+                            inforechtsicon.classList.remove('hidden');
+                            inforechtsicon.classList.add('iconrechts');
                             iconrechts1.classList.add('fa-light');
                             iconrechts1.classList.add('fa-' + mappedIcon.toLowerCase());
 
 
                         } else {
                             // Element ausblenden, wenn Transparent
-                            inforechts1icon.classList.add('hidden');
+                            inforechtsicon.classList.add('hidden');
                         }
 
                         break;
@@ -1359,7 +1359,7 @@
             </div>
             <div class="right-aligned">
                 <div class="right-aligned2" style="align-items: center">
-                    <div class="hidden" id="inforechts1icon"><i class="fa-light" id="iconrechts1"></i></div>
+                    <div class="hidden" id="inforechtsicon"><i class="fa-light" id="iconrechts1"></i></div>
                     <div class="infotext">
                         <span class="hidden" id="inforechtsname"></span>
                         <span class="hidden" id="inforechtsdoppelpunkt">:&nbsp;</span>
