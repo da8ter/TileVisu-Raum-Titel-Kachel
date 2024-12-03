@@ -1051,9 +1051,9 @@
                             schalter4name.textContent = decodedData[parameter];
                         }
                         break;
-                    case 'schalter5asso':
+                        case 'schalter5asso':
                         element.className = 'schalter5asso';
-                        schalter5.className = 'schalter5';
+                        schalter4.className = 'schalter5';
                         element.textContent = decodedData[parameter];
                         if (!document.getElementById("schalter5name").classList.contains("hidden")) schalter5doppelpunkt.className = 'schalter5asso';
                         break;
@@ -1072,11 +1072,11 @@
                             element.classList.add('hidden');
                         }
 
-
+                        break;
                     case 'schalter5name':
                         element.className = 'schalter5name';
-                        schalter5.className = 'schalter5';
                         element.textContent = decodedData[parameter];
+                        schalter5.className = 'schalter5';
                         break;
                     case 'schalter5altname':
                         if (decodedData[parameter] != '') {
