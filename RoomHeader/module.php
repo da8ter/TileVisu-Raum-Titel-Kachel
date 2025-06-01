@@ -176,40 +176,58 @@ class TileVisuRoomHeaderTile extends IPSModule
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
     {
+        $properties = [
+            'bgImage', 'InfoLinks', 'InfoLinks2', 'InfoRechts', 'InfoRechts2',
+            'Schalter1', 'Schalter2', 'Schalter3', 'Schalter4', 'Schalter5',
+            'Info1', 'Info2', 'Info3', 'Info4', 'Info5'
+        ];
 
-        foreach (['bgImage', 'InfoLinks', 'InfoLinks2', 'InfoRechts', 'InfoRechts2', 'Schalter1', 'Schalter2', 'Schalter3', 'Schalter4', 'Schalter5', 'Info1', 'Info2', 'Info3', 'Info4', 'Info5'] as $index => $VariableProperty)
+        foreach ($properties as $VariableProperty) // $VariableProperty ist der Name der Eigenschaft, z.B. "Schalter1"
         {
+            // Prüfen, ob der Sender (geänderte Variable) zu dieser Eigenschaft gehört
             if ($SenderID === $this->ReadPropertyInteger($VariableProperty))
             {
-                
-
-                switch ($Message)
+                // Wenn ja, und es ist eine Aktualisierungsnachricht...
+                if ($Message === VM_UPDATE)
                 {
-                    case VM_UPDATE:
+                    // Erster Update-Aufruf: Sendet den Hauptwert der geänderten Variable.
+                    // $SenderID ist hier die ID der Variablen.
+                    $this->UpdateVisualizationValue(json_encode([
+                        $VariableProperty => GetValueFormatted($SenderID) // Verwende SenderID
+                    ]));
+                    
+                    // Vorbereitung der Daten für den zweiten Update-Aufruf (assoziierte Eigenschaften).
+                    $result = []; 
+                    // Verwende SenderID für GetColor
+                    $result[$VariableProperty . 'Color'] = $this->GetColor($SenderID);
+
+                    if ($VariableProperty != 'bgImage')
+                    {
+                        if ($this->ReadPropertyBoolean($VariableProperty . 'NameSwitch')) {
+                            // Verwende SenderID für IPS_GetName
+                            $result[$VariableProperty . 'name'] = IPS_GetName($SenderID);
+                        }
                         
-                        // Teile der HTML-Darstellung den neuen Wert mit. Damit dieser korrekt formatiert ist, holen wir uns den von der Variablen via GetValueFormatted
-                        $this->UpdateVisualizationValue(json_encode([$VariableProperty => GetValueFormatted($this->ReadPropertyInteger($VariableProperty))]));
-                        
-                        //Icon und Farbe abrufen
-                            //Farbe abrufen
-                            $result[$VariableProperty . 'Color'] = $this->GetColor($this->ReadPropertyInteger($VariableProperty));
+                        // Verwende SenderID für GetIcon
+                        $iconValue = $this->GetIcon($SenderID, $this->ReadPropertyBoolean($VariableProperty . 'VarIconSwitch'));
+                        if ($this->ReadPropertyBoolean($VariableProperty . 'IconSwitch') && $iconValue !== "Transparent") {
+                           $result[$VariableProperty . 'icon'] = $iconValue;
+                        }
 
-                            if($VariableProperty != 'bgImage')
-                            {
-                                if ($this->ReadPropertyBoolean($VariableProperty . 'NameSwitch')) $result[$VariableProperty . 'name'] = IPS_GetName($this->ReadPropertyInteger($VariableProperty));
-                                if ($this->ReadPropertyBoolean($VariableProperty . 'IconSwitch') && $this->GetIcon($this->ReadPropertyInteger($VariableProperty), $this->ReadPropertyBoolean($VariableProperty . 'VarIconSwitch')) !== "Transparent") {
-                                   $result[$VariableProperty .'icon'] = $this->GetIcon($this->ReadPropertyInteger($VariableProperty), $this->ReadPropertyBoolean($VariableProperty . 'VarIconSwitch'));
-                                }
-                                if ($this->ReadPropertyBoolean($VariableProperty . 'AssoSwitch')) $result[$VariableProperty . 'asso'] = $this->CheckAndGetValueFormatted($VariableProperty);
-                                $result[$VariableProperty .'AltName'] =  $this->ReadPropertyString($VariableProperty .'AltName');
-                            }
+                        if ($this->ReadPropertyBoolean($VariableProperty . 'AssoSwitch')) {
+                            // CheckAndGetValueFormatted benötigt den Namen der Eigenschaft
+                            $result[$VariableProperty . 'asso'] = $this->CheckAndGetValueFormatted($VariableProperty);
+                        }
+                        $result[$VariableProperty . 'AltName'] = $this->ReadPropertyString($VariableProperty . 'AltName');
+                    }
 
-                            $this->UpdateVisualizationValue(json_encode($result));
-
-                            
-                            break; // Beende die Schleife, da der passende Wert gefunden wurde
-
+                    // Zweiter Update-Aufruf: Sendet die assoziierten Eigenschaften.
+                    $this->UpdateVisualizationValue(json_encode($result));
+                    
+                    // Da die passende Variable gefunden und verarbeitet wurde, die Schleife und Methode verlassen.
+                    return; 
                 }
+                // Hier könnten andere Nachrichten-Typen (außer VM_UPDATE) für den gematchten SenderID behandelt werden.
             }
         }
     }
@@ -246,217 +264,106 @@ class TileVisuRoomHeaderTile extends IPSModule
 
     // Generiere eine Nachricht, die alle Elemente in der HTML-Darstellung aktualisiert
     private function GetFullUpdateMessage() {
-
         $result = [];
-    
-        if (IPS_VariableExists($this->ReadPropertyInteger('InfoLinks'))) {
-            $result['infolinks'] = $this->CheckAndGetValueFormatted('InfoLinks');
-            if ($this->ReadPropertyBoolean('InfoLinksNameSwitch')) $result['infolinksname'] = IPS_GetName($this->ReadPropertyInteger('InfoLinks'));
-            if ($this->ReadPropertyBoolean('InfoLinksIconSwitch') && $this->GetIcon($this->ReadPropertyInteger('InfoLinks'), $this->ReadPropertyBoolean('InfoLinksVarIconSwitch')) !== "Transparent") {
-                $result['infolinksicon'] = $this->GetIcon($this->ReadPropertyInteger('InfoLinks'), $this->ReadPropertyBoolean('InfoLinksVarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('InfoLinksAssoSwitch')) $result['infolinksasso'] = $this->CheckAndGetValueFormatted('InfoLinks');
+
+        $infoProperties = ['InfoLinks', 'InfoLinks2', 'InfoRechts', 'InfoRechts2', 'Info1', 'Info2', 'Info3', 'Info4', 'Info5'];
+        $schalterProperties = ['Schalter1', 'Schalter2', 'Schalter3', 'Schalter4', 'Schalter5'];
+
+        foreach ($infoProperties as $propName) {
+            $this->_addVisualisationProperty($result, $propName, 'info');
         }
 
-        if (IPS_VariableExists($this->ReadPropertyInteger('InfoLinks2'))) {
-            $result['infolinks2'] = $this->CheckAndGetValueFormatted('InfoLinks2');
-            if ($this->ReadPropertyBoolean('InfoLinks2NameSwitch')) $result['infolinks2name'] = IPS_GetName($this->ReadPropertyInteger('InfoLinks2'));
-            if ($this->ReadPropertyBoolean('InfoLinks2IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('InfoLinks2'), $this->ReadPropertyBoolean('InfoLinks2VarIconSwitch')) !== "Transparent") {
-                $result['infolinks2icon'] = $this->GetIcon($this->ReadPropertyInteger('InfoLinks2'), $this->ReadPropertyBoolean('InfoLinks2VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('InfoLinks2AssoSwitch')) $result['infolinks2asso'] = $this->CheckAndGetValueFormatted('InfoLinks2');
-        }
-    
-        if (IPS_VariableExists($this->ReadPropertyInteger('InfoRechts'))) {
-            $result['inforechts'] = $this->CheckAndGetValueFormatted('InfoRechts');
-            if ($this->ReadPropertyBoolean('InfoRechtsNameSwitch')) $result['inforechtsname'] = IPS_GetName($this->ReadPropertyInteger('InfoRechts'));
-            if ($this->ReadPropertyBoolean('InfoRechtsIconSwitch') && $this->GetIcon($this->ReadPropertyInteger('InfoRechts'), $this->ReadPropertyBoolean('InfoRechtsVarIconSwitch')) !== "Transparent") {
-                $result['inforechtsicon'] = $this->GetIcon($this->ReadPropertyInteger('InfoRechts'), $this->ReadPropertyBoolean('InfoRechtsVarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('InfoRechtsAssoSwitch')) $result['inforechtsasso'] = $this->CheckAndGetValueFormatted('InfoRechts');
+        foreach ($schalterProperties as $propName) {
+            $this->_addVisualisationProperty($result, $propName, 'schalter');
         }
 
-        if (IPS_VariableExists($this->ReadPropertyInteger('InfoRechts2'))) {
-            $result['inforechts2'] = $this->CheckAndGetValueFormatted('InfoRechts2');
-            if ($this->ReadPropertyBoolean('InfoRechts2NameSwitch')) $result['inforechts2name'] = IPS_GetName($this->ReadPropertyInteger('InfoRechts2'));
-            if ($this->ReadPropertyBoolean('InfoRechts2IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('InfoRechts2'), $this->ReadPropertyBoolean('InfoRechts2VarIconSwitch')) !== "Transparent") {
-                $result['inforechts2icon'] = $this->GetIcon($this->ReadPropertyInteger('InfoRechts2'), $this->ReadPropertyBoolean('InfoRechts2VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('InfoRechts2AssoSwitch')) $result['inforechts2asso'] = $this->CheckAndGetValueFormatted('InfoRechts2');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Info1'))) {
-            $result['info1'] = $this->CheckAndGetValueFormatted('Info1');
-            if ($this->ReadPropertyBoolean('Info1NameSwitch')) $result['info1name'] = IPS_GetName($this->ReadPropertyInteger('Info1'));
-            if ($this->ReadPropertyBoolean('Info1IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Info1'), $this->ReadPropertyBoolean('Info1VarIconSwitch')) !== "Transparent") {
-                $result['info1icon'] = $this->GetIcon($this->ReadPropertyInteger('Info1'), $this->ReadPropertyBoolean('Info1VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Info1AssoSwitch')) $result['info1asso'] = $this->CheckAndGetValueFormatted('Info1');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Info2'))) {
-            $result['info2'] = $this->CheckAndGetValueFormatted('Info2');
-            if ($this->ReadPropertyBoolean('Info2NameSwitch')) $result['info2name'] = IPS_GetName($this->ReadPropertyInteger('Info2'));
-            if ($this->ReadPropertyBoolean('Info2IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Info2'), $this->ReadPropertyBoolean('Info2VarIconSwitch')) !== "Transparent") {
-                $result['info2icon'] = $this->GetIcon($this->ReadPropertyInteger('Info2'), $this->ReadPropertyBoolean('Info2VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Info2AssoSwitch')) $result['info2asso'] = $this->CheckAndGetValueFormatted('Info2');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Info3'))) {
-            $result['info3'] = $this->CheckAndGetValueFormatted('Info3');
-            if ($this->ReadPropertyBoolean('Info3NameSwitch')) $result['info3name'] = IPS_GetName($this->ReadPropertyInteger('Info3'));
-            if ($this->ReadPropertyBoolean('Info3IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Info3'), $this->ReadPropertyBoolean('Info3VarIconSwitch')) !== "Transparent") {
-                $result['info3icon'] = $this->GetIcon($this->ReadPropertyInteger('Info3'), $this->ReadPropertyBoolean('Info3VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Info3AssoSwitch')) $result['info3asso'] = $this->CheckAndGetValueFormatted('Info3');
-
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Info4'))) {
-            $result['info4'] = $this->CheckAndGetValueFormatted('Info4');
-            if ($this->ReadPropertyBoolean('Info4NameSwitch')) $result['info4name'] = IPS_GetName($this->ReadPropertyInteger('Info4'));
-            if ($this->ReadPropertyBoolean('Info4IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Info4'), $this->ReadPropertyBoolean('Info4VarIconSwitch')) !== "Transparent") {
-                $result['info4icon'] = $this->GetIcon($this->ReadPropertyInteger('Info4'), $this->ReadPropertyBoolean('Info4VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Info4AssoSwitch')) $result['info4asso'] = $this->CheckAndGetValueFormatted('Info4');
-
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Info5'))) {
-            $result['info5'] = $this->CheckAndGetValueFormatted('Info5');
-            if ($this->ReadPropertyBoolean('Info5NameSwitch')) $result['info5name'] = IPS_GetName($this->ReadPropertyInteger('Info5'));
-            if ($this->ReadPropertyBoolean('Info5IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Info5'), $this->ReadPropertyBoolean('Info5VarIconSwitch')) !== "Transparent") {
-                $result['info5icon'] = $this->GetIcon($this->ReadPropertyInteger('Info5'), $this->ReadPropertyBoolean('Info5VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Info5AssoSwitch')) $result['info5asso'] = $this->CheckAndGetValueFormatted('Info5');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Schalter1'))) {
-            $result['schalter1'] = $this->CheckAndGetValueFormatted('Schalter1');
-            $result['schalter1breite'] =  $this->ReadPropertyFloat('Schalter1Breite');
-            $result['schalter1color'] =  $this->GetColor($this->ReadPropertyInteger('Schalter1'));
-            if ($this->ReadPropertyBoolean('Schalter1NameSwitch')) $result['schalter1name'] = IPS_GetName($this->ReadPropertyInteger('Schalter1'));
-            if ($this->ReadPropertyBoolean('Schalter1IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Schalter1'), $this->ReadPropertyBoolean('Schalter1VarIconSwitch')) !== "Transparent") {
-                $result['schalter1icon'] = $this->GetIcon($this->ReadPropertyInteger('Schalter1'), $this->ReadPropertyBoolean('Schalter1VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Schalter1AssoSwitch')) $result['schalter1asso'] = $this->CheckAndGetValueFormatted('Schalter1');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Schalter2'))) {
-            $result['Schalter2'] = $this->CheckAndGetValueFormatted('Schalter2');
-            $result['schalter2breite'] =  $this->ReadPropertyFloat('Schalter2Breite');
-            $result['schalter2color'] =  $this->GetColor($this->ReadPropertyInteger('Schalter2'));
-            if ($this->ReadPropertyBoolean('Schalter2NameSwitch')) $result['schalter2name'] = IPS_GetName($this->ReadPropertyInteger('Schalter2'));
-            if ($this->ReadPropertyBoolean('Schalter2IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Schalter2'), $this->ReadPropertyBoolean('Schalter2VarIconSwitch')) !== "Transparent") {
-                $result['schalter2icon'] = $this->GetIcon($this->ReadPropertyInteger('Schalter2'), $this->ReadPropertyBoolean('Schalter2VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Schalter2AssoSwitch')) $result['schalter2asso'] = $this->CheckAndGetValueFormatted('Schalter2');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Schalter3'))) {
-            $result['Schalter3'] = $this->CheckAndGetValueFormatted('Schalter3');
-            $result['schalter3breite'] =  $this->ReadPropertyFloat('Schalter3Breite');
-            $result['schalter3color'] =  $this->GetColor($this->ReadPropertyInteger('Schalter3'));
-            if ($this->ReadPropertyBoolean('Schalter3NameSwitch')) $result['schalter3name'] = IPS_GetName($this->ReadPropertyInteger('Schalter3'));
-            if ($this->ReadPropertyBoolean('Schalter3IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Schalter3'), $this->ReadPropertyBoolean('Schalter3VarIconSwitch')) !== "Transparent") {
-                $result['schalter3icon'] = $this->GetIcon($this->ReadPropertyInteger('Schalter3'), $this->ReadPropertyBoolean('Schalter3VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Schalter3AssoSwitch')) $result['schalter3asso'] = $this->CheckAndGetValueFormatted('Schalter3');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Schalter4'))) {
-            $result['Schalter4'] = $this->CheckAndGetValueFormatted('Schalter4');
-            $result['schalter4breite'] =  $this->ReadPropertyFloat('Schalter4Breite');
-            $result['schalter4color'] =  $this->GetColor($this->ReadPropertyInteger('Schalter4'));
-            if ($this->ReadPropertyBoolean('Schalter4NameSwitch')) $result['schalter4name'] = IPS_GetName($this->ReadPropertyInteger('Schalter4'));
-            if ($this->ReadPropertyBoolean('Schalter4IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Schalter4'), $this->ReadPropertyBoolean('Schalter4VarIconSwitch')) !== "Transparent") {
-                $result['schalter4icon'] = $this->GetIcon($this->ReadPropertyInteger('Schalter4'), $this->ReadPropertyBoolean('Schalter4VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Schalter4AssoSwitch')) $result['schalter4asso'] = $this->CheckAndGetValueFormatted('Schalter4');
-        }
-        if (IPS_VariableExists($this->ReadPropertyInteger('Schalter5'))) {
-            $result['Schalter5'] = $this->CheckAndGetValueFormatted('Schalter5');
-            $result['schalter5breite'] =  $this->ReadPropertyFloat('Schalter5Breite');
-            $result['schalter5color'] =  $this->GetColor($this->ReadPropertyInteger('Schalter5'));
-            if ($this->ReadPropertyBoolean('Schalter5NameSwitch')) $result['schalter5name'] = IPS_GetName($this->ReadPropertyInteger('Schalter5'));
-            if ($this->ReadPropertyBoolean('Schalter5IconSwitch') && $this->GetIcon($this->ReadPropertyInteger('Schalter5'), $this->ReadPropertyBoolean('Schalter5VarIconSwitch')) !== "Transparent") {
-                $result['schalter5icon'] = $this->GetIcon($this->ReadPropertyInteger('Schalter5'), $this->ReadPropertyBoolean('Schalter5VarIconSwitch'));
-            }
-            if ($this->ReadPropertyBoolean('Schalter5AssoSwitch')) $result['schalter5asso'] = $this->CheckAndGetValueFormatted('Schalter5');
-        }
-
-            $result['infofontsize'] =  $this->ReadPropertyFloat('InfoSchriftgroesse');
-            $result['hintergrundfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('Kachelhintergrundfarbe'));
-            $result['infoschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('InfoSchriftfarbe'));
-            $result['infomenueschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('InfoMenueSchriftfarbe'));
-            $result['infomenuefontsize'] =  $this->ReadPropertyFloat('InfoMenueSchriftgroesse');
-            $result['infomenuetransparenz'] =  $this->ReadPropertyFloat('InfoMenueTransparenz');
-            $result['infomenuehintergrundfarbe'] =  $this->GetColorRGB($this->ReadPropertyInteger('InfoMenueHintergrundfarbe'));
-            $result['transparenz'] =  $this->ReadPropertyFloat('Bildtransparenz');
-            $result['raumname'] =  $this->ReadPropertyString('Raumname');
-            $result['raumnameschriftgroesse'] =  $this->ReadPropertyFloat('RaumnameSchriftgroesse');
-            $result['raumnameschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('RaumnameSchriftfarbe'));
-            $result['schalter1altname'] =  $this->ReadPropertyString('Schalter1AltName');
-            $result['schalter2altname'] =  $this->ReadPropertyString('Schalter2AltName');
-            $result['schalter3altname'] =  $this->ReadPropertyString('Schalter3AltName');
-            $result['schalter4altname'] =  $this->ReadPropertyString('Schalter4AltName');
-            $result['schalter5altname'] =  $this->ReadPropertyString('Schalter5AltName');
-            $result['info1altname'] =  $this->ReadPropertyString('Info1AltName');
-            $result['info2altname'] =  $this->ReadPropertyString('Info2AltName');
-            $result['info3altname'] =  $this->ReadPropertyString('Info3AltName');
-            $result['info4altname'] =  $this->ReadPropertyString('Info4AltName');
-            $result['info5altname'] =  $this->ReadPropertyString('Info5AltName');         
-            $result['infolinksaltname'] =  $this->ReadPropertyString('InfoLinksAltName');
-            $result['inforechtsaltname'] =  $this->ReadPropertyString('InfoRechtsAltName');    
-            $result['infolinks2altname'] =  $this->ReadPropertyString('InfoLinks2AltName');
-            $result['inforechts2altname'] =  $this->ReadPropertyString('InfoRechts2AltName');    
-            $result['infomenueswitch'] =  $this->ReadPropertyBoolean('InfoMenueSwitch');   
-            
-            // Prüfe vorweg, ob ein Bild ausgewählt wurde
-            $imageID = $this->ReadPropertyInteger('bgImage');
-            if (IPS_MediaExists($imageID))
+        // Restliche Properties und Bildbehandlung
+        $result['infofontsize'] =  $this->ReadPropertyFloat('InfoSchriftgroesse');
+        $result['hintergrundfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('Kachelhintergrundfarbe'));
+        $result['infoschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('InfoSchriftfarbe'));
+        $result['infomenueschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('InfoMenueSchriftfarbe'));
+        $result['infomenuefontsize'] =  $this->ReadPropertyFloat('InfoMenueSchriftgroesse');
+        $result['infomenuetransparenz'] =  $this->ReadPropertyFloat('InfoMenueTransparenz');
+        $result['infomenuehintergrundfarbe'] =  $this->GetColorRGB($this->ReadPropertyInteger('InfoMenueHintergrundfarbe'));
+        $result['transparenz'] =  $this->ReadPropertyFloat('Bildtransparenz');
+        $result['raumname'] =  $this->ReadPropertyString('Raumname');
+        $result['raumnameschriftgroesse'] =  $this->ReadPropertyFloat('RaumnameSchriftgroesse');
+        $result['raumnameschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('RaumnameSchriftfarbe'));
+        $result['schalter1altname'] =  $this->ReadPropertyString('Schalter1AltName');
+        $result['schalter2altname'] =  $this->ReadPropertyString('Schalter2AltName');
+        $result['schalter3altname'] =  $this->ReadPropertyString('Schalter3AltName');
+        $result['schalter4altname'] =  $this->ReadPropertyString('Schalter4AltName');
+        $result['schalter5altname'] =  $this->ReadPropertyString('Schalter5AltName');
+        $result['info1altname'] =  $this->ReadPropertyString('Info1AltName');
+        $result['info2altname'] =  $this->ReadPropertyString('Info2AltName');
+        $result['info3altname'] =  $this->ReadPropertyString('Info3AltName');
+        $result['info4altname'] =  $this->ReadPropertyString('Info4AltName');
+        $result['info5altname'] =  $this->ReadPropertyString('Info5AltName');         
+        $result['infolinksaltname'] =  $this->ReadPropertyString('InfoLinksAltName');
+        $result['inforechtsaltname'] =  $this->ReadPropertyString('InfoRechtsAltName');    
+        $result['infolinks2altname'] =  $this->ReadPropertyString('InfoLinks2AltName');
+        $result['inforechts2altname'] =  $this->ReadPropertyString('InfoRechts2AltName');    
+        $result['infomenueswitch'] =  $this->ReadPropertyBoolean('InfoMenueSwitch');   
+        
+        // Prüfe vorweg, ob ein Bild ausgewählt wurde
+        $imageID = $this->ReadPropertyInteger('bgImage');
+        if (IPS_MediaExists($imageID))
+        {
+            $image = IPS_GetMedia($imageID);
+            if ($image['MediaType'] === MEDIATYPE_IMAGE)
             {
-                $image = IPS_GetMedia($imageID);
-                if ($image['MediaType'] === MEDIATYPE_IMAGE)
+                $imageFile = explode('.', $image['MediaFile']);
+                $imageContent = '';
+                switch (end($imageFile))
                 {
-                    $imageFile = explode('.', $image['MediaFile']);
-                    $imageContent = '';
-                    // Falls ja, ermittle den Anfang der src basierend auf dem Dateitypen
-                    switch (end($imageFile))
-                    {
-                        case 'bmp':
-                            $imageContent = 'data:image/bmp;base64,';
-                            break;
-
-                        case 'jpg':
-                        case 'jpeg':
-                            $imageContent = 'data:image/jpeg;base64,';
-                            break;
-
-                        case 'gif':
-                            $imageContent = 'data:image/gif;base64,';
-                            break;
-
-                        case 'png':
-                            $imageContent = 'data:image/png;base64,';
-                            break;
-
-                        case 'ico':
-                            $imageContent = 'data:image/x-icon;base64,';
-                            break;
-                    }
-
-                    // Nur fortfahren, falls Inhalt gesetzt wurde. Ansonsten ist das Bild kein unterstützter Dateityp
-                    if ($imageContent)
-                    {
-                        // Hänge base64-codierten Inhalt des Bildes an
-                        $imageContent .= IPS_GetMediaContent($imageID);
-                        $result['image1'] = $imageContent;
-                    }
+                    case 'bmp': $imageContent = 'data:image/bmp;base64,'; break;
+                    case 'jpg': case 'jpeg': $imageContent = 'data:image/jpeg;base64,'; break;
+                    case 'gif': $imageContent = 'data:image/gif;base64,'; break;
+                    case 'png': $imageContent = 'data:image/png;base64,'; break;
+                    case 'ico': $imageContent = 'data:image/x-icon;base64,'; break;
+                }
+                if ($imageContent)
+                {
+                    $imageContent .= IPS_GetMediaContent($imageID);
+                    $result['image1'] = $imageContent;
                 }
             }
-            else
-            {
-                $imageContent = 'data:image/png;base64,';
-                $imageContent .= base64_encode(file_get_contents(__DIR__ . '/assets/placeholder.png'));
-                $result['image1'] = $imageContent;
+        }
+        else
+        {
+            $imageContent = 'data:image/png;base64,';
+            $imageContent .= base64_encode(file_get_contents(__DIR__ . '/assets/placeholder.png'));
+            $result['image1'] = $imageContent;
+        }
+        return json_encode($result);
+    }
+
+    private function _addVisualisationProperty(&$result, $propertyName, $propertyType) {
+        $varID = $this->ReadPropertyInteger($propertyName);
+        if (IPS_VariableExists($varID)) {
+            $baseKey = strtolower($propertyName); // e.g., "infolinks", "schalter1"
+
+            $result[$baseKey] = $this->CheckAndGetValueFormatted($propertyName);
+
+            if ($this->ReadPropertyBoolean($propertyName . 'NameSwitch')) {
+                $result[$baseKey . 'name'] = IPS_GetName($varID);
             }
 
+            // GetIcon nur einmal aufrufen und Wert zwischenspeichern
+            $iconValue = $this->GetIcon($varID, $this->ReadPropertyBoolean($propertyName . 'VarIconSwitch'));
+            if ($this->ReadPropertyBoolean($propertyName . 'IconSwitch') && $iconValue !== "Transparent") {
+                $result[$baseKey . 'icon'] = $iconValue;
+            }
 
+            if ($this->ReadPropertyBoolean($propertyName . 'AssoSwitch')) {
+                $result[$baseKey . 'asso'] = $this->CheckAndGetValueFormatted($propertyName);
+            }
 
-        return json_encode($result);
+            if ($propertyType === 'schalter') {
+                $result[$baseKey . 'breite'] = $this->ReadPropertyFloat($propertyName . 'Breite');
+                $result[$baseKey . 'color'] = $this->GetColor($varID);
+            }
+        }
     }
     private function CheckAndGetValueFormatted($property) {
         $id = $this->ReadPropertyInteger($property);
