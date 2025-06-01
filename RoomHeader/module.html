@@ -1096,7 +1096,7 @@
                         }
                         break;
                     case 'schalterschriftgroesse':
-                        root.style.setProperty('--schalterschriftgroesse', decodedData[parameter] + 'em');
+                        root.style.setProperty('--schalterschriftgroesse', decodedData[parameter] + 'px');
                         break;
                     case 'schalter1breite':
                         root.style.setProperty('--schalter1breite', decodedData[parameter] + 'px');
@@ -1129,7 +1129,7 @@
                         root.style.setProperty('--schalter5color', decodedData[parameter]);
                         break;
                     case 'infofontsize':
-                        root.style.setProperty('--infofontsize', decodedData[parameter] + 'em');
+                        root.style.setProperty('--infofontsize', decodedData[parameter] + 'px');
                         //console.log('Setze innerHTML für', parameter);
                         break;
                     case 'hintergrundfarbe':
@@ -1139,7 +1139,7 @@
                         root.style.setProperty('--infoschriftfarbe', decodedData[parameter]);
                         break;
                     case 'infomenuefontsize':
-                        root.style.setProperty('--infomenuefontsize', decodedData[parameter] + 'em');
+                        root.style.setProperty('--infomenuefontsize', decodedData[parameter] + 'px');
                         break;
                     case 'infomenueschriftfarbe':
                         root.style.setProperty('--infomenueschriftfarbe', decodedData[parameter]);
@@ -1155,7 +1155,7 @@
                         element.textContent = decodedData[parameter];
                         break;
                     case 'raumnameschriftgroesse':
-                        root.style.setProperty('--raumnamefontsize', decodedData[parameter] + 'em');
+                        root.style.setProperty('--raumnamefontsize', decodedData[parameter] + 'px');
                         break;
                     case 'raumnameschriftfarbe':
                         root.style.setProperty('--raumnameschriftfarbe', decodedData[parameter]);

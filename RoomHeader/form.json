@@ -65,9 +65,9 @@
                             "name": "RaumnameSchriftgroesse",
                             "caption": "Font size:",
                             "digits": 1,
-                            "minimum": 0.5,
-                            "maximum": 10.0,
-                            "suffix": "em"
+                            "minimum": 1,
+                            "maximum": 50,
+                            "suffix": "px"
                         }
                     ]
                 }
@@ -183,9 +183,9 @@
                                     "name": "InfoSchriftgroesse",
                                     "caption": "Font size:",
                                     "digits": 1,
-                                    "minimum": 0.5,
-                                    "maximum": 10.0,
-                                    "suffix": "em"
+                                    "minimum": 1,
+                                    "maximum": 50,
+                                    "suffix": "px"
                                 }
                             ]
                         },
@@ -843,9 +843,9 @@
                     "name": "InfoMenueSchriftgroesse",
                     "caption": "Font size:",
                     "digits": 1,
-                    "minimum": 0.5,
-                    "maximum": 10.0,
-                    "suffix": "em"
+                    "minimum": 1,
+                    "maximum": 50,
+                    "suffix": "px"
                 },
                 {
                     "type": "SelectColor",
