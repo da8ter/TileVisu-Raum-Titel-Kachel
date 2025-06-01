@@ -921,6 +921,7 @@
                         schalter1.className = 'schalter1';
                         element.textContent = decodedData[parameter];
                         if (!document.getElementById("schalter1name").classList.contains("hidden")) schalter1doppelpunkt.className = 'schalter1asso';
+                        document.getElementById("schalter1icon").style.marginRight = "8px";
                         break;
                     case 'schalter1icon':
 
@@ -944,12 +945,14 @@
                         element.className = 'schalter1name';
                         schalter1.className = 'schalter1';
                         element.textContent = decodedData[parameter];
+                        document.getElementById("schalter1icon").style.marginRight = "8px";
                         break;
                     case 'schalter1altname':
                         if (decodedData[parameter] != '') {
                             schalter1name.className = 'schalter1name';
                             schalter1.className = 'schalter1';
                             schalter1name.textContent = decodedData[parameter];
+                            document.getElementById("schalter1icon").style.marginRight = "8px";
                         }
                         break;
                     case 'schalter2asso':
@@ -957,6 +960,7 @@
                         schalter2.className = 'schalter2';
                         element.textContent = decodedData[parameter];
                         if (!document.getElementById("schalter2name").classList.contains("hidden")) schalter2doppelpunkt.className = 'schalter2asso';
+                        document.getElementById("schalter2icon").style.marginRight = "8px";
                         break;
                     case 'schalter2icon':
 
@@ -980,12 +984,14 @@
                         element.className = 'schalter2name';
                         element.textContent = decodedData[parameter];
                         schalter2.className = 'schalter2';
+                        document.getElementById("schalter2icon").style.marginRight = "8px";
                         break;
                     case 'schalter2altname':
                         if (decodedData[parameter] != '') {
                             schalter2name.className = 'schalter2name';
                             schalter2.className = 'schalter2';
                             schalter2name.textContent = decodedData[parameter];
+                            document.getElementById("schalter2icon").style.marginRight = "8px";
                         }
                         break;
                     case 'schalter3asso':
@@ -993,6 +999,7 @@
                         schalter3.className = 'schalter3';
                         element.textContent = decodedData[parameter];
                         if (!document.getElementById("schalter3name").classList.contains("hidden")) schalter3doppelpunkt.className = 'schalter3asso';
+                        document.getElementById("schalter3icon").style.marginRight = "8px";
                         break;
                     case 'schalter3icon':
 
@@ -1015,12 +1022,14 @@
                         element.className = 'schalter3name';
                         schalter3.className = 'schalter3';
                         element.textContent = decodedData[parameter];
+                        document.getElementById("schalter3icon").style.marginRight = "8px";
                         break;
                     case 'schalter3altname':
                         if (decodedData[parameter] != '') {
                             schalter3name.className = 'schalter3name';
                             schalter3.className = 'schalter3';
                             schalter3name.textContent = decodedData[parameter];
+                            document.getElementById("schalter3icon").style.marginRight = "8px";
                         }
                         break;
                     case 'schalter4asso':
@@ -1028,6 +1037,7 @@
                         schalter4.className = 'schalter4';
                         element.textContent = decodedData[parameter];
                         if (!document.getElementById("schalter4name").classList.contains("hidden")) schalter4doppelpunkt.className = 'schalter4asso';
+                        document.getElementById("schalter4icon").style.marginRight = "8px";
                         break;
                     case 'schalter4icon':
 
@@ -1051,12 +1061,14 @@
                         element.className = 'schalter4name';
                         element.textContent = decodedData[parameter];
                         schalter4.className = 'schalter4';
+                        document.getElementById("schalter4icon").style.marginRight = "8px";
                         break;
                     case 'schalter4altname':
                         if (decodedData[parameter] != '') {
                             schalter4name.className = 'schalter4name';
                             schalter4.className = 'schalter4';
                             schalter4name.textContent = decodedData[parameter];
+                            document.getElementById("schalter4icon").style.marginRight = "8px";
                         }
                         break;
                         case 'schalter5asso':
@@ -1064,6 +1076,7 @@
                         schalter4.className = 'schalter5';
                         element.textContent = decodedData[parameter];
                         if (!document.getElementById("schalter5name").classList.contains("hidden")) schalter5doppelpunkt.className = 'schalter5asso';
+                        document.getElementById("schalter5icon").style.marginRight = "8px";
                         break;
                     case 'schalter5icon':
 
@@ -1087,12 +1100,14 @@
                         element.className = 'schalter5name';
                         element.textContent = decodedData[parameter];
                         schalter5.className = 'schalter5';
+                        document.getElementById("schalter5icon").style.marginRight = "8px";
                         break;
                     case 'schalter5altname':
                         if (decodedData[parameter] != '') {
                             schalter5name.className = 'schalter5name';
                             schalter5.className = 'schalter5';
                             schalter5name.textContent = decodedData[parameter];
+                            document.getElementById("schalter5icon").style.marginRight = "8px";
                         }
                         break;
                     case 'schalterschriftgroesse':
@@ -1428,35 +1443,35 @@
             <div class="menueleisterechts">
 
                 <button id="schalter1" class="hidden" onclick="requestAction('Schalter1', 1);">
-                    <i class="hidden" id="schalter1icon" style="margin-right: 5px;"></i>
+                    <i class="hidden" id="schalter1icon" style="margin-right: 0px;"></i>
                     <p class="hidden" id="schalter1name"></p>
                     <p class="hidden" id="schalter1doppelpunkt">:&nbsp;</p>
                     <p class="hidden" id="schalter1asso"></p>
                 </button>
 
                 <button id="schalter2" class="hidden" onclick="requestAction('Schalter2', 1);">
-                    <i class="hidden" id="schalter2icon" style="margin-right: 5px;"></i>
+                    <i class="hidden" id="schalter2icon" style="margin-right: 0px;"></i>
                     <p class="hidden" id="schalter2name"></p>
                     <p class="hidden" id="schalter2doppelpunkt">:&nbsp;</p>
                     <p class="hidden" id="schalter2asso"></p>
                 </button>
 
                 <button id="schalter3" class="hidden" onclick="requestAction('Schalter3', 1);">
-                    <i class="hidden" id="schalter3icon" style="margin-right: 5px;"></i>
+                    <i class="hidden" id="schalter3icon" style="margin-right: 0px;"></i>
                     <p class="hidden" id="schalter3name"></p>
                     <p class="hidden" id="schalter3doppelpunkt">:&nbsp;</p>
                     <p class="hidden" id="schalter3asso"></p>
                 </button>
 
                 <button id="schalter4" class="hidden" onclick="requestAction('Schalter4', 1);">
-                    <i class="hidden" id="schalter4icon" style="margin-right: 5px;"></i>
+                    <i class="hidden" id="schalter4icon" style="margin-right: 0px;"></i>
                     <p class="hidden" id="schalter4name"></p>
                     <p class="hidden" id="schalter4doppelpunkt">:&nbsp;</p>
                     <p class="hidden" id="schalter4asso"></p>
                 </button>
 
                 <button id="schalter5" class="hidden" onclick="requestAction('Schalter5', 1);">
-                    <i class="hidden" id="schalter5icon" style="margin-right: 5px;"></i>
+                    <i class="hidden" id="schalter5icon" style="margin-right: 0px;"></i>
                     <p class="hidden" id="schalter5name"></p>
                     <p class="hidden" id="schalter5doppelpunkt">:&nbsp;</p>
                     <p class="hidden" id="schalter5asso"></p>
