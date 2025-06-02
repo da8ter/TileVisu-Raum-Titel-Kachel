@@ -47,7 +47,7 @@ Transparenz Foto|Einstellung der Transparenz des Hintergrundbildes, um es abzudu
 Kachelhintergrundfarbe|Farbe des Kachelhintergrunds (wird nur bei eingestellter Bildtransparenz sichtbar)
 Raumname|Der Raumname welcher in der Kachelmitte angezeigt wird.
 Schriftfarbe|Schriftfarbe Raumname
-Schriftgröße|Schriftgröße Raumname in em
+Schriftgröße|Schriftgröße Raumname in px
 
 __Infobereich__
 Name     | Beschreibung
@@ -57,7 +57,7 @@ Variable links 2|Die zweite anzuzeigende Variable im linken Infobereich
 Variable rechts 1|Die erste anzuzeigende Variable im rechten Infobereich
 Variable rechts 2|Die zweite anzuzeigende Variable im rechten Infobereich
 Schriftfarbe|Schriftfarbe Infobereich
-Schriftgröße|Schriftgröße Infobereich in em
+Schriftgröße|Schriftgröße Infobereich in px
 
 __Einstellungen (Variablenanzeige)__
 Name     | Beschreibung
@@ -75,7 +75,7 @@ Name     | Beschreibung
 Info 1-5|Variablen die im linken Bereich der Menüleiste angezeigt werden sollen
 Schalter 1-5|Variablen die im rechten Bereich der Menüleiste als Button angezeigt werden sollen. Anforderung: Bool-Variable mit einem Variablenprofil mit Assoziationen. Die Buttonfarbe ist die Farbe welche im Profil eingestellt ist.
 Schriftfarbe|Schriftfarbe Info und Button
-Schriftgröße|Schriftgröße Infobereich und Button in em
+Schriftgröße|Schriftgröße Infobereich und Button in px
 Hintergrund Transparenz|Transparenz der Menüleiste
 Hintergrund Farbe|Hintergrundfarbe Menüleiste
 
