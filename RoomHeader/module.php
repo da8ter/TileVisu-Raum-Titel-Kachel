@@ -140,10 +140,7 @@ class TileVisuRoomHeaderTile extends IPSModule
             $this->ReadPropertyInteger('Info2'),
             $this->ReadPropertyInteger('Info3'),
             $this->ReadPropertyInteger('Info4'),
-            $this->ReadPropertyInteger('Info5'),
-            $this->ReadPropertyInteger('Schalter3'),
-            $this->ReadPropertyInteger('Schalter4'),
-            $this->ReadPropertyInteger('Schalter5')
+            $this->ReadPropertyInteger('Info5')
         ];
         $refs = $this->GetReferenceList();
             foreach($refs as $ref) {
