@@ -70,6 +70,17 @@
                             "suffix": "px"
                         }
                     ]
+                },
+                {
+                    "type": "RowLayout",
+                    "visible": false,
+                    "items": [
+                        {
+                            "type": "SelectObject",
+                            "name": "Target",
+                            "caption": "Objekt welche beim Klick geöffnet wird:"
+                        }
+                    ]
                 }
             ]
         },

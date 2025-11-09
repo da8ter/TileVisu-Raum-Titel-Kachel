@@ -744,7 +744,7 @@
             for (const parameter in decodedData) {
                 //console.log('Aktueller Parameter:', parameter, 'Wert:', decodedData[parameter]);
 
-                const element = document.getElementById(parameter.toLowerCase());
+	            const element = document.getElementById(parameter.toLowerCase());
                 const parameter2 = String(parameter).toLowerCase();
 
 
@@ -752,6 +752,16 @@
                 var root = document.documentElement;
                 // Abhängig vom Parameter werden allerdings verschiedene Werte angepasst
                 switch (parameter2) {
+                    case 'targetlink':
+				        if (typeof openObject === "function") { // nur prüfen, ob die Funktion definiert ist
+                            if (decodedData[parameter] > 9999){ //ObjektID gültig?
+                                const mainDiv2 = document.querySelector('.maindiv2');
+                                mainDiv2.addEventListener('click', function () { // Event-Listener hinzufügen mit openObject
+                                    openObject(decodedData[parameter]);
+                                });
+                            }
+                        }
+                        break;
                     case 'image1':
                         const mainDiv = document.querySelector('.maindiv1');
                         mainDiv.style.setProperty('--background-image', 'url(' + decodedData[parameter] + ')');
@@ -1357,7 +1367,7 @@
                         //element.innerHTML = decodedData[parameter];<i id="temp_icon" class="fa-solid fa-house-chimney-user icon"></i>
                         break;
                 }
-
+				
             }
         }
     </script>
