@@ -1,12 +1,12 @@
 {
   "id": "{5D1D3B42-2B8E-4C5E-AE9A-4E8E2C00E9F4}",
-  "name": "TileVisu Room Header Grid",
+  "name": "Multi Room Tile",
   "type": 3,
   "vendor": "",
-  "aliases": [],
+  "aliases": ["Multi Raum Kachel"],
   "parentRequirements": [],
   "childRequirements": [],
   "implemented": [],
-  "prefix": "RMHG",
-  "url": "https://github.com/da8ter/TileVisu-Raum-Titel-Kachel/RoomHeaderGrid/README.md"
+  "prefix": "MRT",
+  "url": "https://github.com/da8ter/TileVisu-Raum-Titel-Kachel/MultiRoomTile/README.md"
 }
