@@ -1,45 +1,86 @@
-# RoomHeaderGrid
+# Multi‑Raum Kachel (Grid)
+Support: https://community.symcon.de/t/html-kachelsammlung-bewohnerstatus-waermepumpe-etc/
 
-Kurzbeschreibung: Aggregator-Kachel für mehrere Räume mit Bild, Raumnamen, Info-Badges links/rechts und Menüleiste mit Schaltern.
+### Inhaltsverzeichnis
 
-## Neues Feature
-- Buttonfarben aus Hintergrundbild (optional)
-  - Global aktivierbar unter: Globale Standardwerte → "Buttonfarben aus Hintergrundbild".
-  - Pro Raum aktivierbar unter: Räume → Design → Hintergrund → "Buttonfarben aus Hintergrundbild".
-  - Bei Multi-Buttons erhält jeder Button eine andere, aus dem Bild abgeleitete Farbe.
-  - Bei Einzel-Buttons wird eine Bildfarbe als Hintergrund genutzt.
- 
-- Feste Spaltenanzahl (optional)
-  - Konfigurierbar unter: Rastereinstellungen → "Spalten (0 = auto)".
-  - 0 = automatische Spaltenanordnung via minimaler Kachelbreite.
-  - > 0 = fixe Anzahl an Kacheln pro Zeile.
-  
-- Info-Badge-Hintergrund (links/mitte/rechts)
-  - Globale Defaults unter: Globale Standardwerte → "Hintergrund-Transparenz (Info …)" und "Hintergrundfarbe (Info …)" für links/mitte/rechts.
-  - Pro Raum konfigurierbar unter: Räume → Info-Leiste → entsprechende Felder für links/mitte/rechts.
-  - Die mittlere Info-Zone (Mitte) ist jetzt aktiv und kann über die Bereichs-Auswahl "Mitte" in den Info-Elementen genutzt werden.
+1. [Funktionsumfang](#1-funktionsumfang)
+2. [Voraussetzungen](#2-voraussetzungen)
+3. [Software-Installation](#3-software-installation)
+4. [Einrichten der Instanzen in IP-Symcon](#4-einrichten-der-instanzen-in-ip-symcon)
+5. [Kachelkonfiguration](#5-Kachelkonfiguration)
 
-Hinweis: Die Farben werden aus dem aktuell gesetzten Hintergrundbild der Kachel extrahiert und an die Farbstimmung angepasst.
+### 1. Funktionsumfang
 
-## Änderungen
-- Schalter können alternativ ein Objekt öffnen; die Kachel rendert dann einen klickbaren Button, der `openObject` für das Ziel aufruft.
-- Hintergrund: Bildfilter-Steuerung
-  - Lichtstatus: Bool-Variable für Ein/Aus.
-    - `false` → maximaler Filtereffekt (Dimmwert wird ignoriert).
-    - `true`  → Filterintensität richtet sich nach dem Dimmwert (falls vorhanden).
-  - Dimmwert (0..100): Integer/Float-Variable für die Intensität.
-    - 100 = kein Effekt, 0 = maximaler Effekt.
-    - Ohne Lichtstatus steuert ausschließlich der Dimmwert.
-    - Wenn kein Dimmwert vorhanden ist und Lichtstatus = true, bleibt der Filter aus.
-  - Maximaler Effekt: `brightness(0.2) contrast(0.9) grayscale(0.5)`.
+Aggregator-Kachel für mehrere Räume mit Bild, Raumnamen (zentral), Info‑Badges (links/mitte/rechts) und Menüleiste mit Schaltern.
 
-- Transparenzen auf Prozent (0–100%) umgestellt
-  - Alle Formularfelder zur Transparenz (Info-Badges links/mittig/rechts, Menü-Hintergrund, Bildtransparenz) verwenden jetzt 0–100%.
-  - Backend skaliert automatisch auf CSS-Alpha (0–1).
-  - Abwärtskompatibel: frühere Werte im Bereich 0–1 werden weiterhin korrekt interpretiert.
+- Optional: Buttonfarben automatisch aus dem Hintergrundbild (global und pro Raum)
+- Optional: Feste Spaltenanzahl im Grid (0 = auto)
+- Dynamische Info‑ und Menü‑Elemente (Listen)
+- Einheitliche Hintergrund‑Transparenz/Farbe für die Info‑Badges (links/mitte/rechts)
 
-## Voraussetzungen
-- IP-Symcon ≥ 7.1
+### 2. Voraussetzungen
 
-## Support
-- https://community.symcon.de/
+- IP‑Symcon ≥ 7.1
+
+### 3. Software-Installation
+
+- Über den Module Store
+- Über das Module Control folgende URL hinzufügen
+https://github.com/da8ter/TileVisu-Raum-Titel-Kachel.git
+
+### 4. Einrichten der Instanzen in IP-Symcon
+
+Unter 'Instanz hinzufügen' kann die Multi‑Raum‑Kachel mithilfe des Schnellfilters gefunden werden. (Suchbegriff: MultiRoom, TileVisu oder Kachel)  
+- Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
+
+### 5. Kachelkonfiguration
+
+Grundsätzlicher Hinweis:
+Standardmäßig sind alle Objekte in der Kachelansicht ausgeblendet. Sie werden nur angezeigt, wenn du sie entsprechend konfigurierst. Bitte beachte, dass nicht alle Änderungen an der Konfiguration automatisch in der Kachelansicht sichtbar sind. Sollten Änderungen nicht sofort erscheinen, lade bitte die Seite oder den iFrame neu.
+
+__Rastereinstellungen__
+Name     | Beschreibung
+-------- | ------------------
+Minimale Kachelbreite (px)|Minimale Breite jeder Raumkachel (für automatische Spalten)
+Abstand (px)|Abstand zwischen den Kacheln
+Eckenradius (px)|Abrundung der Kachel-Ecken
+Spalten (0 = auto)|Feste Anzahl der Spalten; 0 = automatische Spaltenaufteilung
+
+__Globale Standardwerte__
+Name     | Beschreibung
+-------- | ------------------
+Buttonfarben aus Hintergrundbild|Leitet Buttonfarben aus dem Kachelbild ab (optional)
+Schriftgröße (Info)|Schriftgröße der Info‑Badges (oben)
+Schriftfarbe (Info)|Schriftfarbe der Info‑Badges
+Hintergrund‑Transparenz (Infoleiste)|Transparenz der Info‑Badges (oben)
+Hintergrundfarbe (Infoleiste)|Hintergrundfarbe der Info‑Badges (oben)
+Schriftgröße (Menü)|Schriftgröße der Menüleiste
+Schriftfarbe (Menü)|Schriftfarbe der Menüleiste
+Hintergrund‑Transparenz (Menü)|Transparenz der Menüleiste
+Hintergrundfarbe (Menü)|Hintergrundfarbe der Menüleiste
+Hintergrundfarbe (Kachel)|Kachelhintergrundfarbe (unter dem Bild)
+Bildtransparenz|Transparenz des Hintergrundbildes
+Schriftgröße (Raumname)|Schriftgröße des zentralen Raumnamens
+Schriftfarbe (Raumname)|Schriftfarbe des zentralen Raumnamens
+
+__Räume__
+Name     | Beschreibung
+-------- | ------------------
+Raumname|Anzeige-Name des Raums (zentral in der Kachel)
+Objekt welche beim Klick geöffnet wird:|Objekt-ID, die beim Klicken geöffnet wird
+Info‑Leiste: Hintergrund‑Transparenz|Transparenz der Info‑Badges (einheitlich für links/mitte/rechts)
+Info‑Leiste: Hintergrundfarbe|Hintergrundfarbe der Info‑Badges (einheitlich)
+Info‑Elemente (Liste)|Dynamische Liste von Info‑Elementen (Bereich: links/mitte/rechts, Name/Icon/Wert)
+Menü‑Leiste anzeigen|Ein-/Ausblenden der Menüleiste
+Menü‑Elemente (Liste)|Dynamische Liste von Menü‑Elementen (Buttons/Optionen, optional Objekt öffnen)
+Schalter‑Ausrichtung|Ausrichtung der Menü‑Elemente (links/rechts)
+Schalter gleichmäßig verteilen|Verteilung der Menü‑Elemente über die Breite
+Hintergrundbild|Medienobjekt (Bild) für die Kachel
+Bildtransparenz|Transparenz des Hintergrundbildes
+Hintergrundfarbe|Farbe unter dem Bild (sichtbar bei Bildtransparenz)
+Lichtstatus / Dimmwert|Optionaler Bildfilter: Bool (ein/aus) und/oder 0..100 für die Intensität
+
+Hinweise zum Bildfilter:
+- `false` (Licht aus) → maximaler Effekt (Dimmwert wird ignoriert)
+- `true` (Licht an) → Dimmwert steuert; fehlt Dimmwert, ist der Effekt aus
+- Ohne Lichtstatus steuert ausschließlich der Dimmwert (100 = kein Effekt, 0 = max)

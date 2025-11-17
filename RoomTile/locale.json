@@ -1,6 +1,7 @@
 {
   "translations": {
     "de": {
+      "Raum Kachel": "Raum Kachel",
       "Info-Leiste": "Info-Leiste",
       "Menü-Leiste": "Menü-Leiste",
       "Globale Standardwerte": "Globale Standardwerte",
@@ -75,6 +76,7 @@
       "Breite": "Breite"
     },
     "en": {
+      "Raum Kachel": "Room Tile",
       "Info-Leiste": "Info Bar",
       "Menü-Leiste": "Menu",
       "Globale Standardwerte": "Global defaults",

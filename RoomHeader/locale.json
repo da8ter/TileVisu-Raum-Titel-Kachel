@@ -1,7 +1,7 @@
 {
     "translations": {
         "de": {
-            "TileVisu Room Header Tile": "TileVisu Raum-Titel Kachel",
+            "TileVisu Room Header Tile (EOL)": "TileVisu Raum-Titel Kachel (EOL)",
             "Tile configuration:": "Kachelkonfiguration:",
             "Example of a fully configured tile": "Beispiel einer voll konfigurierten Kachel",
             "Room name and picture": "Raumname und Bild",

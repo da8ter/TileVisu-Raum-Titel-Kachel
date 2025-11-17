@@ -1,6 +1,7 @@
 {
   "translations": {
     "de": {
+      "Multi Raum Kachel": "Multi Raum Kachel",
       "Info-Leiste": "Info-Leiste",
       "Menü-Leiste": "Menü-Leiste",
       "Globale Standardwerte": "Globale Standardwerte",
@@ -74,6 +75,7 @@
       "Hintergrundfarbe (Infoleiste)": "Hintergrundfarbe (Infoleiste)"
     },
     "en": {
+      "Multi Raum Kachel": "Multi Room Tile",
       "Info-Leiste": "Info Bar",
       "Menü-Leiste": "Menu",
       "Globale Standardwerte": "Global defaults",
