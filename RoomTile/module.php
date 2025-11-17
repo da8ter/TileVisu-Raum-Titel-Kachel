@@ -1,6 +1,6 @@
 <?php
  require_once __DIR__ . '/../libs/TileVisuLib.php';
-class TileVisuRoomTile extends IPSModule
+class RoomTile extends IPSModule
 {
     public function Create()
     {

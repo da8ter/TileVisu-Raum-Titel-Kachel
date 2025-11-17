@@ -1,6 +1,6 @@
 <?php
  require_once __DIR__ . '/../libs/TileVisuLib.php';
-class TileVisuRoomHeaderGrid extends IPSModule
+class MultiRoomTile extends IPSModule
 {
     public function Create()
     {
