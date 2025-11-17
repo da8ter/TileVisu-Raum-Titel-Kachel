@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <script src="/icons.js" crossorigin="anonymous"></script>
+  <style>
+    :root { --menu-padding: 20px; }
+    /* Single tile view: no grid container needed */
+
+    body {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: var(--hintergrundfarbe);
+    }
+
+    .tile {
+      position: fixed;
+      inset: 0;
+      background: var(--hintergrundfarbe, #000);
+      overflow: hidden;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      box-sizing: border-box;
+      z-index: 9999999 !important;
+    }
+
+    .tile-bg {
+      position: absolute;
+      inset: 0;
+      background-position: bottom;
+      background-repeat: no-repeat;
+      background-size: cover;
+      opacity: var(--transparenz, 0.7);
+      z-index: 1;
+    }
+
+    .tile > :not(.tile-bg):not(.row-top):not(.center) { position: relative; z-index: 2; }
+
+    .row-top {
+      position: static;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 8px;
+      padding-bottom: 8px;
+      flex-grow: 1;
+    }
+    .row-top.centered { justify-content: center; }
+    .row-top.sides { justify-content: space-between; }
+
+    .left, .right, .mid {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+      min-height: 20px;
+      flex: 0 0 auto;
+      z-index: 3;
+      padding: 4px 8px;
+      background-color: var(--infotophintergrundfarbe, rgba(0,0,0,0.3));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--infotop-borderradius, 50px);
+      box-sizing: border-box;
+      width: fit-content;
+      height: fit-content;
+    }
+    .left.single-only, .right.single-only, .mid.single-only { justify-content: center; }
+    .left.single-only .group, .right.single-only .group, .mid.single-only .group { margin-left: auto; margin-right: auto; }
+    .left.single-only .group.only-icon, .right.single-only .group.only-icon, .mid.single-only .group.only-icon { width: 100%; justify-content: center; }
+
+    .left:empty, .right:empty, .mid:empty {
+      display: none;
+    }
+
+    .left .group, .right .group, .mid .group { 
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .menu-switches .group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .info-icon.solo {
+      margin-right: 0;
+      margin-left: 0;
+    }
+    .info-icon.svg-inline--fa, .switch-icon.svg-inline--fa { height: 1em; }
+    .group.only-icon {
+      gap: 0;
+      justify-content: center;
+    }
+    /* Ensure icon-only badges have vertical spacing in top info area */
+    .row-top .group.only-icon { padding-top: 4px; padding-bottom: 4px; }
+    .nv {
+      display: inline;
+    }
+    .nv .info-name[id$="colon"] {
+      white-space: pre;
+    }
+    
+    .sep {
+      width: 1px;
+      align-self: stretch;
+      background-color: var(--infoschriftfarbe, #fff);
+      min-height: 20px;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .center { 
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .center * {
+      pointer-events: none;
+    }
+    .center .raumname { 
+      margin: 0;
+      line-height: 1.2; /* Verbesserte Lesbarkeit */
+    }
+
+    .menueleiste {
+      backdrop-filter: blur(10px) brightness(1);
+      -webkit-backdrop-filter: blur(10px) brightness(1);
+      background-color: var(--infomenuehintergrundfarbe, rgba(0,0,0,0.3));
+      color: var(--infomenueschriftfarbe, #fff);
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 6px var(--menu-padding, 20px);
+      flex-shrink: 0;
+      border-radius: 0 0 var(--borderRadius, 0px) var(--borderRadius, 0px);
+    }
+    .menueleiste.is-hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .hidden { display: none !important; }
+
+    .menu-switches { 
+      --switch-gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: var(--switch-gap, 10px);
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .menu-switches > .switch-group, .menu-switches > .group { flex: 0 0 auto; }
+    .menu-switches.align-left { justify-content: flex-start; }
+    .menu-switches.align-center { justify-content: center; }
+    .menu-switches.align-right { justify-content: flex-end; align-content: flex-end; gap: 0; }
+    .menu-switches.align-right > * + * { margin-left: var(--switch-gap, 10px); }
+    .menu-switches.distribute { justify-content: space-between; gap: 0; }
+    /* Full-width overrides for direct children - must come after alignment */
+    .menu-switches > .switch-group.full-width,
+    .menu-switches > .group.full-width { flex: 1 1 0; min-width: 0; width: auto; }
+    .menu-switches .switch-group.full-width .switch { width: 100%; min-width: 0; }
+    .menu-switches .switch-group.full-width .switch-option { flex: 1 1 0; min-width: 0; }
+    .menu-switches .group.full-width .switch { width: 100%; min-width: 0; }
+    /* Single button auto full-width - only for left alignment and not in distribute mode */
+    .menu-switches.single-button.align-left:not(.distribute) .switch-group { width: 100%; }
+    .menu-switches.single-button.align-left:not(.distribute) .switch { width: 100%; min-width: 0; }
+
+    .info-name, .info-value { white-space: nowrap; }
+    .row-top .info-name, .row-top .info-value { font-size: var(--infofontsize, 16px); }
+    .menueleiste .info-name, .menueleiste .info-value { font-size: var(--infomenuefontsize, 16px); }
+    .row-top .group .info-name, .row-top .group .info-value { color: var(--infoschriftfarbe, #fff); }
+    .row-top .info-icon { font-size: calc(var(--infofontsize, 16px) * 0.805); color: var(--infoschriftfarbe, #fff); }
+    .menueleiste .info-icon, .menueleiste .switch-icon { font-size: calc(var(--infomenuefontsize, 16px) * 0.805); color: var(--infomenueschriftfarbe, #fff); }
+
+    /* Fixed spacing for menu text items (no-action) and separators */
+    .menueleiste .group.no-action { padding: 0 12px; }
+    .menueleiste .group.no-action .info-icon { margin-right: 0px; }
+    .menueleiste .sep { margin: 0 0px; }
+
+    .switch {
+      display: inline-flex;
+      align-items: center;
+      height: var(--button-height, 25px);
+      padding: 0 12px;
+      border: none;
+      border-radius: var(--progress-bar-border-radius, 10px);
+      background-color: var(--accent-color, #f8f9fa);
+      color: var(--infomenueschriftfarbe, #fff);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: var(--infomenuefontsize, 16px);
+      font-weight: 500;
+      user-select: none;
+      min-width: 80px;
+      justify-content: center;
+      box-sizing: border-box;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      background-clip: padding-box;
+    }
+    .switch.hide-values .info-value { display: none !important; }
+    .switch.hide-labels .info-name { display: none !important; }
+    .switch:hover { opacity: 0.8; }
+    .switch.inactive::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .switch-group { display: flex; gap: 1px; align-items: center; }
+    .switch-option {
+      display: inline-flex;
+      align-items: center;
+      height: var(--button-height, 25px);
+      padding: 0 8px;
+      border: none;
+      border-radius: var(--progress-bar-border-radius, 10px);
+      background-color: var(--accent-color, #f8f9fa);
+      color: var(--infomenueschriftfarbe, #fff);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: var(--infomenuefontsize, 16px);
+      font-weight: 500;
+      user-select: none;
+      min-width: 60px;
+      justify-content: center;
+      box-sizing: border-box;
+      flex: 0 0 auto;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      background-clip: padding-box;
+    }
+    .switch-option:hover { opacity: 0.8; }
+    .switch-option.active { font-weight: 600; }
+    .switch-option.inactive::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .switch-group .switch-option:first-child { border-radius: var(--progress-bar-border-radius, 10px) 0 0 var(--progress-bar-border-radius, 10px); }
+    .switch-group .switch-option:last-child { border-radius: 0 var(--progress-bar-border-radius, 10px) var(--progress-bar-border-radius, 10px) 0; }
+    .switch-group .switch-option:not(:first-child):not(:last-child) { border-radius: 0; }
+    .switch-group .switch-option:only-child { border-radius: var(--progress-bar-border-radius, 10px); }
+    .switch-group.hide-labels .switch-option .info-name { display: none; }
+    .switch-group.hide-values .switch-option .info-value { display: none; }
+    .switch-group.hide-icons .switch-option .switch-icon { display: none; }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script>
+    const iconMapping = window.iconMapping || {};
+    // Global flags and per-room palettes
+    const GRID_FLAGS = { useImageColorsForButtons: false };
+    const IMAGE_PALETTES = {}; // key: room DOM id (e.g., 'room-0') -> array of colors
+    function prepareIconClass(iconName) {
+      if (!iconName || iconName === 'Transparent') return '';
+      const resolvedRaw = String(iconName).trim();
+      const mapped = iconMapping[resolvedRaw] ?? resolvedRaw;
+      let iconClass = String(mapped).trim();
+      // Respektiere vorhandene Prefixe (fa-light/fa-solid/fa-regular/fa-brands/fas/far/fal/fab/fa-kit/fak)
+      const tokens = iconClass.split(/\s+/).filter(Boolean);
+      const hasPrefix = tokens.some(t => (
+        t === 'fa-light' || t === 'fa-solid' || t === 'fa-regular' || t === 'fa-brands' ||
+        t === 'fas' || t === 'far' || t === 'fal' || t === 'fab' || t === 'fa-kit' || t === 'fak'
+      ));
+      if (hasPrefix) {
+        if (!tokens.includes('fa-fw')) {
+          iconClass = 'fa-fw ' + iconClass;
+        }
+        return iconClass;
+      }
+      const baseName = iconClass.startsWith('fa-') ? iconClass.substring(3) : iconClass;
+      const styles = [
+        { classes: 'fa-kit fak', find: 'fak' },
+        { classes: 'fa-solid',  find: 'fas' },
+        { classes: 'fas',       find: 'fas' },
+        { classes: 'fa-regular',find: 'far' },
+        { classes: 'far',       find: 'far' },
+        { classes: 'fa-light',  find: 'fal' },
+        { classes: 'fal',       find: 'fal' },
+        { classes: 'fa-brands', find: 'fab' },
+        { classes: 'fab',       find: 'fab' },
+      ];
+      try {
+        if (window.FontAwesome && typeof window.FontAwesome.findIconDefinition === 'function') {
+          for (const s of styles) {
+            try {
+              const def = window.FontAwesome.findIconDefinition({ prefix: s.find, iconName: baseName });
+              if (def) {
+                return `fa-fw ${s.classes} fa-${baseName}`;
+              }
+            } catch (e) {}
+          }
+        }
+      } catch (e) {}
+      return `fa-fw fa-kit fak fa-${baseName}`;
+    }
+    function ensureFaSvg(node) {
+      try {
+        if (!node) return;
+        // Kit-Icons werden als Font gerendert – nicht in SVG konvertieren
+        const hasKitIcon = (node.classList && node.classList.contains('fak')) ||
+          (typeof node.querySelector === 'function' && !!node.querySelector('.fak'));
+        if (hasKitIcon) return;
+        if (window.FontAwesome && window.FontAwesome.dom && typeof window.FontAwesome.dom.i2svg === 'function') {
+          window.FontAwesome.dom.i2svg({ node, observeMutations: false });
+        }
+      } catch (e) { }
+    }
+    function el(tag, attrs = {}, children = []) {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) {
+        if (k === 'class') e.className = v; else if (k === 'style') e.setAttribute('style', v); else e.id = k === 'id' ? v : e.id, e.setAttribute(k, v);
+      }
+      for (const c of [].concat(children)) e.append(c instanceof Node ? c : document.createTextNode(c));
+      return e;
+    }
+
+    function setIconElementById(elId, newClass) {
+      const cur = document.getElementById(elId);
+      if (!cur) return null;
+      const p = cur.parentElement;
+      if (!p) return null;
+      if (cur.tagName !== 'I') {
+        const i = document.createElement('i');
+        i.id = elId;
+        i.className = newClass || '';
+        p.replaceChild(i, cur);
+        return i;
+      }
+      cur.className = newClass || '';
+      return cur;
+    }
+
+    function computeBgFilterString(percent) {
+      const p = Math.max(0, Math.min(100, Number(percent) || 0));
+      const f = p / 100;
+      const brightness = 1 - 0.8 * f; // 1.0 -> 0.2
+      const contrast = 1 - 0.1 * f;   // 1.0 -> 0.9
+      const grayscale = 0.5 * f;      // 0.0 -> 0.5
+      return `brightness(${brightness.toFixed(3)}) contrast(${contrast.toFixed(3)}) grayscale(${grayscale.toFixed(3)})`;
+    }
+
+    async function loadImageForTile(url, bgEl) {
+      if (!bgEl || !url) return null;
+      bgEl.style.backgroundImage = 'url(' + url + ')';
+      
+      return new Promise((resolve) => {
+        const tryFetchFallback = () => {
+          try {
+            fetch(url, { cache: 'no-store' })
+              .then(r => r.ok ? r.blob() : Promise.reject())
+              .then(blob => new Promise(res => { const fr = new FileReader(); fr.onloadend = () => res(fr.result); fr.readAsDataURL(blob); }))
+              .then(dataUri => resolve(typeof dataUri === 'string' ? dataUri : null))
+              .catch(() => resolve(null));
+          } catch (e) { resolve(null); }
+        };
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            ctx.drawImage(img, 0, 0);
+            const dataUri = canvas.toDataURL('image/png');
+            resolve(dataUri);
+          } catch (e) {
+            tryFetchFallback();
+          }
+        };
+        img.onerror = () => tryFetchFallback();
+        img.src = url;
+      });
+    }
+
+    // --- Image palette extraction helpers ---
+    function _clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    function _luminance(r, g, b) {
+      // relative luminance 0..1
+      const srgb = [r, g, b].map(v => {
+        v = v / 255;
+        return (v <= 0.04045) ? (v / 12.92) : Math.pow((v + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2];
+    }
+    function _rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+    function _adjustLum(r, g, b, targetMin = 0.25, targetMax = 0.8) {
+      // keep colors within a pleasant brightness range for buttons
+      const lum = _luminance(r, g, b);
+      if (lum < targetMin || lum > targetMax) {
+        // scale towards target midpoint
+        const mid = (targetMin + targetMax) / 2;
+        // simple linear blend with white/black depending on lum
+        const t = lum < mid ? (mid - lum) : (lum - mid);
+        const toward = lum < mid ? 255 : 0;
+        const blend = (c) => _clamp(Math.round(c * (1 - t) + toward * t), 0, 255);
+        return [blend(r), blend(g), blend(b)];
+      }
+      return [r, g, b];
+    }
+    async function extractPaletteFromDataUri(dataUri, maxColors = 8) {
+      return new Promise(resolve => {
+        try {
+          const img = new Image();
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d', { willReadFrequently: true });
+              const w = 64;
+              const h = Math.max(1, Math.round((img.height / img.width) * w));
+              canvas.width = w; canvas.height = h;
+              ctx.drawImage(img, 0, 0, w, h);
+              const data = ctx.getImageData(0, 0, w, h).data;
+              // coarse histogram in 16x16x16 bins
+              const hist = new Map();
+              for (let i = 0; i < data.length; i += 4) {
+                const a = data[i + 3]; if (a < 32) continue; // skip transparent
+                const r = data[i], g = data[i + 1], b = data[i + 2];
+                const lum = _luminance(r, g, b);
+                if (lum < 0.05 || lum > 0.97) continue; // ignore extremes
+                const rb = r >> 4, gb = g >> 4, bb = b >> 4;
+                const key = (rb << 8) | (gb << 4) | bb;
+                hist.set(key, (hist.get(key) || 0) + 1);
+              }
+              const entries = Array.from(hist.entries()).sort((a, b) => b[1] - a[1]);
+              const chosen = [];
+              const isFar = (c1, c2) => {
+                const dr = c1[0] - c2[0], dg = c1[1] - c2[1], db = c1[2] - c2[2];
+                return (dr*dr + dg*dg + db*db) > 40*40; // ensure variety
+              };
+              for (const [key] of entries) {
+                if (chosen.length >= maxColors) break;
+                const rb = (key >> 8) & 0xF, gb = (key >> 4) & 0xF, bb = key & 0xF;
+                let r = (rb << 4) + 8, g = (gb << 4) + 8, b = (bb << 4) + 8;
+                [r, g, b] = _adjustLum(r, g, b);
+                const cand = [r, g, b];
+                if (chosen.length === 0 || chosen.every(c => isFar(c, cand))) {
+                  chosen.push(cand);
+                }
+              }
+              // fallback if none
+              if (chosen.length === 0) {
+                chosen.push([120, 120, 120]);
+              }
+              resolve(chosen.map(c => _rgbToHex(c[0], c[1], c[2])));
+            } catch (e) { resolve([]); }
+          };
+          img.onerror = () => resolve([]);
+          img.src = dataUri;
+        } catch (e) { resolve([]); }
+      });
+    }
+
+    function colorsForCount(palette, count) {
+      if (!Array.isArray(palette) || palette.length === 0) return [];
+      const out = [];
+      for (let i = 0; i < count; i++) out.push(palette[i % palette.length]);
+      return out;
+    }
+    function applyPaletteToRoom(room, palette) {
+      if (!room || !palette || palette.length === 0) return;
+      const id = 'room-' + room.idx;
+      // apply to switch groups/buttons (static)
+      for (let i = 1; i <= 5; i++) {
+        const group = document.getElementById(id + '-schalter' + i + '-group');
+        if (!group) continue;
+        const options = room['schalter' + i + 'options'];
+        if (Array.isArray(options) && options.length > 0) {
+          const cols = colorsForCount(palette, options.length);
+          let k = 0;
+          for (const child of group.children) {
+            if (child && child.classList && child.classList.contains('switch-option')) {
+              child.style.backgroundColor = cols[k % cols.length];
+              k++;
+            }
+          }
+        } else {
+          // single button fallback inside group (only if action exists)
+          const hasAction = !!room['schalter' + i + 'hasaction'];
+          if (!hasAction) {
+            continue;
+          }
+          const btn = document.getElementById(id + '-schalter' + i);
+          if (btn) {
+            const baseCol = palette[0];
+            btn.dataset.fallbackcolor = baseCol;
+            if (btn.dataset && btn.dataset.vartype === '0') {
+              btn.dataset.colorOn = baseCol;
+              btn.dataset.colorOff = baseCol;
+              btn.style.backgroundColor = baseCol;
+            } else {
+              btn.style.backgroundColor = baseCol;
+            }
+          }
+        }
+      }
+      // apply to dynamic menu items
+      if (Array.isArray(room.menuitems)) {
+        for (const it of room.menuitems) {
+          const baseId = id + '-menuitem-' + it.id;
+          const group = document.getElementById(baseId + '-group');
+          if (!group) continue;
+          if (Array.isArray(it.options) && it.options.length > 0) {
+            const cols = colorsForCount(palette, it.options.length);
+            let k = 0;
+            for (const child of group.children) {
+              if (child && child.classList && child.classList.contains('switch-option')) {
+                child.style.backgroundColor = cols[k % cols.length];
+                k++;
+              }
+            }
+          } else {
+            const btn = document.getElementById(baseId);
+            if (btn && it.hasaction) {
+              const baseCol = palette[0];
+              btn.style.backgroundColor = baseCol;
+            }
+          }
+        }
+      }
+    }
+
+    function updateBadgeMinWidth(prefixId) {
+      const root = document.getElementById(prefixId);
+      if (!root) return;
+      const els = [];
+      const midEl = root.querySelector('.mid');
+      if (midEl) els.push(midEl);
+      const leftEl = root.querySelector('.left');
+      const rightEl = root.querySelector('.right');
+      if (!midEl) {
+        if (leftEl) els.push(leftEl);
+        if (rightEl) els.push(rightEl);
+      }
+
+      // First pass: reset and collect metrics
+      const metas = [];
+      for (const el of els) {
+        if (!el) continue;
+        // Reset overrides before measuring
+        el.style.width = '';
+        el.style.minWidth = '';
+        el.style.height = '';
+        const allGroups = Array.from(el.querySelectorAll('.group'));
+        const visibleGroups = allGroups.filter(g => g.style.display !== 'none' && g.offsetParent !== null);
+        const isSingle = visibleGroups.length === 1;
+        const isOnlyIcon = isSingle && visibleGroups[0] && visibleGroups[0].classList.contains('only-icon');
+        // Adjust side padding for icon-only badge
+        if (isOnlyIcon) {
+          el.style.padding = '0px';
+        } else {
+          el.style.padding = '';
+        }
+        // Measure natural height after padding change
+        const h = el.getBoundingClientRect().height;
+        metas.push({ el, h: Math.ceil(h), isOnlyIcon, allGroups, visibleGroups });
+      }
+
+      // Compute equal height for left/right when both are visible (sides layout)
+      let eqH = 0;
+      const leftMeta = metas.find(m => m.el === leftEl);
+      const rightMeta = metas.find(m => m.el === rightEl);
+      const leftVisible = !!(leftEl && leftEl.style.display !== 'none');
+      const rightVisible = !!(rightEl && rightEl.style.display !== 'none');
+      if (!midEl && leftVisible && rightVisible && leftMeta && rightMeta) {
+        eqH = Math.max(leftMeta.h || 0, rightMeta.h || 0);
+      }
+
+      // Second pass: apply sizes based on equalized height (if any)
+      for (const meta of metas) {
+        const { el, isOnlyIcon, allGroups, visibleGroups } = meta;
+        const useH = eqH > 0 && (el === leftEl || el === rightEl) ? eqH : meta.h;
+        if (useH > 0) {
+          // Fix container height to the larger height for left/right
+          if (el === leftEl || el === rightEl) {
+            el.style.height = useH + 'px';
+          }
+          if (isOnlyIcon) {
+            // Make badge square: width = height
+            el.style.width = useH + 'px';
+            el.style.minWidth = useH + 'px';
+            if (visibleGroups[0]) {
+              visibleGroups[0].style.minWidth = '100%';
+              visibleGroups[0].style.justifyContent = 'center';
+            }
+          } else {
+            // For general case keep pill min width equal to height
+            el.style.minWidth = useH + 'px';
+            allGroups.forEach(g => { g.style.minWidth = ''; });
+          }
+        }
+      }
+    }
+
+    function updateAllBadgeMinWidths() {
+      const tiles = document.querySelectorAll('.tile');
+      tiles.forEach(t => { if (t.id) updateBadgeMinWidth(t.id); });
+    }
+
+    window.addEventListener('resize', () => { updateAllBadgeMinWidths(); });
+
+    function infoSwitchGroup(prefixId, idx, n) {
+      const group = el('div', { id: prefixId + '-info' + n + '-group', class: 'switch-group' });
+      // Fallback: simple button if boolean
+      const btn = el('button', { id: prefixId + '-info' + n, class: 'hidden switch', onclick: `requestAction('room:${idx}:Info${n}', 1);` });
+      const name = el('span', { id: prefixId + '-info' + n + 'name', class: 'hidden info-name' });
+      const colon = el('span', { id: prefixId + '-info' + n + 'colon', class: 'hidden info-name' }, ':\u00A0');
+      const val = el('span', { id: prefixId + '-info' + n + 'asso', class: 'hidden info-value' });
+      btn.append(name, colon, val);
+      group.appendChild(btn);
+      return group;
+    }
+
+    function renderInfoSwitchGroup(prefixId, idx, n, options, currentValue, fallbackColor, widthPx, fullWidth) {
+      const group = document.getElementById(prefixId + '-info' + n + '-group');
+      if (!group) return;
+      group.innerHTML = '';
+      group.classList.toggle('full-width', !!fullWidth);
+      if (Array.isArray(options) && options.length > 0) {
+        for (const opt of options) {
+          const btn = el('button', { class: 'switch-option' + (String(opt.value) === String(currentValue) ? ' active' : ' inactive'), onclick: `requestAction('room:${idx}:Info${n}', ${JSON.stringify(opt.value)})`, 'data-value': String(opt.value) });
+          const icon = el('i', { class: 'hidden switch-icon' });
+          if (opt.icon) {
+            const cls = prepareIconClass(opt.icon);
+            if (cls) icon.className = cls + ' switch-icon';
+          }
+          const label = el('span', { class: 'info-name' }, opt.label ?? '');
+          if (opt.color) btn.style.backgroundColor = opt.color; else if (fallbackColor) btn.style.backgroundColor = fallbackColor;
+          if (widthPx) btn.style.minWidth = widthPx + 'px';
+          if (icon.className.indexOf('hidden') === -1) {
+            btn.appendChild(icon);
+            ensureFaSvg(btn);
+          }
+          btn.appendChild(label);
+          group.appendChild(btn);
+          if (icon.className && icon.className.indexOf('hidden') === -1) ensureFaSvg(btn);
+        }
+      } else {
+        // Fallback single button (toggle/legacy)
+        const btn = el('button', { id: prefixId + '-info' + n, class: 'hidden switch', onclick: `requestAction('room:${idx}:Info${n}', 1);` });
+        const name = el('span', { id: prefixId + '-info' + n + 'name', class: 'hidden info-name' });
+        const colon = el('span', { id: prefixId + '-info' + n + 'colon', class: 'hidden info-name' }, ':\u00A0');
+        const val = el('span', { id: prefixId + '-info' + n + 'asso', class: 'hidden info-value' });
+        btn.append(name, colon, val);
+        group.appendChild(btn);
+      }
+    }
+
+    function ensureTile(room) {
+      const grid = document.getElementById('container');
+      const id = 'room-' + room.idx;
+      let tile = document.getElementById(id);
+      if (tile) return tile;
+
+      tile = el('div', { id, class: 'tile' });
+      const bg = el('div', { id: id + '-bg', class: 'tile-bg' });
+      tile.appendChild(bg);
+
+      // Top row
+      const row = el('div', { class: 'row-top' });
+      tile.appendChild(row);
+      setTopInfoLayout(id, !!room.infotopcentered);
+
+      // center raumname (as overlay inside tile)
+      const center = el('div', { class: 'center' });
+      const rn = el('p', { id: id + '-raumname', class: 'raumname' }, '');
+      center.appendChild(rn);
+      tile.appendChild(center);
+
+      // menueleiste
+      const menu = el('div', { id: id + '-menueleiste', class: 'menueleiste' + (room.infomenueswitch ? '' : ' is-hidden') });
+      const switchContainer = el('div', { id: id + '-switches', class: 'menu-switches align-left' });
+      for (let i = 1; i <= 5; i++) {
+        const configured = !!room['schalter' + i + 'configured'];
+        if (!configured) continue;
+        const type = room['schalter' + i + 'type'];
+        const options = room['schalter' + i + 'options'];
+        const hasAction = !!room['schalter' + i + 'hasaction'];
+        const shouldMulti = hasAction && (type === 0 || (Array.isArray(options) && options.length > 0));
+        if (shouldMulti) {
+          switchContainer.appendChild(switchGroup(id, room.idx, i));
+        } else {
+          switchContainer.appendChild(groupSwitch(id, i));
+        }
+      }
+      menu.appendChild(switchContainer);
+      tile.appendChild(menu);
+
+      grid.appendChild(tile);
+      return tile;
+    }
+
+    function groupInfo(prefixId, key) {
+      const g = el('div', { class: 'group' });
+      const icon = el('i', { id: prefixId + '-' + key + 'icon', class: 'hidden info-icon' });
+      const name = el('span', { id: prefixId + '-' + key + 'name', class: 'hidden info-name' });
+      const colon = el('span', { id: prefixId + '-' + key + 'colon', class: 'hidden info-name' }, ': ');
+      const val = el('span', { id: prefixId + '-' + key + 'asso', class: 'hidden info-value' });
+      const textWrap = el('span', { class: 'nv' });
+      textWrap.append(name, colon, val);
+      g.append(icon, textWrap);
+      return g;
+    }
+
+    function isGroupVisible(prefixId, key) {
+      const parts = ['name', 'asso', 'icon'];
+      for (const p of parts) {
+        const el = document.getElementById(prefixId + '-' + key + p);
+        if (el && !el.classList.contains('hidden')) return true;
+      }
+      return false;
+    }
+
+    function adjustIconSolo(prefixId, key) {
+      const icon = document.getElementById(prefixId + '-' + key + 'icon');
+      const name = document.getElementById(prefixId + '-' + key + 'name');
+      const val = document.getElementById(prefixId + '-' + key + 'asso');
+      if (!icon || !name || !val) return;
+      const onlyIcon = !icon.classList.contains('hidden') &&
+                       name.classList.contains('hidden') &&
+                       val.classList.contains('hidden');
+      icon.classList.toggle('solo', onlyIcon);
+      const group = icon.parentElement;
+      if (group && group.classList) {
+        group.classList.toggle('only-icon', onlyIcon);
+      }
+    }
+
+    function updateInfoContainerVisibility(prefixId) {
+      const root = document.getElementById(prefixId);
+      if (!root) return;
+      const row = root.querySelector('.row-top');
+      if (!row) return;
+      // Prüfe, ob dynamische Info-Gruppen vorhanden sind
+      const hasDynamic = !!root.querySelector(`[id^="${prefixId}-infoitem-"]`);
+      const mid = root.querySelector('.mid');
+      if (mid && row.classList.contains('centered')) {
+        if (hasDynamic) {
+          const visCount = mid.querySelectorAll('.group').length;
+          mid.style.display = visCount > 0 ? '' : 'none';
+          mid.classList.toggle('single-only', visCount === 1);
+          return;
+        }
+        // Statischer Modus (Legacy)
+        const has1 = isGroupVisible(prefixId, 'infolinks');
+        const has2 = isGroupVisible(prefixId, 'infolinks2');
+        const has3 = isGroupVisible(prefixId, 'inforechts');
+        const has4 = isGroupVisible(prefixId, 'inforechts2');
+        const g1Icon = document.getElementById(prefixId + '-infolinksicon');
+        const g2Icon = document.getElementById(prefixId + '-infolinks2icon');
+        const g3Icon = document.getElementById(prefixId + '-inforechtsicon');
+        const g4Icon = document.getElementById(prefixId + '-inforechts2icon');
+        const g1 = g1Icon ? g1Icon.parentElement : null;
+        const g2 = g2Icon ? g2Icon.parentElement : null;
+        const g3 = g3Icon ? g3Icon.parentElement : null;
+        const g4 = g4Icon ? g4Icon.parentElement : null;
+        if (g1) g1.style.display = has1 ? '' : 'none';
+        if (g2) g2.style.display = has2 ? '' : 'none';
+        if (g3) g3.style.display = has3 ? '' : 'none';
+        if (g4) g4.style.display = has4 ? '' : 'none';
+        const sep1 = document.getElementById(prefixId + '-sep-mid-1');
+        const sep2 = document.getElementById(prefixId + '-sep-mid-2');
+        const sep3 = document.getElementById(prefixId + '-sep-mid-3');
+        if (sep1) sep1.style.display = (has1 && has2) ? 'block' : 'none';
+        if (sep2) sep2.style.display = (has2 && has3) ? 'block' : 'none';
+        if (sep3) sep3.style.display = (has3 && has4) ? 'block' : 'none';
+        const visCount = [has1, has2, has3, has4].filter(Boolean).length;
+        mid.style.display = visCount > 0 ? '' : 'none';
+        mid.classList.toggle('single-only', visCount === 1);
+        return;
+      }
+      // Left/Right Mode
+      const left = root.querySelector('.left');
+      const right = root.querySelector('.right');
+      if (hasDynamic) {
+        if (left) {
+          const groups = left.querySelectorAll('.group');
+          const visibleGroups = Array.from(groups).filter(g => {
+            // Check if group has any non-hidden content
+            const icon = g.querySelector('.info-icon:not(.hidden)');
+            const name = g.querySelector('.info-name:not(.hidden)');
+            const value = g.querySelector('.info-value:not(.hidden)');
+            return icon || name || value;
+          });
+          const cnt = visibleGroups.length;
+          left.style.display = cnt > 0 ? '' : 'none';
+          left.classList.toggle('single-only', cnt === 1);
+        }
+        if (right) {
+          const groups = right.querySelectorAll('.group');
+          const visibleGroups = Array.from(groups).filter(g => {
+            const icon = g.querySelector('.info-icon:not(.hidden)');
+            const name = g.querySelector('.info-name:not(.hidden)');
+            const value = g.querySelector('.info-value:not(.hidden)');
+            return icon || name || value;
+          });
+          const cnt = visibleGroups.length;
+          right.style.display = cnt > 0 ? '' : 'none';
+          right.classList.toggle('single-only', cnt === 1);
+        }
+        const sepL = document.getElementById(prefixId + '-sep-left'); if (sepL) sepL.style.display = 'none';
+        const sepR = document.getElementById(prefixId + '-sep-right'); if (sepR) sepR.style.display = 'none';
+        return;
+      }
+      // Statischer Modus (Legacy)
+      if (left) {
+        let sepL = document.getElementById(prefixId + '-sep-left');
+        if (!sepL) {
+          sepL = el('div', { id: prefixId + '-sep-left', class: 'sep sep-left' });
+          const children = Array.from(left.children);
+          const firstGroupIdx = children.findIndex(n => n.classList && n.classList.contains('group'));
+          if (firstGroupIdx !== -1 && firstGroupIdx + 1 <= children.length) {
+            left.insertBefore(sepL, children[firstGroupIdx + 1] || null);
+          } else {
+            left.appendChild(sepL);
+          }
+        }
+        const hasLeft1 = isGroupVisible(prefixId, 'infolinks');
+        const hasLeft2 = isGroupVisible(prefixId, 'infolinks2');
+        const leftGroups = left.querySelectorAll('.group');
+        if (leftGroups[0]) leftGroups[0].style.display = hasLeft1 ? '' : 'none';
+        if (leftGroups[1]) leftGroups[1].style.display = hasLeft2 ? '' : 'none';
+        const anyLeft = hasLeft1 || hasLeft2;
+        left.style.display = anyLeft ? '' : 'none';
+        if (sepL) sepL.style.display = (hasLeft1 && hasLeft2) ? 'block' : 'none';
+        const exactlyOneLeft = (hasLeft1 && !hasLeft2) || (!hasLeft1 && hasLeft2);
+        left.style.justifyContent = exactlyOneLeft ? 'center' : 'flex-start';
+        left.classList.toggle('single-only', exactlyOneLeft);
+      }
+      if (right) {
+        let sepR = document.getElementById(prefixId + '-sep-right');
+        if (!sepR) {
+          sepR = el('div', { id: prefixId + '-sep-right', class: 'sep sep-right' });
+          const children = Array.from(right.children);
+          const firstGroupIdx = children.findIndex(n => n.classList && n.classList.contains('group'));
+          if (firstGroupIdx !== -1 && firstGroupIdx + 1 <= children.length) {
+            right.insertBefore(sepR, children[firstGroupIdx + 1] || null);
+          } else {
+            right.appendChild(sepR);
+          }
+        }
+        const hasRight1 = isGroupVisible(prefixId, 'inforechts');
+        const hasRight2 = isGroupVisible(prefixId, 'inforechts2');
+        const rightGroups = right.querySelectorAll('.group');
+        if (rightGroups[0]) rightGroups[0].style.display = hasRight1 ? '' : 'none';
+        if (rightGroups[1]) rightGroups[1].style.display = hasRight2 ? '' : 'none';
+        const anyRight = hasRight1 || hasRight2;
+        right.style.display = anyRight ? '' : 'none';
+        if (sepR) sepR.style.display = (hasRight1 && hasRight2) ? 'block' : 'none';
+        const exactlyOneRight = (hasRight1 && !hasRight2) || (!hasRight1 && hasRight2);
+        right.style.justifyContent = exactlyOneRight ? 'center' : 'flex-start';
+        right.classList.toggle('single-only', exactlyOneRight);
+      }
+    }
+
+    function setTopInfoLayout(prefixId, centered) {
+      const tile = document.getElementById(prefixId);
+      if (!tile) return;
+      const row = tile.querySelector('.row-top');
+      if (!row) return;
+      row.innerHTML = '';
+      if (centered) {
+        row.classList.add('centered');
+        row.classList.remove('sides');
+        const mid = el('div', { class: 'mid' });
+        mid.appendChild(groupInfo(prefixId, 'infolinks'));
+        const sep1 = el('div', { id: prefixId + '-sep-mid-1', class: 'sep' });
+        mid.appendChild(sep1);
+        mid.appendChild(groupInfo(prefixId, 'infolinks2'));
+        const sep2 = el('div', { id: prefixId + '-sep-mid-2', class: 'sep' });
+        mid.appendChild(sep2);
+        mid.appendChild(groupInfo(prefixId, 'inforechts'));
+        const sep3 = el('div', { id: prefixId + '-sep-mid-3', class: 'sep' });
+        mid.appendChild(sep3);
+        mid.appendChild(groupInfo(prefixId, 'inforechts2'));
+        row.appendChild(mid);
+        tile.style.paddingTop = '10px';
+      } else {
+        row.classList.add('sides');
+        row.classList.remove('centered');
+        const left = el('div', { class: 'left' });
+        left.appendChild(groupInfo(prefixId, 'infolinks'));
+        const sepL = el('div', { id: prefixId + '-sep-left', class: 'sep sep-left' });
+        left.appendChild(sepL);
+        left.appendChild(groupInfo(prefixId, 'infolinks2'));
+        const right = el('div', { class: 'right' });
+        right.appendChild(groupInfo(prefixId, 'inforechts'));
+        const sepR = el('div', { id: prefixId + '-sep-right', class: 'sep sep-right' });
+        right.appendChild(sepR);
+        right.appendChild(groupInfo(prefixId, 'inforechts2'));
+        row.appendChild(left);
+        row.appendChild(right);
+        tile.style.paddingTop = '60px';
+      }
+    }
+
+    function setSwitchAlignment(prefixId, alignment, distribute) {
+      const cont = document.getElementById(prefixId + '-switches');
+      if (!cont) return;
+      // preserve existing alignment if undefined
+      let align = alignment;
+      if (!align) {
+        if (cont.classList.contains('align-center')) align = 'center';
+        else if (cont.classList.contains('align-right')) align = 'right';
+        else align = 'left';
+      }
+      cont.classList.remove('align-left', 'align-center', 'align-right');
+      cont.classList.add('align-' + align);
+      if (distribute === true) cont.classList.add('distribute');
+      if (distribute === false) cont.classList.remove('distribute');
+      // Force inline style with setProperty to override CSS classes
+      if (cont.classList.contains('distribute')) {
+        cont.style.setProperty('justify-content', 'space-between', 'important');
+      } else {
+        const jc = (align === 'center') ? 'center' : (align === 'right') ? 'flex-end' : 'flex-start';
+        cont.style.setProperty('justify-content', jc, 'important');
+      }
+    }
+
+    function updateSingleButtonState(prefixId) {
+      const cont = document.getElementById(prefixId + '-switches');
+      if (!cont) return;
+      // Count visible switch groups/buttons
+      const groups = Array.from(cont.querySelectorAll('.switch-group, .group'));
+      const visibleGroups = groups.filter(g => {
+        return !g.classList.contains('hidden') && g.offsetParent !== null;
+      });
+      // Single button: apply full-width class
+      cont.classList.toggle('single-button', visibleGroups.length === 1);
+    }
+
+    function normalizeDistribute(prefixId) {
+      const cont = document.getElementById(prefixId + '-switches');
+      if (!cont) return;
+      if (!cont.classList.contains('distribute')) return;
+      const hasFull = Array.from(cont.children).some(c => c.classList && c.classList.contains('full-width'));
+      if (hasFull) cont.classList.remove('distribute');
+    }
+
+    function groupSwitch(prefixId, n) {
+      const base = prefixId + '-schalter' + n;
+      const g = el('div', { id: base + '-group', class: 'group hidden' });
+      const icon = el('i', { id: base + 'icon', class: 'hidden info-icon' });
+      const name = el('span', { id: base + 'name', class: 'hidden info-name' });
+      const colon = el('span', { id: base + 'colon', class: 'hidden info-name' }, ': ');
+      const val = el('span', { id: base + 'asso', class: 'hidden info-value' });
+      const textWrap = el('span', { class: 'nv' });
+      textWrap.append(name, colon, val);
+      g.append(icon, textWrap);
+      return g;
+    }
+
+    function switchGroup(prefixId, idx, n) {
+      const group = el('div', { id: prefixId + '-schalter' + n + '-group', class: 'switch-group' });
+      // Fallback: initial single button until data arrives
+      const fallback = switchButton(prefixId, idx, n);
+      group.appendChild(fallback);
+      return group;
+    }
+
+    function renderSwitchGroup(prefixId, idx, n, options, currentValue, fallbackColor, widthPx, iconswitch, showName, showValue, showIcon, fullWidth) {
+      const group = document.getElementById(prefixId + '-schalter' + n + '-group');
+      if (!group) return;
+      group.innerHTML = '';
+      group.classList.toggle('full-width', !!fullWidth);
+      // Toggle visibility for label/value/icon inside buttons
+      // Defaults: labels shown, values hidden (unless explicitly enabled), icons shown (subject to iconswitch)
+      group.classList.toggle('hide-labels', showName === false);
+      group.classList.toggle('hide-values', showValue !== true);
+      group.classList.toggle('hide-icons', showIcon === false);
+      if (Array.isArray(options) && options.length > 0) {
+        for (const opt of options) {
+          const btn = el('button', { class: 'switch-option' + (String(opt.value) === String(currentValue) ? ' active' : ' inactive'), onclick: `requestAction('room:${idx}:Schalter${n}', ${JSON.stringify(opt.value)})`, 'data-value': String(opt.value) });
+          const icon = el('i', { class: 'hidden switch-icon' });
+          if (iconswitch && opt.icon) {
+            const cls = prepareIconClass(opt.icon);
+            if (cls) {
+              icon.className = cls + ' switch-icon';
+            }
+          }
+          const label = el('span', { class: 'info-name' }, opt.label ?? '');
+          const valueText = el('span', { class: 'info-value' }, String(opt.value ?? ''));
+          if (opt.color) btn.style.backgroundColor = opt.color; else if (fallbackColor) btn.style.backgroundColor = fallbackColor;
+          if (widthPx && !fullWidth) btn.style.minWidth = widthPx + 'px'; else btn.style.minWidth = '';
+          if (icon.className.indexOf('hidden') === -1) btn.appendChild(icon);
+          btn.appendChild(label);
+          btn.appendChild(valueText);
+          group.appendChild(btn);
+        }
+      } else {
+        // Fallback to single button like legacy rendering
+        group.appendChild(switchButton(prefixId, idx, n));
+      }
+    }
+
+    function switchButton(prefixId, idx, n) {
+      const btn = el('button', { id: prefixId + '-schalter' + n, class: 'hidden switch', onclick: `requestAction('room:${idx}:Schalter${n}', 1);` });
+      const icon = el('i', { id: prefixId + '-schalter' + n + 'icon', class: 'hidden switch-icon' });
+      const name = el('span', { id: prefixId + '-schalter' + n + 'name', class: 'hidden info-name' });
+      const colon = el('span', { id: prefixId + '-schalter' + n + 'colon', class: 'hidden info-name' }, ': ');
+      const val = el('span', { id: prefixId + '-schalter' + n + 'asso', class: 'hidden info-value' });
+      const textWrap = el('span', { class: 'nv' });
+      textWrap.append(name, colon, val);
+      btn.append(icon, textWrap);
+      ensureFaSvg(btn);
+      return btn;
+    }
+
+    function renderDynamicInfo(prefixId, roomObj) {
+      const root = document.getElementById(prefixId);
+      if (!root) return;
+      const row = root.querySelector('.row-top');
+      if (!row) return;
+      const centered = !!roomObj.infotopcentered;
+      const left = row.querySelector('.left');
+      const right = row.querySelector('.right');
+      const mid = row.querySelector('.mid');
+      const items = Array.isArray(roomObj.infoitems) ? roomObj.infoitems.slice() : [];
+      if (left) left.innerHTML = '';
+      if (right) right.innerHTML = '';
+      if (mid) mid.innerHTML = '';
+      if (centered) {
+        // Im zentrierten Modus: Zeige ALLE Items in der Mitte (ignoriere Area)
+        const list = items.sort((a,b)=> (a.order||0)-(b.order||0));
+        for (let i = 0; i < list.length; i++) {
+          const it = list[i];
+          const g = groupInfo(prefixId, it.key);
+          if (mid) mid.appendChild(g);
+          applyInfo(prefixId, it.key, roomObj);
+          // Add separator after each item except the last
+          if (i < list.length - 1) {
+            const sep = el('div', { class: 'sep', style: 'display:block;' });
+            if (mid) mid.appendChild(sep);
+          }
+        }
+      } else {
+        // Im Seitenlayout: Filtere nach Area left/right
+        const listL = items.filter(it => it.area === 'left').sort((a,b)=> (a.order||0)-(b.order||0));
+        const listR = items.filter(it => it.area === 'right').sort((a,b)=> (a.order||0)-(b.order||0));
+        for (let i = 0; i < listL.length; i++) {
+          const it = listL[i];
+          const g = groupInfo(prefixId, it.key);
+          if (left) left.appendChild(g);
+          applyInfo(prefixId, it.key, roomObj);
+          if (i < listL.length - 1 && left) {
+            left.appendChild(el('div', { class: 'sep', style: 'display:block;' }));
+          }
+        }
+        for (let i = 0; i < listR.length; i++) {
+          const it = listR[i];
+          const g = groupInfo(prefixId, it.key);
+          if (right) right.appendChild(g);
+          applyInfo(prefixId, it.key, roomObj);
+          if (i < listR.length - 1 && right) {
+            right.appendChild(el('div', { class: 'sep', style: 'display:block;' }));
+          }
+        }
+      }
+      updateInfoContainerVisibility(prefixId);
+      updateBadgeMinWidth(prefixId);
+    }
+
+    function renderDynamicMenu(prefixId, roomObj) {
+      const cont = document.getElementById(prefixId + '-switches');
+      if (!cont) return;
+      const items = Array.isArray(roomObj.menuitems) ? roomObj.menuitems.slice() : [];
+      cont.innerHTML = '';
+      // Track sequences of adjacent single buttons without action
+      let lastNoAction = false;
+      for (const it of items.sort((a,b)=> (a.order||0)-(b.order||0))) {
+        const baseId = prefixId + '-menuitem-' + it.id;
+        const isObjectAction = it.action === 'object' && it.openObjectId > 0 && typeof openObject === 'function';
+        const hasOptions = Array.isArray(it.options) && it.options.length > 0 && it.hasaction && it.action === 'variable';
+        if (hasOptions) {
+          const group = el('div', { id: baseId + '-group', class: 'switch-group' + (it.fullWidth ? ' full-width' : '') });
+          // Steuere Sichtbarkeit von Label/Value/Icon gemäß Konfiguration
+          group.classList.toggle('hide-labels', it.showName === false);
+          group.classList.toggle('hide-values', it.showValue !== true);
+          group.classList.toggle('hide-icons', it.showIcon === false);
+          cont.appendChild(group);
+          const optWidth = (it.width && !it.fullWidth) ? (it.width|0) : 0;
+          const useImgCol = (roomObj.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons);
+          for (const opt of it.options) {
+            const val = (opt.value !== undefined) ? opt.value : (opt.Value !== undefined ? opt.Value : opt);
+            const label = (opt.label !== undefined) ? opt.label : (opt.Name !== undefined ? opt.Name : String(val));
+            const btn = el('button', { class: 'switch-option' + (String(it.value) === String(val) ? ' active' : ' inactive'), onclick: `requestAction('menuitem:${it.id}', ${JSON.stringify(val)})`, 'data-value': String(val) });
+            // Icon (optional)
+            if (it.showIcon && opt.icon) {
+              const cls = prepareIconClass(opt.icon);
+              if (cls) {
+                const i = el('i', { class: cls + ' switch-icon' });
+                btn.appendChild(i);
+                ensureFaSvg(btn);
+              }
+            }
+            // Label & Value
+            btn.appendChild(el('span', { class: 'info-name' }, label ?? ''));
+            btn.appendChild(el('span', { class: 'info-value' }, String(val ?? '')));
+            // Farben & Breite (skip if using image colors - palette will be applied after)
+            if (!useImgCol) {
+              if (opt.color) btn.style.backgroundColor = opt.color; else if (it.color) btn.style.backgroundColor = it.color;
+            }
+            if (optWidth > 0) btn.style.minWidth = optWidth + 'px'; else btn.style.minWidth = '';
+            group.appendChild(btn);
+          }
+          // Break the no-action sequence
+          lastNoAction = false;
+        } else {
+          const isNoAction = !it.hasaction;
+          if (isNoAction) {
+            if (lastNoAction) {
+              cont.appendChild(el('div', { class: 'sep' }));
+            }
+            const wrapper = el('div', { id: baseId + '-group', class: 'group no-action' + (it.fullWidth ? ' full-width' : '') });
+            if (it.showIcon && roomObj[`${it.key}icon`]) {
+              const cls = prepareIconClass(roomObj[`${it.key}icon`]);
+              if (cls) {
+                const i = el('i', { id: baseId + 'icon', class: cls + ' info-icon' + (it.showIcon === false ? ' hidden' : '') });
+                wrapper.appendChild(i);
+                ensureFaSvg(wrapper);
+              }
+            }
+            const label = (roomObj[`${it.key}name`] || '');
+            const v = (roomObj[`${it.key}asso`] || roomObj[`${it.key}`] || '');
+            const textWrap = el('span', { class: 'nv' });
+            textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (it.showName === false ? ' hidden' : '') }, label));
+            if (it.showValue && (v || v === 0)) {
+              textWrap.appendChild(el('span', { id: baseId + 'colon', class: 'info-name' }, ': '));
+              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' }, String(v)));
+            } else {
+              // Ensure value span exists for delta updates even if initially hidden
+              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value hidden' }, ''));
+            }
+            wrapper.appendChild(textWrap);
+            cont.appendChild(wrapper);
+            lastNoAction = true;
+          } else {
+            const btnAttrs = { id: baseId, class: 'switch' };
+            if (isObjectAction) {
+              btnAttrs.class += ' object-action';
+            }
+            const btn = el('button', btnAttrs);
+            if (it.type !== undefined) btn.dataset.vartype = String(it.type);
+            if (it.colorOn) btn.dataset.colorOn = it.colorOn;
+            if (it.colorOff) btn.dataset.colorOff = it.colorOff;
+            if (it.color) btn.dataset.fallbackcolor = it.color;
+            btn.dataset.currentValue = String(it.value ?? '');
+            const useImgCol = (roomObj.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons);
+            if (it.type === 0 && !isObjectAction) {
+              const isOn = (it.value === true || String(it.value) === '1');
+              btn.classList.toggle('inactive', !isOn);
+              if (!useImgCol) {
+                let bg = isOn ? (it.colorOn || it.color || '') : (it.colorOff || it.color || '');
+                if (bg) btn.style.backgroundColor = bg;
+              }
+            } else if (!isObjectAction && it.color && !useImgCol) {
+              btn.style.backgroundColor = it.color;
+            }
+            if (isObjectAction) {
+              btn.onclick = () => openObject(Number(it.openObjectId));
+            } else if (it.type === 0) {
+              btn.onclick = () => {
+                const currentVal = btn.dataset.currentValue === 'true' || btn.dataset.currentValue === '1';
+                const newVal = !currentVal;
+                requestAction('menuitem:' + it.id, newVal);
+              };
+            } else {
+              btn.onclick = () => requestAction('menuitem:' + it.id, 1);
+            }
+            if (it.showIcon !== false && roomObj[`${it.key}icon`]) {
+              const cls = prepareIconClass(roomObj[`${it.key}icon`]);
+              if (cls) {
+                const i = el('i', { id: baseId + 'icon', class: cls + ' switch-icon' });
+                btn.appendChild(i);
+                ensureFaSvg(btn);
+              }
+            }
+            const label = (roomObj[`${it.key}name`] || '');
+            const v = (roomObj[`${it.key}asso`] || roomObj[`${it.key}`] || '');
+            // Wrap text to avoid flex gap between name and colon
+            const textWrap = el('span', { class: 'nv' });
+            const showLabel = it.showName !== false || isObjectAction;
+            if (showLabel && label) textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' }, label));
+            if (!isObjectAction && it.showValue && (v || v === 0)) {
+              textWrap.appendChild(el('span', { id: baseId + 'colon', class: 'info-name' }, ': '));
+              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' }, String(v)));
+            }
+            if (isObjectAction) {
+              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value hidden' }, ''));
+            }
+            btn.appendChild(textWrap);
+            const isFull = !!it.fullWidth;
+            if (isFull) {
+              const wrapper = el('div', { id: baseId + '-group', class: 'group full-width' });
+              wrapper.appendChild(btn);
+              cont.appendChild(wrapper);
+              lastNoAction = false;
+            } else {
+              if (it.width && it.width > 0) { btn.style.minWidth = (it.width|0) + 'px'; }
+              const wrapper = el('div', { id: baseId + '-group', class: 'group' });
+              wrapper.appendChild(btn);
+              cont.appendChild(wrapper);
+              lastNoAction = false;
+            }
+          }
+        }
+      }
+      updateSingleButtonState(prefixId);
+      normalizeDistribute(prefixId);
+      setSwitchAlignment(prefixId, roomObj.schalteralignment, !!roomObj.schalterdistribute);
+    }
+
+    function applyRoomState(room) {
+      const id = 'room-' + room.idx;
+      const root = document.getElementById(id);
+      if (!root) return;
+
+      root.onclick = null;
+      const menuEl = document.getElementById(id + '-menueleiste');
+      if (menuEl) menuEl.onclick = (e) => { e.stopPropagation(); };
+      if (room.targetlink && Number(room.targetlink) > 0 && typeof openObject === 'function') {
+        const target = Number(room.targetlink);
+        root.style.cursor = 'pointer';
+        root.onclick = () => openObject(target);
+      } else {
+        root.style.cursor = '';
+      }
+
+      // Grid-independent styling per room
+      root.style.setProperty('--hintergrundfarbe', room.hintergrundfarbe || '#000');
+      root.style.setProperty('--infomenuehintergrundfarbe', room.infomenuehintergrundfarbe || 'rgba(0,0,0,0.3)');
+      root.style.setProperty('--infomenueschriftfarbe', room.infomenueschriftfarbe || '#fff');
+      root.style.setProperty('--infomenuefontsize', (room.infomenuefontsize || 16) + 'px');
+      root.style.setProperty('--infofontsize', (room.infofontsize || 16) + 'px');
+      root.style.setProperty('--infoschriftfarbe', room.infoschriftfarbe || '#fff');
+      root.style.setProperty('--infotophintergrundfarbe', room.infotophintergrundfarbe || 'rgba(0,0,0,0.3)');
+      root.style.setProperty('--infotop-borderradius', ((room.infotopborderradius !== undefined ? room.infotopborderradius : 50)) + 'px');
+      root.style.setProperty('--progress-bar-border-radius', ((room.buttonborderradius !== undefined ? room.buttonborderradius : 10)) + 'px');
+      root.style.setProperty('--transparenz', room.transparenz ?? 0.7);
+
+      // Background image (+ optional palette -> button colors)
+      if (room.image1) {
+        const bg = document.getElementById(id + '-bg');
+        loadImageForTile(room.image1, bg).then((dataUri) => {
+          if (dataUri && (room.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons)) {
+            extractPaletteFromDataUri(dataUri, 8).then(pal => {
+              if (pal && pal.length) {
+                IMAGE_PALETTES[id] = pal;
+                // apply after switches are rendered below
+                setTimeout(() => applyPaletteToRoom(room, pal), 0);
+              }
+            });
+          }
+        });
+      }
+
+      // Hintergrund-Filter: 0 = aus, 100 = maximaler Effekt
+      try {
+        const bgEl = document.getElementById(id + '-bg');
+        if (bgEl) {
+          let p = Number(room.bgfilter);
+          if (!isFinite(p)) p = 0;
+          p = Math.max(0, Math.min(100, p));
+          bgEl.style.filter = p <= 0 ? '' : computeBgFilterString(p);
+        }
+      } catch (_) {}
+
+      // Raumname
+      const rn = document.getElementById(id + '-raumname');
+      if (rn && room.raumname !== undefined) rn.textContent = room.raumname;
+      if (room.raumnameschriftgroesse !== undefined) rn.style.fontSize = room.raumnameschriftgroesse + 'px';
+      if (room.raumnameschriftfarbe) rn.style.color = room.raumnameschriftfarbe;
+
+      // Ensure top info layout matches setting
+      setTopInfoLayout(id, !!room.infotopcentered);
+      // Dynamic info vs. fixed
+      if (Array.isArray(room.infoitems) && room.infoitems.length > 0) {
+        renderDynamicInfo(id, room);
+      } else {
+        for (const k of ['infolinks','infolinks2','inforechts','inforechts2']) {
+          applyInfo(id, k, room);
+        }
+        updateInfoContainerVisibility(id);
+        updateBadgeMinWidth(id);
+      }
+      
+      // Menu switch
+      const menu = document.getElementById(id + '-menueleiste');
+      if (menu) {
+        if (room.infomenueswitch) menu.classList.remove('is-hidden'); else menu.classList.add('is-hidden');
+      }
+
+      // Dynamic menu vs. fixed
+      if (Array.isArray(room.menuitems) && room.menuitems.length > 0) {
+        renderDynamicMenu(id, room);
+      } else {
+        for (let i = 1; i <= 5; i++) {
+          applySwitch(id, i, room);
+        }
+        updateSingleButtonState(id);
+        normalizeDistribute(id);
+        updateBadgeMinWidth(id);
+        setSwitchAlignment(id, room.schalteralignment, !!room.schalterdistribute);
+      }
+      // If palette already available and enabled, apply now
+      if ((room.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons) && IMAGE_PALETTES[id]) {
+        applyPaletteToRoom(room, IMAGE_PALETTES[id]);
+      }
+    }
+
+    function applyInfo(prefixId, key, roomObj) {
+      const valKey = key; // fallback key if '...asso' is not provided
+      const nameKey = key + 'name';
+      const iconKey = key + 'icon';
+      const assoKey = key + 'asso';
+
+      let iconEl = document.getElementById(prefixId + '-' + key + 'icon');
+      const nameEl = document.getElementById(prefixId + '-' + key + 'name');
+      const colonEl = document.getElementById(prefixId + '-' + key + 'colon');
+      const valEl = document.getElementById(prefixId + '-' + key + 'asso');
+
+      if (!iconEl || !nameEl || !colonEl || !valEl) return;
+      colonEl.textContent = ': ';
+
+      if (roomObj[nameKey]) { nameEl.textContent = roomObj[nameKey]; nameEl.classList.remove('hidden'); } else { nameEl.classList.add('hidden'); }
+      let valueToShow = roomObj[assoKey];
+      if (valueToShow === undefined || valueToShow === null || valueToShow === '') {
+        valueToShow = roomObj[valKey];
+      }
+      if (valueToShow !== undefined && valueToShow !== null && valueToShow !== '') { valEl.textContent = valueToShow; valEl.classList.remove('hidden'); } else { valEl.classList.add('hidden'); }
+      const showValFlag = (roomObj[key + 'showvalue'] !== undefined) ? !!roomObj[key + 'showvalue'] : true;
+      valEl.dataset.showvalue = showValFlag ? '1' : '0';
+      if (!showValFlag) { valEl.classList.add('hidden'); }
+      colonEl.classList.toggle('hidden', nameEl.classList.contains('hidden') || valEl.classList.contains('hidden'));
+
+      const showIconFlag = (roomObj[key + 'showicon'] !== undefined) ? !!roomObj[key + 'showicon'] : false;
+      iconEl.dataset.showicon = showIconFlag ? '1' : '0';
+      if (showIconFlag && roomObj[iconKey] && roomObj[iconKey] !== 'Transparent') {
+        const cls = prepareIconClass(roomObj[iconKey]);
+        iconEl = setIconElementById(prefixId + '-' + key + 'icon', cls ? (cls + ' info-icon') : 'hidden info-icon') || iconEl;
+        if (iconEl && !(iconEl.className || '').includes('hidden')) {
+          iconEl.style.display = '';
+          ensureFaSvg(iconEl.parentElement || iconEl);
+        }
+      } else {
+        iconEl.className = 'hidden info-icon';
+        iconEl.style.display = 'none';
+      }
+      // After updating one info group, adjust styles and container visibility
+      adjustIconSolo(prefixId, key);
+      updateInfoContainerVisibility(prefixId);
+      updateBadgeMinWidth(prefixId);
+    }
+
+    function applySwitch(prefixId, n, roomObj) {
+      const base = prefixId + '-schalter' + n;
+      let group = document.getElementById(base + '-group');
+      const idx = roomObj.idx;
+      const options = roomObj['schalter' + n + 'options'];
+      const hasAction = !!roomObj['schalter' + n + 'hasaction'];
+      const typeVal = roomObj['schalter' + n + 'type'];
+      const shouldMulti = hasAction && (typeVal === 0 || (Array.isArray(options) && options.length > 0));
+      const iconswitch = !!roomObj['schalter' + n + 'iconswitch'];
+      const fullWidth = !!roomObj['schalter' + n + 'vollebreite'];
+
+      // Ensure correct group type exists
+      if (shouldMulti) {
+        if (!group || !group.classList.contains('switch-group')) {
+          const wrap = document.getElementById(base + '-group');
+          const parent = wrap ? wrap.parentElement : document.getElementById(prefixId + '-switches');
+          if (parent) {
+            const newGroup = switchGroup(prefixId, idx, n);
+            if (wrap) parent.insertBefore(newGroup, wrap), parent.removeChild(wrap);
+            else parent.appendChild(newGroup);
+            group = newGroup;
+          }
+        }
+      } else {
+        if (!group || group.classList.contains('switch-group')) {
+          // replace switch-group with text group
+          const parent = group ? group.parentElement : document.getElementById(prefixId + '-switches');
+          if (parent) {
+            const newGroup = groupSwitch(prefixId, n);
+            if (group) parent.insertBefore(newGroup, group), parent.removeChild(group);
+            else parent.appendChild(newGroup);
+            group = newGroup;
+          }
+        }
+      }
+
+      // Apply full-width to the wrapper regardless of mode
+      if (group) {
+        group.classList.toggle('full-width', fullWidth);
+      }
+
+      // If options present, render multi-button
+      if (group && Array.isArray(options) && options.length > 0 && shouldMulti) {
+        const current = roomObj['schalter' + n + 'value'];
+        const color = roomObj['schalter' + n + 'color'];
+        const width = roomObj['schalter' + n + 'breite'];
+        const showName = (roomObj['schalter' + n + 'showname'] !== undefined) ? roomObj['schalter' + n + 'showname'] : roomObj['Schalter' + n + 'ShowName'];
+        const showValue = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? roomObj['schalter' + n + 'showvalue'] : roomObj['Schalter' + n + 'ShowValue'];
+        const showIcon = (roomObj['schalter' + n + 'showicon'] !== undefined) ? roomObj['schalter' + n + 'showicon'] : roomObj['Schalter' + n + 'ShowIcon'];
+        renderSwitchGroup(prefixId, idx, n, options, current, color, width, iconswitch, showName, showValue, showIcon, fullWidth);
+        return;
+      }
+
+      // Common element refs (works for both button and text group)
+      const nameKey = 'schalter' + n + 'name';
+      const altNameKey = 'schalter' + n + 'altname';
+      const iconKey = 'schalter' + n + 'icon';
+      const assoKey = 'schalter' + n + 'asso';
+      const colorKey = 'schalter' + n + 'color';
+      const widthKey = 'schalter' + n + 'breite';
+      const nameEl = document.getElementById(base + 'name');
+      const colonEl = document.getElementById(base + 'colon');
+      const valEl = document.getElementById(base + 'asso');
+      const iconEl = document.getElementById(base + 'icon');
+
+      // Name: AltName bevorzugt, sonst Name; anzeigen nur wenn einer gesetzt ist
+      const displayName = roomObj[altNameKey] ? roomObj[altNameKey] : roomObj[nameKey];
+      if (nameEl) { if (displayName) { nameEl.textContent = displayName; nameEl.classList.remove('hidden'); } else { nameEl.classList.add('hidden'); } }
+      if (valEl) { if (roomObj[assoKey] || roomObj[assoKey] === 0) { valEl.textContent = roomObj[assoKey]; valEl.classList.remove('hidden'); } else { valEl.classList.add('hidden'); } }
+      const showValSw = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? !!roomObj['schalter' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
+      if (valEl) {
+        valEl.dataset.showvalue = showValSw ? '1' : '0';
+        valEl.classList.toggle('hidden', !showValSw || (!valEl.textContent && valEl.textContent !== '0'));
+      }
+      if (colonEl && nameEl && valEl) { colonEl.classList.toggle('hidden', nameEl.classList.contains('hidden') || valEl.classList.contains('hidden')); }
+      
+      // Show/hide group based on whether it has any visible content
+      if (!shouldMulti && group) {
+        const hasVisibleContent = (nameEl && !nameEl.classList.contains('hidden')) || (valEl && !valEl.classList.contains('hidden')) || (iconEl && !iconEl.classList.contains('hidden'));
+        if (hasVisibleContent) { group.classList.remove('hidden'); } else { group.classList.add('hidden'); }
+      }
+
+      // If button mode
+      if (shouldMulti) {
+        const btn = document.getElementById(base);
+        if (!btn) return;
+        btn.classList.remove('hidden');
+        btn.classList.toggle('full-width', fullWidth);
+        if (fullWidth) { btn.style.width = ''; btn.style.minWidth = ''; }
+        if (group) { group.classList.toggle('full-width', fullWidth); }
+        else if (roomObj[widthKey]) { btn.style.minWidth = roomObj[widthKey] + 'px'; btn.style.width = ''; }
+        if (roomObj[colorKey]) { btn.style.backgroundColor = roomObj[colorKey]; btn.dataset.fallbackcolor = roomObj[colorKey]; }
+        if (typeVal !== undefined) { btn.dataset.vartype = String(typeVal); }
+        const colorOnKey = 'schalter' + n + 'colorOn';
+        const colorOffKey = 'schalter' + n + 'colorOff';
+        const colOn = roomObj[colorOnKey];
+        const colOff = roomObj[colorOffKey];
+        if (colOn) btn.dataset.colorOn = colOn;
+        if (colOff) btn.dataset.colorOff = colOff;
+        const rawVal = roomObj['schalter' + n + 'value'];
+        const isOn = (rawVal === true || String(rawVal) === '1');
+        if (typeVal === 0) {
+          btn.classList.toggle('inactive', !isOn);
+          let bg = isOn ? (colOn || roomObj[colorKey] || '') : (colOff || roomObj[colorKey] || '');
+          if (!bg) bg = 'var(--accent-color)';
+          btn.style.backgroundColor = bg;
+        }
+        const showNameSingle = (roomObj['schalter' + n + 'showname'] !== undefined)
+          ? !!roomObj['schalter' + n + 'showname']
+          : (roomObj['Schalter' + n + 'ShowName'] !== undefined ? !!roomObj['Schalter' + n + 'ShowName'] : true);
+        const showValueSingle = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? !!roomObj['schalter' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
+        btn.classList.toggle('hide-labels', !showNameSingle);
+        btn.classList.toggle('hide-values', !showValueSingle);
+        // Icon for button
+        if (iconEl) {
+          if (iconswitch && roomObj[iconKey] && roomObj[iconKey] !== 'Transparent') {
+            const cls = prepareIconClass(roomObj[iconKey]);
+            iconEl.className = cls ? (cls + ' switch-icon') : 'hidden switch-icon';
+          } else {
+            iconEl.className = 'hidden switch-icon';
+          }
+        }
+      } else {
+        // Text-mode icon
+        if (iconEl) {
+          if (iconswitch && roomObj[iconKey] && roomObj[iconKey] !== 'Transparent') {
+            const cls = prepareIconClass(roomObj[iconKey]);
+            iconEl.className = cls ? (cls + ' info-icon') : 'hidden info-icon';
+          } else {
+            iconEl.className = 'hidden info-icon';
+          }
+        }
+      }
+    }
+
+    function updateRoomKey(idx, key, value) {
+      const id = 'room-' + idx;
+      if (key === 'targetlink' || key === 'Target') {
+        const root = document.getElementById(id);
+        if (root) {
+          const menuEl = document.getElementById(id + '-menueleiste');
+          if (menuEl) menuEl.onclick = (e) => { e.stopPropagation(); };
+          root.onclick = null;
+          if (value && Number(value) > 0 && typeof openObject === 'function') {
+            const target = Number(value);
+            root.style.cursor = 'pointer';
+            root.onclick = () => openObject(target);
+          } else {
+            root.style.cursor = '';
+          }
+        }
+        return;
+      }
+      
+      // Background image
+      if (key === 'image1') {
+        const bg = document.getElementById(id + '-bg');
+        if (bg) {
+          loadImageForTile(value, bg).then((dataUri) => {
+            const root = document.getElementById(id);
+            const use = root && root.__useImageColors === true ? true : undefined; // legacy, not used
+            // We don't have the full room here, so only recolor if we have a stored palette or can extract a new one.
+            if (dataUri) {
+              extractPaletteFromDataUri(dataUri, 8).then(pal => {
+                if (pal && pal.length) {
+                  IMAGE_PALETTES[id] = pal;
+                  // Try to infer room object from DOM cache: not available; palette will be applied on next full update.
+                }
+              });
+            }
+          });
+        }
+        return;
+      }
+      // Toggle menu
+      if (key === 'infomenueswitch') {
+        const menu = document.getElementById(id + '-menueleiste');
+        if (menu) value ? menu.classList.remove('is-hidden') : menu.classList.add('is-hidden');
+        return;
+      }
+      // Toggle top info layout
+      if (key === 'infotopcentered') {
+        setTopInfoLayout(id, !!value);
+        // Re-apply visibility after layout change
+        updateInfoContainerVisibility(id);
+        return;
+      }
+      // Switch alignment updates
+      if (key === 'schalteralignment' || key === 'SchalterAlignment') {
+        setSwitchAlignment(id, value, undefined);
+        return;
+      }
+      if (key === 'schalterdistribute' || key === 'SchalterDistribute') {
+        setSwitchAlignment(id, undefined, !!value);
+        return;
+      }
+      // Simple text keys
+      if (key === 'raumname') {
+        const rn = document.getElementById(id + '-raumname'); if (rn) rn.textContent = value; return;
+      }
+      // Font sizes
+      if (key === 'infofontsize' || key === 'infomenuefontsize') {
+        const root = document.getElementById(id); if (root) root.style.setProperty('--' + key, value + 'px'); return;
+      }
+      if (key === 'raumnameschriftgroesse') {
+        const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.fontSize = value + 'px'; return;
+      }
+      if (key === 'infotopborderradius') {
+        const root = document.getElementById(id); if (root) root.style.setProperty('--infotop-borderradius', value + 'px'); return;
+      }
+      if (key === 'buttonborderradius') {
+        const root = document.getElementById(id); if (root) root.style.setProperty('--progress-bar-border-radius', value + 'px'); return;
+      }
+      // Background filter delta (0..100)
+      if (key === 'bgfilter') {
+        const bg = document.getElementById(id + '-bg');
+        if (bg) {
+          let p = Number(value);
+          if (!isFinite(p)) p = 0;
+          p = Math.max(0, Math.min(100, p));
+          bg.style.filter = p <= 0 ? '' : computeBgFilterString(p);
+        }
+        return;
+      }
+      // Colors and transparency
+      if (['hintergrundfarbe','infoschriftfarbe','infomenueschriftfarbe','infomenuehintergrundfarbe','infotophintergrundfarbe','transparenz','raumnameschriftfarbe'].includes(key)) {
+        const root = document.getElementById(id);
+        if (root) root.style.setProperty('--' + key, value);
+        // raumnameschriftfarbe applies directly to element color too
+        if (key === 'raumnameschriftfarbe') {
+          const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.color = value;
+        }
+        return;
+      }
+      // Info groups granular update
+      const infoGroups = ['infolinks','infolinks2','inforechts','inforechts2'];
+      for (const g of infoGroups) {
+        if (key === g + 'name') {
+          const el = document.getElementById(id + '-' + g + 'name');
+          if (el) { el.textContent = value; el.classList.toggle('hidden', !value); }
+          const colon = document.getElementById(id + '-' + g + 'colon');
+          const val = document.getElementById(id + '-' + g + 'asso');
+          if (colon && el && val) colon.classList.toggle('hidden', el.classList.contains('hidden') || val.classList.contains('hidden'));
+          adjustIconSolo(id, g);
+          updateInfoContainerVisibility(id);
+          updateBadgeMinWidth(id);
+          return;
+        }
+        if (key === g + 'showicon') {
+          const el = document.getElementById(id + '-' + g + 'icon');
+          if (el) {
+            const allow = (value === true || value === 1 || value === '1' || value === 'true');
+            el.dataset.showicon = allow ? '1' : '0';
+            if (!allow) {
+              el.className = 'hidden info-icon';
+              el.style.display = 'none';
+            } else {
+              el.style.display = '';
+            }
+          }
+          adjustIconSolo(id, g);
+          updateInfoContainerVisibility(id);
+          return;
+        }
+        if (key === g + 'asso') {
+          const el = document.getElementById(id + '-' + g + 'asso');
+          if (el) {
+            el.textContent = value;
+            const allowShow = !(el.dataset && el.dataset.showvalue === '0');
+            const hide = (!value && value !== 0) || !allowShow;
+            el.classList.toggle('hidden', hide);
+          }
+          const colon = document.getElementById(id + '-' + g + 'colon');
+          const name = document.getElementById(id + '-' + g + 'name');
+          if (colon && name && el) colon.classList.toggle('hidden', name.classList.contains('hidden') || el.classList.contains('hidden'));
+          adjustIconSolo(id, g);
+          updateInfoContainerVisibility(id);
+          return;
+        }
+        if (key === g + 'icon') {
+          const elOld = document.getElementById(id + '-' + g + 'icon');
+          if (!elOld) return;
+          const allow = !(elOld.dataset && elOld.dataset.showicon === '0');
+          if (value && value !== 'Transparent' && allow) {
+            const cls = prepareIconClass(value);
+            const elNew = setIconElementById(id + '-' + g + 'icon', cls ? (cls + ' info-icon') : 'hidden info-icon');
+            if (elNew && !(elNew.className || '').includes('hidden')) {
+              elNew.style.display = '';
+              ensureFaSvg(elNew.parentElement || elNew);
+            }
+          } else {
+            const elNew = setIconElementById(id + '-' + g + 'icon', 'hidden info-icon');
+            if (elNew) elNew.style.display = 'none';
+          }
+          adjustIconSolo(id, g);
+          updateInfoContainerVisibility(id);
+          return;
+        }
+      }
+      // Dynamic menu item value updates
+      if (key.startsWith('menuitem-') && key.endsWith('value')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'value'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const group = document.getElementById(baseId + '-group');
+        if (group && group.classList.contains('switch-group')) {
+          // Multi-option group
+          for (const child of group.children) {
+            if (child && child.classList && child.classList.contains('switch-option')) {
+              const isActive = (child.dataset && 'value' in child.dataset) ? (String(child.dataset.value) === String(value)) : false;
+              child.classList.toggle('active', isActive);
+              child.classList.toggle('inactive', !isActive);
+            }
+          }
+        } else {
+          // Single button (Boolean without options)
+          const btn = document.getElementById(baseId);
+          if (btn) {
+            const isOn = (value === true || String(value) === '1');
+            btn.classList.toggle('inactive', !isOn);
+            // Update stored value in dataset
+            btn.dataset.currentValue = String(value);
+            // Update visual state if it's a boolean button (only if palette is not applied)
+            // If button has palette color (check if background is not from dataset), don't override
+            const hasDatasetColor = btn.dataset && (btn.dataset.colorOn || btn.dataset.colorOff || btn.dataset.fallbackcolor);
+            const currentBg = btn.style.backgroundColor;
+            const hasPaletteColor = currentBg && !hasDatasetColor;
+            // Only update color if: it's boolean AND (no palette OR palette not active)
+            if (btn.dataset && btn.dataset.vartype === '0' && !hasPaletteColor && hasDatasetColor) {
+              const colOn = btn.dataset.colorOn;
+              const colOff = btn.dataset.colorOff;
+              const fb = btn.dataset.fallbackcolor;
+              let bg = isOn ? (colOn || fb || '') : (colOff || fb || '');
+              if (!bg) bg = 'var(--accent-color)';
+              btn.style.backgroundColor = bg;
+            }
+          }
+        }
+        return;
+      }
+      // Dynamic menu item asso (formatted value) updates
+      if (key.startsWith('menuitem-') && key.endsWith('asso')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'asso'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const valEl = document.getElementById(baseId + 'asso');
+        if (valEl) valEl.textContent = value;
+        return;
+      }
+      // Dynamic menu item icon updates
+      if (key.startsWith('menuitem-') && key.endsWith('icon')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'icon'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const existing = document.getElementById(baseId + 'icon');
+        const isButton = !!document.getElementById(baseId);
+        const iconClass = isButton ? 'switch-icon' : 'info-icon';
+        if (value && value !== 'Transparent') {
+          const cls = prepareIconClass(value);
+          const elNew = setIconElementById(baseId + 'icon', cls ? (cls + ' ' + iconClass) : ('hidden ' + iconClass));
+          if (elNew && !(elNew.className || '').includes('hidden')) {
+            elNew.style.display = '';
+            ensureFaSvg(elNew.parentElement || elNew);
+          }
+        } else {
+          const elNew = setIconElementById(baseId + 'icon', 'hidden ' + iconClass);
+          if (elNew) elNew.style.display = 'none';
+        }
+        return;
+      }
+      // Dynamic menu item name updates
+      if (key.startsWith('menuitem-') && key.endsWith('name')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'name'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const nameEl = document.getElementById(baseId + 'name');
+        if (nameEl) {
+          nameEl.textContent = value;
+          // Nur ausblenden, wenn leer; ansonsten aktuellen Zustand respektieren (ShowName-Einstellung)
+          if (!value && value !== 0) nameEl.classList.add('hidden');
+        }
+        const colon = document.getElementById(baseId + 'colon');
+        const val = document.getElementById(baseId + 'asso');
+        if (colon && nameEl && val) colon.classList.toggle('hidden', nameEl.classList.contains('hidden') || val.classList.contains('hidden'));
+        return;
+      }
+      // Dynamic menu item show/hide icon
+      if (key.startsWith('menuitem-') && key.endsWith('showicon')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'showicon'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const iconEl = document.getElementById(baseId + 'icon');
+        const allow = (value === true || value === 1 || value === '1' || value === 'true');
+        if (iconEl) {
+          if (!allow) { iconEl.classList.add('hidden'); iconEl.style.display = 'none'; }
+          else { iconEl.classList.remove('hidden'); iconEl.style.display = ''; }
+        }
+        return;
+      }
+      // Dynamic menu item show/hide value
+      if (key.startsWith('menuitem-') && key.endsWith('showvalue')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'showvalue'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const valEl = document.getElementById(baseId + 'asso');
+        const nameEl = document.getElementById(baseId + 'name');
+        const colon = document.getElementById(baseId + 'colon');
+        const show = (value === true || value === 1 || value === '1' || value === 'true');
+        if (valEl) {
+          valEl.dataset.showvalue = show ? '1' : '0';
+          valEl.classList.toggle('hidden', !show || (!valEl.textContent && valEl.textContent !== '0'));
+        }
+        if (colon && nameEl && valEl) colon.classList.toggle('hidden', nameEl.classList.contains('hidden') || valEl.classList.contains('hidden'));
+        return;
+      }
+      // Dynamic info item updates (icon/name/value/showicon/showvalue)
+      if (key.startsWith('infoitem-')) {
+        const baseKey = key.replace(/(icon|name|asso|showicon|showvalue)$/,'');
+        const suffix = key.substring(baseKey.length);
+        const baseId = id + '-' + baseKey; // e.g., id + '-infoitem-123'
+        if (suffix === 'icon') {
+          const elOld = document.getElementById(baseId + 'icon');
+          if (elOld) {
+            const allow = !(elOld.dataset && elOld.dataset.showicon === '0');
+            if (value && value !== 'Transparent' && allow) {
+              const cls = prepareIconClass(value);
+              const elNew = setIconElementById(baseId + 'icon', cls ? (cls + ' info-icon') : 'hidden info-icon');
+              if (elNew && !(elNew.className || '').includes('hidden')) {
+                elNew.style.display = '';
+                ensureFaSvg(elNew.parentElement || elNew);
+              }
+            } else {
+              const elNew = setIconElementById(baseId + 'icon', 'hidden info-icon');
+              if (elNew) elNew.style.display = 'none';
+            }
+          }
+          adjustIconSolo(id, baseKey);
+          updateInfoContainerVisibility(id);
+          return;
+        }
+        if (suffix === 'name') {
+          const el = document.getElementById(baseId + 'name');
+          if (el) {
+            el.textContent = value;
+            // Nur ausblenden, wenn leer; ansonsten aktuellen Zustand respektieren (ShowName-Einstellung)
+            if (!value && value !== 0) el.classList.add('hidden');
+          }
+          const colon = document.getElementById(baseId + 'colon');
+          const val = document.getElementById(baseId + 'asso');
+          if (colon && el && val) colon.classList.toggle('hidden', el.classList.contains('hidden') || val.classList.contains('hidden'));
+          adjustIconSolo(id, baseKey);
+          updateInfoContainerVisibility(id);
+          updateBadgeMinWidth(id);
+          return;
+        }
+        if (suffix === 'asso') {
+          const el = document.getElementById(baseId + 'asso');
+          if (el) {
+            el.textContent = value;
+            const allowShow = !(el.dataset && el.dataset.showvalue === '0');
+            const hide = (!value && value !== 0) || !allowShow;
+            el.classList.toggle('hidden', hide);
+          }
+          const colon = document.getElementById(baseId + 'colon');
+          const name = document.getElementById(baseId + 'name');
+          if (colon && name && el) colon.classList.toggle('hidden', name.classList.contains('hidden') || el.classList.contains('hidden'));
+          adjustIconSolo(id, baseKey);
+          updateInfoContainerVisibility(id);
+          return;
+        }
+        if (suffix === 'showicon') {
+          const el = document.getElementById(baseId + 'icon');
+          if (el) {
+            const allow = (value === true || value === 1 || value === '1' || value === 'true');
+            el.dataset.showicon = allow ? '1' : '0';
+            if (!allow) { el.className = 'hidden info-icon'; el.style.display = 'none'; }
+            else { el.style.display = ''; }
+          }
+          adjustIconSolo(id, baseKey);
+          updateInfoContainerVisibility(id);
+          return;
+        }
+        if (suffix === 'showvalue') {
+          const valEl = document.getElementById(baseId + 'asso');
+          const colon = document.getElementById(baseId + 'colon');
+          const nameEl = document.getElementById(baseId + 'name');
+          const show = (value === true || value === 1 || value === '1' || value === 'true');
+          if (valEl) {
+            valEl.dataset.showvalue = show ? '1' : '0';
+            valEl.classList.toggle('hidden', !show || (!valEl.textContent && valEl.textContent !== '0'));
+          }
+          if (colon && nameEl && valEl) colon.classList.toggle('hidden', nameEl.classList.contains('hidden') || valEl.classList.contains('hidden'));
+          adjustIconSolo(id, baseKey);
+          updateInfoContainerVisibility(id);
+          return;
+        }
+      }
+      // Switches granular update
+      for (let i = 1; i <= 5; i++) {
+        const base = id + '-schalter' + i;
+        // toggle showing labels inside multi-button group
+        if (key === 'schalter' + i + 'showname' || key === 'Schalter' + i + 'ShowName') {
+          const group = document.getElementById(base + '-group');
+          const show = !(value === false || value === 0 || value === '0' || value === 'false');
+          if (group) {
+            group.classList.toggle('hide-labels', !show);
+          }
+          const btn = document.getElementById(base);
+          if (btn) {
+            btn.classList.toggle('hide-labels', !show);
+            const nameEl = document.getElementById(base + 'name');
+            const colon = document.getElementById(base + 'colon');
+            const val = document.getElementById(base + 'asso');
+            if (nameEl) nameEl.classList.toggle('hidden', !show);
+            if (colon && nameEl && val) colon.classList.toggle('hidden', nameEl.classList.contains('hidden') || val.classList.contains('hidden'));
+          }
+          return;
+        }
+        // toggle showing values inside multi-button group
+        if (key === 'schalter' + i + 'showvalue' || key === 'Schalter' + i + 'ShowValue') {
+          const group = document.getElementById(base + '-group');
+          const show = (value === true || value === 1 || value === '1' || value === 'true');
+          if (group) {
+            group.classList.toggle('hide-values', !show);
+          }
+          const btn = document.getElementById(base);
+          const valEl = document.getElementById(base + 'asso');
+          const colon = document.getElementById(base + 'colon');
+          const name = document.getElementById(base + 'name');
+          if (btn) btn.classList.toggle('hide-values', !show);
+          if (valEl) {
+            valEl.dataset.showvalue = show ? '1' : '0';
+            valEl.classList.toggle('hidden', !show || (!valEl.textContent && valEl.textContent !== '0'));
+          }
+          if (colon && name && valEl) colon.classList.toggle('hidden', name.classList.contains('hidden') || valEl.classList.contains('hidden'));
+          return;
+        }
+        // toggle showing icons inside multi-button group
+        if (key === 'schalter' + i + 'showicon' || key === 'Schalter' + i + 'ShowIcon') {
+          const group = document.getElementById(base + '-group');
+          if (group) {
+            const show = !(value === false || value === 0 || value === '0' || value === 'false');
+            group.classList.toggle('hide-icons', !show);
+          }
+          return;
+        }
+        if (key === 'schalter' + i + 'name') {
+          const el = document.getElementById(base + 'name');
+          if (el) { el.textContent = value; el.classList.toggle('hidden', !value); }
+          const colon = document.getElementById(base + 'colon');
+          const val = document.getElementById(base + 'asso');
+          if (colon && el && val) colon.classList.toggle('hidden', el.classList.contains('hidden') || val.classList.contains('hidden'));
+          // ensure button visibility
+          const btn = document.getElementById(base);
+          if (btn) btn.classList.remove('hidden');
+          return;
+        }
+        if (key === 'schalter' + i + 'asso') {
+          const el = document.getElementById(base + 'asso');
+          if (el) {
+            el.textContent = value;
+            const allowShow = !(el.dataset && el.dataset.showvalue === '0');
+            const hide = (!value && value !== 0) || !allowShow;
+            el.classList.toggle('hidden', hide);
+          }
+          const colon = document.getElementById(base + 'colon');
+          const name = document.getElementById(base + 'name');
+          if (colon && name && el) colon.classList.toggle('hidden', name.classList.contains('hidden') || el.classList.contains('hidden'));
+          const btn = document.getElementById(base);
+          if (btn) btn.classList.remove('hidden');
+          return;
+        }
+        if (key === 'schalter' + i + 'icon') {
+          const oldEl = document.getElementById(base + 'icon');
+          if (oldEl) {
+            if (value && value !== 'Transparent') {
+              const cls = prepareIconClass(value);
+              const newEl = setIconElementById(base + 'icon', cls ? (cls + ' switch-icon') : 'hidden switch-icon');
+              if (newEl && !(newEl.className || '').includes('hidden')) {
+                ensureFaSvg(newEl.parentElement || newEl);
+              }
+            } else {
+              const newEl = setIconElementById(base + 'icon', 'hidden switch-icon');
+              if (newEl) newEl.style.display = 'none';
+            }
+          }
+          const btn = document.getElementById(base);
+          if (btn) btn.classList.remove('hidden');
+          return;
+        }
+        if (key === 'schalter' + i + 'color') {
+          const btn = document.getElementById(base);
+          if (btn && value) btn.style.backgroundColor = value;
+          return;
+        }
+        if (key === 'schalter' + i + 'breite') {
+          const btn = document.getElementById(base);
+          if (btn && value) btn.style.minWidth = value + 'px';
+          return;
+        }
+        if (key === 'schalter' + i + 'value') {
+          // Update active state for multi-button groups
+          const group = document.getElementById(base + '-group');
+          if (group) {
+            for (const child of group.children) {
+              if (child && child.classList && child.classList.contains('switch-option')) {
+                const isActive = (child.dataset && 'value' in child.dataset) ? (String(child.dataset.value) === String(value)) : false;
+                child.classList.toggle('active', isActive);
+                child.classList.toggle('inactive', !isActive);
+              }
+            }
+          }
+          const single = document.getElementById(base);
+          if (single) {
+            const isOn = (value === true || String(value) === '1');
+            const isBool = (single.dataset && single.dataset.vartype === '0');
+            if (isBool) {
+              single.classList.toggle('inactive', !isOn);
+              const colOn = single.dataset ? single.dataset.colorOn : undefined;
+              const colOff = single.dataset ? single.dataset.colorOff : undefined;
+              const fb = single.dataset ? single.dataset.fallbackcolor : undefined;
+              let bg = isOn ? (colOn || fb || '') : (colOff || fb || '');
+              if (!bg) bg = 'var(--accent-color)';
+              single.style.backgroundColor = bg;
+            }
+          }
+          return;
+        }
+        if (key === 'info' + i + 'value') {
+          const infoBase = id + '-info' + i;
+          const group = document.getElementById(infoBase + '-group');
+          if (group) {
+            for (const child of group.children) {
+              if (child && child.classList && child.classList.contains('switch-option')) {
+                const isActive = (child.dataset && 'value' in child.dataset) ? (String(child.dataset.value) === String(value)) : false;
+                child.classList.toggle('active', isActive);
+                child.classList.toggle('inactive', !isActive);
+              }
+            }
+            return;
+          }
+        }
+        // plain key fallback for switches (e.g., 'schalter1')
+        if (key === 'schalter' + i) {
+          const el = document.getElementById(base + 'asso');
+          if (el) { el.textContent = value; el.classList.toggle('hidden', !value && value !== 0); }
+          const colon = document.getElementById(base + 'colon');
+          const name = document.getElementById(base + 'name');
+          if (colon && name && el) colon.classList.toggle('hidden', name.classList.contains('hidden') || el.classList.contains('hidden'));
+          const btn = document.getElementById(base);
+          if (btn) btn.classList.remove('hidden');
+          return;
+        }
+      }
+    }
+
+    function setGlobalStyle(borderRadius, buttonHeight) {
+      const root = document.documentElement;
+      root.style.setProperty('--borderRadius', (borderRadius || 10) + 'px');
+      if (buttonHeight !== undefined && buttonHeight !== null && !isNaN(Number(buttonHeight)) && Number(buttonHeight) > 0) {
+        root.style.setProperty('--button-height', Number(buttonHeight) + 'px');
+      }
+    }
+
+    function handleMessage(data) {
+      const decoded = typeof data === 'string' ? JSON.parse(data) : (data || {});
+
+      if (decoded.grid) {
+        setGlobalStyle(decoded.grid.borderRadius, decoded.grid.buttonHeight);
+        GRID_FLAGS.useImageColorsForButtons = !!decoded.grid.useImageColorsForButtons;
+      }
+
+      if (decoded.rooms) {
+        // Full render (single room expected)
+        const cont = document.getElementById('container');
+        cont.innerHTML = '';
+        decoded.rooms.forEach(r => {
+          const t = ensureTile(r);
+          applyRoomState(r);
+        });
+        return;
+      }
+
+      if (decoded.delta) {
+        for (const d of decoded.delta) {
+          updateRoomKey(d.idx, d.key, d.value);
+        }
+        return;
+      }
+    }
+  </script>
+</body>
+</html>

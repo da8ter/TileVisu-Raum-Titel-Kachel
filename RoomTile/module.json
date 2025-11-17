@@ -1,0 +1,12 @@
+{
+  "id": "{0E33BB6A-B5A7-4D25-883A-EDF0551DB5C3}",
+  "name": "Room Tile",
+  "type": 3,
+  "vendor": "",
+  "aliases": [],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "ROOMTILE",
+  "url": "https://github.com/da8ter/TileVisu-Raum-Titel-Kachel/RoomTile/README.md"
+}
