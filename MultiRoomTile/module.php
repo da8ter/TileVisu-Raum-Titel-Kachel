@@ -41,6 +41,66 @@ class MultiRoomTile extends IPSModule
         $this->RegisterMessage(0, IPS_KERNELMESSAGE);
     }
 
+    public function GetConfigurationForm()
+    {
+        $form = json_decode(@file_get_contents(__DIR__ . '/form.json'), true);
+        if (!is_array($form)) {
+            return json_encode(['elements' => []]);
+        }
+        $supportsSelectObject = ((float)IPS_GetKernelVersion() > 8.1);
+        if (isset($form['elements']) && is_array($form['elements'])) {
+            foreach ($form['elements'] as &$element) {
+                if (!is_array($element)) continue;
+                if (($element['type'] ?? '') === 'ExpansionPanel' && ($element['caption'] ?? '') === 'Räume') {
+                    foreach ($element['items'] as &$roomsItem) {
+                        if (!is_array($roomsItem)) continue;
+                        if (($roomsItem['type'] ?? '') === 'List' && ($roomsItem['name'] ?? '') === 'Rooms') {
+                            if (isset($roomsItem['form']) && is_array($roomsItem['form'])) {
+                                foreach ($roomsItem['form'] as &$subPanel) {
+                                    if (!is_array($subPanel)) continue;
+                                    if (($subPanel['type'] ?? '') === 'ExpansionPanel' && ($subPanel['caption'] ?? '') === 'Raumname') {
+                                        foreach ($subPanel['items'] as &$row) {
+                                            if (!is_array($row)) continue;
+                                            if (($row['type'] ?? '') === 'RowLayout' && isset($row['items']) && is_array($row['items'])) {
+                                                foreach ($row['items'] as &$ctrl) {
+                                                    if (is_array($ctrl) && ($ctrl['type'] ?? '') === 'SelectObject' && ($ctrl['name'] ?? '') === 'Target') {
+                                                        $row['visible'] = $supportsSelectObject;
+                                                        break;
+                                                    }
+                                                }
+                                                unset($ctrl);
+                                            }
+                                        }
+                                        unset($row);
+                                    }
+                                    if (($subPanel['type'] ?? '') === 'ExpansionPanel' && ($subPanel['caption'] ?? '') === 'Menü-Leiste') {
+                                        foreach ($subPanel['items'] as &$mi) {
+                                            if (!is_array($mi)) continue;
+                                            if (($mi['type'] ?? '') === 'List' && ($mi['name'] ?? '') === 'MenuItems' && isset($mi['columns']) && is_array($mi['columns'])) {
+                                                foreach ($mi['columns'] as &$col) {
+                                                    if (is_array($col) && ($col['name'] ?? '') === 'OpenObjectId') {
+                                                        $col['visible'] = $supportsSelectObject;
+                                                        break;
+                                                    }
+                                                }
+                                                unset($col);
+                                            }
+                                        }
+                                        unset($mi);
+                                    }
+                                }
+                                unset($subPanel);
+                            }
+                        }
+                    }
+                    unset($roomsItem);
+                }
+            }
+            unset($element);
+        }
+        return json_encode($form);
+    }
+
     public function ApplyChanges()
     {
         parent::ApplyChanges();
@@ -496,7 +556,10 @@ class MultiRoomTile extends IPSModule
 
             // Transparenz: zuerst neues Feld, sonst alte per-Side Felder als Fallback
             if (array_key_exists('InfoTopTransparenz', $room)) {
-                $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopTransparenz']);
+                $tmp = (float)$room['InfoTopTransparenz'];
+                $topAlphaPercent = ($tmp < 0)
+                    ? $this->normalizePercent((float)($defaults['InfoTopTransparenz'] ?? 30.0))
+                    : $this->normalizePercent($tmp);
             } elseif (array_key_exists('InfoTopLeftTransparenz', $room)) {
                 $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopLeftTransparenz']);
             } elseif (array_key_exists('InfoTopMidTransparenz', $room)) {
@@ -1201,7 +1264,14 @@ class MultiRoomTile extends IPSModule
     private function ReadNumOrDefault(array $room, string $key, array $defaults, float $fallback): float
     {
         if (array_key_exists($key, $room)) {
-            return (float)$room[$key];
+            $v = (float)$room[$key];
+            if ($v < 0) {
+                if (array_key_exists($key, $defaults)) {
+                    return (float)$defaults[$key];
+                }
+                return $fallback;
+            }
+            return $v;
         }
         if (array_key_exists($key, $defaults)) {
             return (float)$defaults[$key];

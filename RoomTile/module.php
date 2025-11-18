@@ -1290,7 +1290,14 @@ class RoomTile extends IPSModule
     private function ReadNumOrDefault(array $room, string $key, array $defaults, float $fallback): float
     {
         if (array_key_exists($key, $room)) {
-            return (float)$room[$key];
+            $v = (float)$room[$key];
+            if ($v < 0) {
+                if (array_key_exists($key, $defaults)) {
+                    return (float)$defaults[$key];
+                }
+                return $fallback;
+            }
+            return $v;
         }
         if (array_key_exists($key, $defaults)) {
             return (float)$defaults[$key];

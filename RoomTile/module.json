@@ -3,7 +3,7 @@
   "name": "Room Tile",
   "type": 3,
   "vendor": "",
-  "aliases": [],
+  "aliases": ["Raum Kachel"],
   "parentRequirements": [],
   "childRequirements": [],
   "implemented": [],

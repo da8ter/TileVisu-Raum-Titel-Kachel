@@ -37,7 +37,7 @@
         ]},
         { "type": "List", "name": "InfoItems", "caption": "Info-Elemente", "rowCount": 5, "add": true, "delete": true, "changeOrder": true, "reorder": true,
           "columns": [
-            { "caption": "ID", "name": "Id", "width": "180px", "add": "", "edit": { "type": "ValidationTextBox" }, "visible": false },
+            { "caption": "ID", "name": "Id", "width": "180px", "add": "", "edit": { "type": "ValidationTextBox", "visible": false }, "visible": false },
             { "caption": "Bereich", "name": "Area", "width": "120px", "add": "left", "visible": false, "edit": { "type": "Select", "options": [
               { "label": "Links", "value": "left" },
               { "label": "Rechts", "value": "right" }
@@ -64,7 +64,7 @@
         ]},
         { "type": "ExpansionPanel", "caption": "Hintergrund", "expanded": false, "items": [
           { "type": "SelectMedia", "name": "bgImage", "caption": "Hintergrund (Kachel)" },
-          { "type": "HorizontalSlider", "name": "Bildtransparenz", "caption": "Bildtransparenz", "minimum": 0, "maximum": 100, "displayValue": true, "suffix": "%" },
+          { "type": "HorizontalSlider", "name": "Bildtransparenz", "caption": "Bildtransparenz", "minimum": -1, "maximum": 100, "displayValue": true, "suffix": "%" },
           { "type": "SelectColor", "name": "Kachelhintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true },
           { "type": "RowLayout", "items": [
             { "type": "SelectVariable", "name": "Lichtstatus", "caption": "Lichtstatus", "validVariableTypes": [0] },
@@ -98,7 +98,7 @@
         ]},
           { "type": "List", "name": "MenuItems", "caption": "Menü-Elemente", "rowCount": 5, "add": true, "delete": true, "changeOrder": true, "reorder": true,
             "columns": [
-              { "caption": "ID", "name": "Id", "width": "180px", "add": "", "edit": { "type": "ValidationTextBox" }, "visible": false },
+              { "caption": "ID", "name": "Id", "width": "180px", "add": "", "edit": { "type": "ValidationTextBox", "visible": false }, "visible": false },
               { "caption": "Variable", "name": "VariableId", "width": "auto", "add": 0, "edit": { "type": "SelectVariable", "validVariableTypes": [0,1,2,3] } },
               { "caption": "Objekt öffnen", "name": "OpenObjectId", "width": "auto", "add": 0, "edit": { "type": "SelectObject" } },
               { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "edit": { "type": "CheckBox" } },
