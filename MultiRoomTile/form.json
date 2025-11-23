@@ -5,11 +5,12 @@
       "caption": "Rastereinstellungen",
       "items": [
         { "type": "RowLayout", "items": [
-          { "type": "NumberSpinner", "name": "MinWidth", "caption": "Minimale Kachelbreite (px)", "minimum": 100, "maximum": 1000, "digits": 0 },
-          { "type": "NumberSpinner", "name": "Gap", "caption": "Abstand (px)", "minimum": 0, "maximum": 100, "digits": 0 }
+          { "type": "NumberSpinner", "name": "MinWidth", "caption": "Minimale Kachelbreite", "minimum": 100, "maximum": 1000, "digits": 0, "suffix": "px" },
+          { "type": "NumberSpinner", "name": "MinHeight", "caption": "Minimale Kachelhöhe", "minimum": 100, "maximum": 1000, "digits": 0, "suffix": "px" },
+          { "type": "NumberSpinner", "name": "Gap", "caption": "Abstand", "minimum": 0, "maximum": 100, "digits": 0, "suffix": "px" }
         ]},
         { "type": "RowLayout", "items": [
-          { "type": "NumberSpinner", "name": "BorderRadius", "caption": "Eckenradius (px)", "minimum": 0, "maximum": 50, "digits": 0 },
+          { "type": "NumberSpinner", "name": "BorderRadius", "caption": "Eckenradius", "minimum": 0, "maximum": 50, "digits": 0, "suffix": "px" },
           { "type": "NumberSpinner", "name": "Columns", "caption": "Spalten (0 = auto)", "minimum": 0, "maximum": 12, "digits": 0 }
         ]}
       ]
@@ -23,32 +24,45 @@
         ]},
         { "type": "Label", "caption": "Infoleiste", "bold": true },
         { "type": "RowLayout", "items": [
-          { "type": "NumberSpinner", "name": "Default_InfoSchriftgroesse", "caption": "Schriftgröße (Info)", "digits": 0, "minimum": 8, "maximum": 100, "suffix": "px", "width": "300px" },
-          { "type": "SelectColor", "name": "Default_InfoSchriftfarbe", "caption": "Schriftfarbe (Info)", "allowTransparent": true, "width": "300px" }
+          { "type": "NumberSpinner", "name": "Default_InfoSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": 8, "maximum": 100, "suffix": "px", "width": "300px" },
+          { "type": "SelectColor", "name": "Default_InfoSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true, "width": "300px" }
         ]},
         { "type": "RowLayout", "items": [
-          { "type": "HorizontalSlider", "name": "Default_InfoTopTransparenz", "caption": "Hintergrund-Transparenz (Infoleiste)", "minimum": 0, "maximum": 100, "displayValue": true, "suffix": "%", "width": "300px" },
-          { "type": "SelectColor", "name": "Default_InfoTopHintergrundfarbe", "caption": "Hintergrundfarbe (Infoleiste)", "allowTransparent": true, "width": "300px" }
+          { "type": "HorizontalSlider", "name": "Default_InfoTopTransparenz", "caption": "Hintergrund-Transparenz", "minimum": 0, "maximum": 100, "displayValue": true, "suffix": "%", "width": "300px" },
+          { "type": "SelectColor", "name": "Default_InfoTopHintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true, "width": "300px" }
         ]},
         { "type": "Label", "caption": "Menüleiste", "bold": true },
         { "type": "RowLayout", "items": [
-          { "type": "NumberSpinner", "name": "Default_InfoMenueSchriftgroesse", "caption": "Schriftgröße (Menü)", "digits": 0, "minimum": 8, "maximum": 100, "suffix": "px", "width": "300px" },
-          { "type": "SelectColor", "name": "Default_InfoMenueSchriftfarbe", "caption": "Schriftfarbe (Menü)", "allowTransparent": true, "width": "300px" }
+          { "type": "NumberSpinner", "name": "Default_InfoMenueSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": 8, "maximum": 100, "suffix": "px", "width": "300px" },
+          { "type": "SelectColor", "name": "Default_InfoMenueSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true, "width": "300px" }
         ]},
         { "type": "RowLayout", "items": [
-          { "type": "HorizontalSlider", "name": "Default_InfoMenueTransparenz", "caption": "Hintergrund-Transparenz (Menü)", "minimum": 0, "maximum": 100, "displayValue": true, "suffix": "%", "width": "300px" },
-          { "type": "SelectColor", "name": "Default_InfoMenueHintergrundfarbe", "caption": "Hintergrundfarbe (Menü)", "allowTransparent": true, "width": "300px" }
+          { "type": "HorizontalSlider", "name": "Default_InfoMenueTransparenz", "caption": "Hintergrund-Transparenz", "minimum": 0, "maximum": 100, "displayValue": true, "suffix": "%", "width": "300px" },
+          { "type": "SelectColor", "name": "Default_InfoMenueHintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true, "width": "300px" }
         ]},
         { "type": "Label", "caption": "Kachel", "bold": true },
         { "type": "RowLayout", "items": [
-          { "type": "SelectColor", "name": "Default_Kachelhintergrundfarbe", "caption": "Hintergrundfarbe (Kachel)", "allowTransparent": true, "width": "300px" },
+          { "type": "SelectColor", "name": "Default_Kachelhintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true, "width": "300px" },
           { "type": "HorizontalSlider", "name": "Default_Bildtransparenz", "caption": "Bildtransparenz", "minimum": 0, "maximum": 100, "displayValue": true, "suffix": "%", "width": "300px" }        ]},
+        { "type": "Label", "caption": "Bildfilter zur Simulation des Lichtstatus über das Hintergrundbild", "bold": true },
+        { "type": "RowLayout", "items": [
+          { "type": "NumberSpinner", "name": "Default_BgFilterBrightnessMin", "caption": "Helligkeit (min, 0..1)", "digits": 2, "minimum": 0, "maximum": 1, "width": "300px" },
+          { "type": "NumberSpinner", "name": "Default_BgFilterBrightnessMax", "caption": "Helligkeit (max, 0..1)", "digits": 2, "minimum": 0, "maximum": 1, "width": "300px" }
+        ]},
+        { "type": "RowLayout", "items": [
+          { "type": "NumberSpinner", "name": "Default_BgFilterContrastMin", "caption": "Kontrast (min, 0..1)", "digits": 2, "minimum": 0, "maximum": 1, "width": "300px" },
+          { "type": "NumberSpinner", "name": "Default_BgFilterContrastMax", "caption": "Kontrast (max, 0..1)", "digits": 2, "minimum": 0, "maximum": 1, "width": "300px" }
+        ]},
+        { "type": "RowLayout", "items": [
+          { "type": "NumberSpinner", "name": "Default_BgFilterGrayscaleMin", "caption": "Graustufen (min, 0..1)", "digits": 2, "minimum": 0, "maximum": 1, "width": "300px" },
+          { "type": "NumberSpinner", "name": "Default_BgFilterGrayscaleMax", "caption": "Graustufen (max, 0..1)", "digits": 2, "minimum": 0, "maximum": 1, "width": "300px" }
+        ]},
         { "type": "RowLayout", "items": [
         ]},
         { "type": "Label", "caption": "Raumname", "bold": true },
         { "type": "RowLayout", "items": [
-          { "type": "NumberSpinner", "name": "Default_RaumnameSchriftgroesse", "caption": "Schriftgröße (Raumname)", "digits": 0, "minimum": 8, "maximum": 200, "suffix": "px", "width": "300px" },
-          { "type": "SelectColor", "name": "Default_RaumnameSchriftfarbe", "caption": "Schriftfarbe (Raumname)", "allowTransparent": true, "width": "300px" }
+          { "type": "NumberSpinner", "name": "Default_RaumnameSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": 8, "maximum": 200, "suffix": "px", "width": "300px" },
+          { "type": "SelectColor", "name": "Default_RaumnameSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true, "width": "300px" }
         ]}
       ]
     },
@@ -61,9 +75,9 @@
           "name": "Rooms",
           "changeOrder": true,
           "caption": "",
-          "rowCount": 5,
+          "rowCount": 10,
           "columns": [
-            { "caption": "Raumname", "name": "Raumname", "width": "240px", "add": "", "edit": { "type": "ValidationTextBox" } },
+            { "caption": "Raumname", "name": "Raumname", "width": "500px", "add": "", "edit": { "type": "ValidationTextBox" } },
             { "caption": "Target Cat", "name": "TargetCategoryId", "width": "120px", "add": 0, "edit": { "type": "SelectObject" }, "visible": false },
             { "caption": "Photo", "name": "bgImage", "width": "120px", "add": 0, "edit": { "type": "SelectMedia" }, "visible": false }
           ],
@@ -98,8 +112,8 @@
               { "type": "NumberSpinner", "name": "InfoSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": -1, "maximum": 100 },
               { "type": "SelectColor", "name": "InfoSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true },
               { "type": "RowLayout", "items": [
-                { "type": "HorizontalSlider", "name": "InfoTopTransparenz", "caption": "Hintergrund-Transparenz (Infoleiste)", "minimum": -1, "maximum": 100, "displayValue": true, "suffix": "%" },
-                { "type": "SelectColor", "name": "InfoTopHintergrundfarbe", "caption": "Hintergrundfarbe (Infoleiste)", "allowTransparent": true }
+                { "type": "HorizontalSlider", "name": "InfoTopTransparenz", "caption": "Hintergrund-Transparenz", "minimum": -1, "maximum": 100, "displayValue": true, "suffix": "%" },
+                { "type": "SelectColor", "name": "InfoTopHintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true }
               ]},
               { "type": "List", "name": "InfoItems", "caption": "Info-Elemente", "rowCount": 5, "add": true, "delete": true, "changeOrder": true, "reorder": true,
                 "columns": [
@@ -133,13 +147,30 @@
               { "type": "RowLayout", "items": [
                 { "type": "SelectVariable", "name": "Lichtstatus", "caption": "Lichtstatus", "validVariableTypes": [0] },
                 { "type": "SelectVariable", "name": "Dimmwert", "caption": "Dimmwert (0..100)", "validVariableTypes": [1,2] },
-                { "type": "PopupButton", "caption": "?", "popup": {
-                  "caption": "?",
+                { "type": "PopupButton", "caption": "Info (Lichtstatus)", "popup": {
+                  "caption": "Info (Lichtstatus)",
                   "items": [
                     { "type": "Label", "caption": "Simuliert über das Hintergrundbild einen Lichteffekt für Licht aus und Licht an. Steht der Lichtstatus auf aus, nutzt der Filter die maximale Stärke. Steht der Lichtstatus auf an, ist der Effekt deaktiviert. Gibst du eine Dimmvariable an, steuert der Dimmwert die Intensität des Effekts. Du kannst eine Bool-Variable für den Lichtstatus nutzen. Du kannst eine Integer oder Float Variable für den Dimmwert nutzen." }
                   ]
                 }}
-              ]}
+              ]},
+              { "type": "PopupButton", "caption": "Bild-Filterkonfiguration", "popup": {
+                "caption": "Bild-Filterkonfiguration",
+                "items": [
+                  { "type": "RowLayout", "items": [
+                    { "type": "NumberSpinner", "name": "BgFilterBrightnessMin", "caption": "Helligkeit (min, 0..1)", "digits": 2, "minimum": -1, "maximum": 1 },
+                    { "type": "NumberSpinner", "name": "BgFilterBrightnessMax", "caption": "Helligkeit (max, 0..1)", "digits": 2, "minimum": -1, "maximum": 1 }
+                  ]},
+                  { "type": "RowLayout", "items": [
+                    { "type": "NumberSpinner", "name": "BgFilterContrastMin", "caption": "Kontrast (min, 0..1)", "digits": 2, "minimum": -1, "maximum": 1 },
+                    { "type": "NumberSpinner", "name": "BgFilterContrastMax", "caption": "Kontrast (max, 0..1)", "digits": 2, "minimum": -1, "maximum": 1 }
+                  ]},
+                  { "type": "RowLayout", "items": [
+                    { "type": "NumberSpinner", "name": "BgFilterGrayscaleMin", "caption": "Graustufen (min, 0..1)", "digits": 2, "minimum": -1, "maximum": 1 },
+                    { "type": "NumberSpinner", "name": "BgFilterGrayscaleMax", "caption": "Graustufen (max, 0..1)", "digits": 2, "minimum": -1, "maximum": 1 }
+                  ]}
+                ]
+              }}
             ]},
             { "type": "ExpansionPanel", "caption": "Menü-Leiste", "expanded": true, "items": [
               { "type": "NumberSpinner", "name": "InfoMenueSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": -1, "maximum": 100 },

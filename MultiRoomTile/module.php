@@ -8,6 +8,7 @@ class MultiRoomTile extends IPSModule
 
         // Grid globale Einstellungen
         $this->RegisterPropertyInteger('MinWidth', 300);
+        $this->RegisterPropertyInteger('MinHeight', 220);
         $this->RegisterPropertyInteger('Gap', 12);
         $this->RegisterPropertyInteger('BorderRadius', 10);
         $this->RegisterPropertyInteger('Columns', 0);
@@ -26,6 +27,13 @@ class MultiRoomTile extends IPSModule
         $this->RegisterPropertyFloat('Default_InfoTopTransparenz', 30.0);
         $this->RegisterPropertyInteger('Default_InfoTopHintergrundfarbe', 0x000000);
         $this->RegisterPropertyBoolean('UseImageColorsForButtons', false);
+        // Image filter defaults (brightness/contrast/grayscale ranges)
+        $this->RegisterPropertyFloat('Default_BgFilterBrightnessMin', 0.2);
+        $this->RegisterPropertyFloat('Default_BgFilterBrightnessMax', 1.0);
+        $this->RegisterPropertyFloat('Default_BgFilterContrastMin', 0.9);
+        $this->RegisterPropertyFloat('Default_BgFilterContrastMax', 1.0);
+        $this->RegisterPropertyFloat('Default_BgFilterGrayscaleMin', 0.0);
+        $this->RegisterPropertyFloat('Default_BgFilterGrayscaleMax', 0.5);
 
         // Räume als JSON-Array
         $this->RegisterPropertyString('Rooms', '[]');
@@ -466,6 +474,7 @@ class MultiRoomTile extends IPSModule
         $result = [];
         $result['grid'] = [
             'minWidth' => $this->ReadPropertyInteger('MinWidth'),
+            'minHeight' => $this->ReadPropertyInteger('MinHeight'),
             'gap' => $this->ReadPropertyInteger('Gap'),
             'borderRadius' => $this->ReadPropertyInteger('BorderRadius'),
             'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons'),
@@ -486,7 +495,14 @@ class MultiRoomTile extends IPSModule
             'RaumnameSchriftfarbe'     => (int)$this->ReadPropertyInteger('Default_RaumnameSchriftfarbe'),
             'Bildtransparenz'          => (float)$this->ReadPropertyFloat('Default_Bildtransparenz'),
             'InfoTopTransparenz'       => (float)$this->ReadPropertyFloat('Default_InfoTopTransparenz'),
-            'InfoTopHintergrundfarbe'  => (int)$this->ReadPropertyInteger('Default_InfoTopHintergrundfarbe')
+            'InfoTopHintergrundfarbe'  => (int)$this->ReadPropertyInteger('Default_InfoTopHintergrundfarbe'),
+            // Image filter defaults
+            'BgFilterBrightnessMin'    => (float)$this->ReadPropertyFloat('Default_BgFilterBrightnessMin'),
+            'BgFilterBrightnessMax'    => (float)$this->ReadPropertyFloat('Default_BgFilterBrightnessMax'),
+            'BgFilterContrastMin'      => (float)$this->ReadPropertyFloat('Default_BgFilterContrastMin'),
+            'BgFilterContrastMax'      => (float)$this->ReadPropertyFloat('Default_BgFilterContrastMax'),
+            'BgFilterGrayscaleMin'     => (float)$this->ReadPropertyFloat('Default_BgFilterGrayscaleMin'),
+            'BgFilterGrayscaleMax'     => (float)$this->ReadPropertyFloat('Default_BgFilterGrayscaleMax')
         ];
         // Normalisiere Transparent(-1) für globale Defaults auf sinnvolle Standardwerte
         if (isset($defaults['InfoSchriftfarbe']) && (int)$defaults['InfoSchriftfarbe'] === -1) {
@@ -589,6 +605,14 @@ class MultiRoomTile extends IPSModule
             $r['schalteralignment'] = (string)($room['SchalterAlignment'] ?? 'left');
             $r['schalterdistribute'] = (bool)($room['SchalterDistribute'] ?? false);
             $r['transparenz'] = $this->percentToAlpha($this->normalizePercent($this->ReadNumOrDefault($room, 'Bildtransparenz', $defaults, 70.0)));
+
+            // Background image filter parameters (merged defaults + per-room overrides)
+            $r['bgfilterbrightnessmin'] = (float)$this->ReadNumOrDefault($room, 'BgFilterBrightnessMin', $defaults, 0.2);
+            $r['bgfilterbrightnessmax'] = (float)$this->ReadNumOrDefault($room, 'BgFilterBrightnessMax', $defaults, 1.0);
+            $r['bgfiltercontrastmin']   = (float)$this->ReadNumOrDefault($room, 'BgFilterContrastMin', $defaults, 0.9);
+            $r['bgfiltercontrastmax']   = (float)$this->ReadNumOrDefault($room, 'BgFilterContrastMax', $defaults, 1.0);
+            $r['bgfiltergrayscalemin']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMin', $defaults, 0.0);
+            $r['bgfiltergrayscalemax']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMax', $defaults, 0.5);
 
             $r['raumname'] = (string)($room['Raumname'] ?? 'Raumname');
             $r['targetlink'] = (int)($room['Target'] ?? 0);

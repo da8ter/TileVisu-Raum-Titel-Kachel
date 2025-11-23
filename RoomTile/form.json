@@ -62,9 +62,41 @@
             { "type": "SelectColor", "name": "RaumnameSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true }
           ]}
         ]},
+        { "type": "ExpansionPanel", "caption": "Info-Mitte", "expanded": false, "items": [
+          { "type": "RowLayout", "items": [
+
+             {           "type": "ColumnLayout",
+            "items": [
+            { "type": "SelectVariable", "name": "InfoMiddleLeft", "caption": "Variable (links)", "validVariableTypes": [0,1,2,3] },
+            { "type": "CheckBox", "name": "InfoMiddleLeftNameSwitch", "caption": "Name anzeigen" },
+            { "type": "CheckBox", "name": "InfoMiddleLeftShowValue", "caption": "Wert anzeigen" },
+            { "type": "CheckBox", "name": "InfoMiddleLeftIconSwitch", "caption": "Icon anzeigen" }
+                     ]
+          },
+             {           "type": "ColumnLayout",
+            "items": [
+            { "type": "SelectVariable", "name": "InfoMiddleRight", "caption": "Variable (rechts)", "validVariableTypes": [0,1,2,3] },
+            { "type": "CheckBox", "name": "InfoMiddleRightNameSwitch", "caption": "Name anzeigen" },
+            { "type": "CheckBox", "name": "InfoMiddleRightShowValue", "caption": "Wert anzeigen" },
+            { "type": "CheckBox", "name": "InfoMiddleRightIconSwitch", "caption": "Icon anzeigen" }
+                     ]
+          }
+          
+          ]},
+          { "type": "RowLayout", "items": [
+            { "type": "NumberSpinner", "name": "InfoMiddleIconSize", "caption": "Icon-Größe", "digits": 0, "minimum": 8, "maximum": 200, "suffix": "px" },
+            { "type": "NumberSpinner", "name": "InfoMiddleTextSize", "caption": "Textgröße", "digits": 0, "minimum": 8, "maximum": 200, "suffix": "px" }
+          ]},
+          { "type": "RowLayout", "items": [
+
+          ]},
+          { "type": "RowLayout", "items": [
+            { "type": "SelectColor", "name": "InfoMiddleColor", "caption": "Farbe (Icon/Text)", "allowTransparent": true }
+          ]}
+        ]},
         { "type": "ExpansionPanel", "caption": "Hintergrund", "expanded": false, "items": [
           { "type": "SelectMedia", "name": "bgImage", "caption": "Hintergrund (Kachel)" },
-          { "type": "HorizontalSlider", "name": "Bildtransparenz", "caption": "Bildtransparenz", "minimum": -1, "maximum": 100, "displayValue": true, "suffix": "%" },
+          { "type": "HorizontalSlider", "name": "Bildtransparenz", "caption": "Bildtransparenz", "minimum": 0, "maximum": 100, "displayValue": true, "suffix": "%" },
           { "type": "SelectColor", "name": "Kachelhintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true },
           { "type": "RowLayout", "items": [
             { "type": "SelectVariable", "name": "Lichtstatus", "caption": "Lichtstatus", "validVariableTypes": [0] },
@@ -75,7 +107,24 @@
                 { "type": "Label", "caption": "Simuliert über das Hintergrundbild einen Lichteffekt für Licht aus und Licht an. Steht der Lichtstatus auf aus, nutzt der Filter die maximale Stärke. Steht der Lichtstatus auf an, ist der Effekt deaktiviert. Gibst du eine Dimmvariable an, steuert der Dimmwert die Intensität des Effekts. Du kannst eine Bool-Variable für den Lichtstatus nutzen. Du kannst eine Integer oder Float Variable für den Dimmwert nutzen." }
               ]
             }}
-          ]}
+          ]},
+          { "type": "PopupButton", "caption": "Bild-Filterkonfiguration", "popup": {
+            "caption": "Bild-Filterkonfiguration",
+            "items": [
+              { "type": "RowLayout", "items": [
+                { "type": "NumberSpinner", "name": "BgFilterBrightnessMin", "caption": "Helligkeit (min, 0..1)", "digits": 2, "minimum": 0, "maximum": 1 },
+                { "type": "NumberSpinner", "name": "BgFilterBrightnessMax", "caption": "Helligkeit (max, 0..1)", "digits": 2, "minimum": 0, "maximum": 1 }
+              ]},
+              { "type": "RowLayout", "items": [
+                { "type": "NumberSpinner", "name": "BgFilterContrastMin", "caption": "Kontrast (min, 0..1)", "digits": 2, "minimum": 0, "maximum": 1 },
+                { "type": "NumberSpinner", "name": "BgFilterContrastMax", "caption": "Kontrast (max, 0..1)", "digits": 2, "minimum": 0, "maximum": 1 }
+              ]},
+              { "type": "RowLayout", "items": [
+                { "type": "NumberSpinner", "name": "BgFilterGrayscaleMin", "caption": "Graustufen (min, 0..1)", "digits": 2, "minimum": 0, "maximum": 1 },
+                { "type": "NumberSpinner", "name": "BgFilterGrayscaleMax", "caption": "Graustufen (max, 0..1)", "digits": 2, "minimum": 0, "maximum": 1 }
+              ]}
+            ]
+          }}
         ]},
         { "type": "ExpansionPanel", "caption": "Menüleiste", "expanded": false, "items": [
           { "type": "CheckBox", "name": "InfoMenueSwitch", "caption": "Menü anzeigen" },

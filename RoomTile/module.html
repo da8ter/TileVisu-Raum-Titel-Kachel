@@ -4,7 +4,13 @@
   <meta charset="UTF-8" />
   <script src="/icons.js" crossorigin="anonymous"></script>
   <style>
-    :root { --menu-padding: 20px; }
+    :root {
+      --menu-padding: 20px;
+      --infomiddle-icon-size: 56px;
+      --infomiddle-text-size: 20px;
+      --infomiddle-color: #fff;
+      --middle-gap: calc(var(--menu-padding, 20px) * 2 + 20px);
+    }
     /* Single tile view: no grid container needed */
 
     body {
@@ -119,13 +125,16 @@
       left: 0;
       right: 0;
       top: 0;
-      bottom: 0;
+      bottom: var(--middle-gap);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       pointer-events: none;
       z-index: 4;
+      padding: 0 20px;
+      padding-top: 60px;
+      padding-bottom: 0;
     }
     .center * {
       pointer-events: none;
@@ -133,6 +142,44 @@
     .center .raumname { 
       margin: 0;
       line-height: 1.2; /* Verbesserte Lesbarkeit */
+    }
+    .middle-wrapper { display: none; }
+    .middle-roomname {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      text-align: center;
+    }
+    .middle-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 8px;
+      color: var(--infomiddle-color, #fff);
+      margin-bottom: 20px;
+    }
+    .middle-info-abs { position: absolute; bottom: 0; transform: none; }
+    .middle-info-abs.middle-info-left { left: var(--middle-edge-padding, 20px); }
+    .middle-info-abs.middle-info-right { right: var(--middle-edge-padding, 20px); }
+    .middle-info-left { align-items: flex-start; text-align: left; }
+    .middle-info-right { align-items: flex-end; text-align: right; }
+    .middle-info .info-icon {
+      font-size: var(--infomiddle-icon-size, 56px);
+      color: var(--infomiddle-color, #fff);
+      line-height: 1;
+    }
+    .middle-info .middle-info-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--infomiddle-text-size, 20px);
+      color: var(--infomiddle-color, #fff);
+    }
+    .middle-info .info-name,
+    .middle-info .info-value {
+      font-size: inherit;
+      color: inherit;
     }
 
     .menueleiste {
@@ -366,12 +413,28 @@
       return cur;
     }
 
-    function computeBgFilterString(percent) {
+    function computeBgFilterString(percent, src) {
       const p = Math.max(0, Math.min(100, Number(percent) || 0));
       const f = p / 100;
-      const brightness = 1 - 0.8 * f; // 1.0 -> 0.2
-      const contrast = 1 - 0.1 * f;   // 1.0 -> 0.9
-      const grayscale = 0.5 * f;      // 0.0 -> 0.5
+      // Defaults
+      let bmin = 0.2, bmax = 1.0, cmin = 0.9, cmax = 1.0, gmin = 0.0, gmax = 0.5;
+      // Read from element dataset or plain object
+      if (src) {
+        const d = src.dataset ? src.dataset : src;
+        const pf = (v, def) => {
+          const x = parseFloat(v);
+          return isFinite(x) ? x : def;
+        };
+        bmin = pf(d.bmin, bmin);
+        bmax = pf(d.bmax, bmax);
+        cmin = pf(d.cmin, cmin);
+        cmax = pf(d.cmax, cmax);
+        gmin = pf(d.gmin, gmin);
+        gmax = pf(d.gmax, gmax);
+      }
+      const brightness = bmax - (bmax - bmin) * f;
+      const contrast = cmax - (cmax - cmin) * f;
+      const grayscale = gmin + (gmax - gmin) * f;
       return `brightness(${brightness.toFixed(3)}) contrast(${contrast.toFixed(3)}) grayscale(${grayscale.toFixed(3)})`;
     }
 
@@ -701,8 +764,12 @@
 
       // center raumname (as overlay inside tile)
       const center = el('div', { class: 'center' });
+      const rnWrap = el('div', { class: 'middle-roomname' });
       const rn = el('p', { id: id + '-raumname', class: 'raumname' }, '');
-      center.appendChild(rn);
+      rnWrap.appendChild(rn);
+      center.appendChild(rnWrap);
+      center.appendChild(middleInfo(id, 'infomiddleleft', false));
+      center.appendChild(middleInfo(id, 'infomiddleright', true));
       tile.appendChild(center);
 
       // menueleiste
@@ -740,6 +807,19 @@
       return g;
     }
 
+    function middleInfo(prefixId, key, alignRight) {
+      const wrap = el('div', { id: prefixId + '-' + key + '-wrap', class: 'middle-info middle-info-abs ' + (alignRight ? 'middle-info-right' : 'middle-info-left') });
+      wrap.classList.add('hidden');
+      const icon = el('i', { id: prefixId + '-' + key + 'icon', class: 'hidden info-icon' });
+      const textWrap = el('div', { class: 'middle-info-text' });
+      const name = el('span', { id: prefixId + '-' + key + 'name', class: 'hidden info-name' });
+      const colon = el('span', { id: prefixId + '-' + key + 'colon', class: 'hidden info-name' }, ': ');
+      const val = el('span', { id: prefixId + '-' + key + 'asso', class: 'hidden info-value' });
+      textWrap.append(name, colon, val);
+      wrap.append(icon, textWrap);
+      return wrap;
+    }
+
     function isGroupVisible(prefixId, key) {
       const parts = ['name', 'asso', 'icon'];
       for (const p of parts) {
@@ -762,6 +842,19 @@
       if (group && group.classList) {
         group.classList.toggle('only-icon', onlyIcon);
       }
+    }
+
+    function updateMiddleWrapVisibility(prefixId, key) {
+      if (!key.startsWith('infomiddle')) return;
+      const wrap = document.getElementById(prefixId + '-' + key + '-wrap');
+      if (!wrap) return;
+      const icon = document.getElementById(prefixId + '-' + key + 'icon');
+      const name = document.getElementById(prefixId + '-' + key + 'name');
+      const val = document.getElementById(prefixId + '-' + key + 'asso');
+      const hasIcon = icon && !icon.classList.contains('hidden');
+      const hasName = name && !name.classList.contains('hidden');
+      const hasValue = val && !val.classList.contains('hidden');
+      wrap.classList.toggle('hidden', !(hasIcon || hasName || hasValue));
     }
 
     function updateInfoContainerVisibility(prefixId) {
@@ -1275,20 +1368,37 @@
       root.style.setProperty('--infotop-borderradius', ((room.infotopborderradius !== undefined ? room.infotopborderradius : 50)) + 'px');
       root.style.setProperty('--progress-bar-border-radius', ((room.buttonborderradius !== undefined ? room.buttonborderradius : 10)) + 'px');
       root.style.setProperty('--transparenz', room.transparenz ?? 0.7);
+      root.style.setProperty('--infomiddle-icon-size', (room.infomiddleiconsize || 56) + 'px');
+      root.style.setProperty('--infomiddle-text-size', (room.infomiddletextsize || room.infofontsize || 16) + 'px');
+      root.style.setProperty('--infomiddle-color', room.infomiddlecolor || room.infoschriftfarbe || '#fff');
 
       // Background image (+ optional palette -> button colors)
       if (room.image1) {
         const bg = document.getElementById(id + '-bg');
+        if (bg) {
+          // Store filter config on element dataset
+          if (room.bgfilterbrightnessmin !== undefined) bg.dataset.bmin = String(room.bgfilterbrightnessmin);
+          if (room.bgfilterbrightnessmax !== undefined) bg.dataset.bmax = String(room.bgfilterbrightnessmax);
+          if (room.bgfiltercontrastmin !== undefined) bg.dataset.cmin = String(room.bgfiltercontrastmin);
+          if (room.bgfiltercontrastmax !== undefined) bg.dataset.cmax = String(room.bgfiltercontrastmax);
+          if (room.bgfiltergrayscalemin !== undefined) bg.dataset.gmin = String(room.bgfiltergrayscalemin);
+          if (room.bgfiltergrayscalemax !== undefined) bg.dataset.gmax = String(room.bgfiltergrayscalemax);
+        }
         loadImageForTile(room.image1, bg).then((dataUri) => {
           if (dataUri && (room.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons)) {
             extractPaletteFromDataUri(dataUri, 8).then(pal => {
               if (pal && pal.length) {
                 IMAGE_PALETTES[id] = pal;
-                // apply after switches are rendered below
                 setTimeout(() => applyPaletteToRoom(room, pal), 0);
               }
             });
           }
+          try {
+            let p = Number(room.bgfilter);
+            if (!isFinite(p)) p = 0;
+            p = Math.max(0, Math.min(100, p));
+            if (bg) bg.style.filter = p <= 0 ? '' : computeBgFilterString(p, bg);
+          } catch (_) {}
         });
       }
 
@@ -1299,7 +1409,14 @@
           let p = Number(room.bgfilter);
           if (!isFinite(p)) p = 0;
           p = Math.max(0, Math.min(100, p));
-          bgEl.style.filter = p <= 0 ? '' : computeBgFilterString(p);
+          // ensure config is present on dataset
+          if (room.bgfilterbrightnessmin !== undefined) bgEl.dataset.bmin = String(room.bgfilterbrightnessmin);
+          if (room.bgfilterbrightnessmax !== undefined) bgEl.dataset.bmax = String(room.bgfilterbrightnessmax);
+          if (room.bgfiltercontrastmin !== undefined) bgEl.dataset.cmin = String(room.bgfiltercontrastmin);
+          if (room.bgfiltercontrastmax !== undefined) bgEl.dataset.cmax = String(room.bgfiltercontrastmax);
+          if (room.bgfiltergrayscalemax !== undefined) bgEl.dataset.gmax = String(room.bgfiltergrayscalemax);
+          bgEl.style.filter = p <= 0 ? '' : computeBgFilterString(p, bgEl);
+          bgEl.dataset.bgfilter = String(p);
         }
       } catch (_) {}
 
@@ -1320,6 +1437,9 @@
         }
         updateInfoContainerVisibility(id);
         updateBadgeMinWidth(id);
+      }
+      for (const middleKey of ['infomiddleleft','infomiddleright']) {
+        applyInfo(id, middleKey, room);
       }
       
       // Menu switch
@@ -1384,10 +1504,14 @@
         iconEl.className = 'hidden info-icon';
         iconEl.style.display = 'none';
       }
+      updateMiddleWrapVisibility(prefixId, key);
+      const isMiddle = key.startsWith('infomiddle');
       // After updating one info group, adjust styles and container visibility
-      adjustIconSolo(prefixId, key);
-      updateInfoContainerVisibility(prefixId);
-      updateBadgeMinWidth(prefixId);
+      if (!isMiddle) {
+        adjustIconSolo(prefixId, key);
+        updateInfoContainerVisibility(prefixId);
+        updateBadgeMinWidth(prefixId);
+      }
     }
 
     function applySwitch(prefixId, n, roomObj) {
@@ -1560,6 +1684,13 @@
                 }
               });
             }
+            // Re-apply cached bgfilter after image has loaded
+            try {
+              const cached = bg && bg.dataset ? Number(bg.dataset.bgfilter) : 0;
+              let p = isFinite(cached) ? cached : 0;
+              p = Math.max(0, Math.min(100, p));
+              if (bg) bg.style.filter = p <= 0 ? '' : computeBgFilterString(p, bg);
+            } catch (_) {}
           });
         }
         return;
@@ -1597,6 +1728,12 @@
       if (key === 'raumnameschriftgroesse') {
         const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.fontSize = value + 'px'; return;
       }
+      if (key === 'infomiddleiconsize') {
+        const root = document.getElementById(id); if (root) root.style.setProperty('--infomiddle-icon-size', value + 'px'); return;
+      }
+      if (key === 'infomiddletextsize') {
+        const root = document.getElementById(id); if (root) root.style.setProperty('--infomiddle-text-size', value + 'px'); return;
+      }
       if (key === 'infotopborderradius') {
         const root = document.getElementById(id); if (root) root.style.setProperty('--infotop-borderradius', value + 'px'); return;
       }
@@ -1610,17 +1747,24 @@
           let p = Number(value);
           if (!isFinite(p)) p = 0;
           p = Math.max(0, Math.min(100, p));
-          bg.style.filter = p <= 0 ? '' : computeBgFilterString(p);
+          const filterStr = p <= 0 ? '' : computeBgFilterString(p, bg);
+          console.log('[RoomTile] bgfilter Delta:', {roomId: id, value: value, percent: p, filterString: filterStr});
+          bg.style.filter = filterStr;
+          bg.dataset.bgfilter = String(p);
         }
         return;
       }
       // Colors and transparency
-      if (['hintergrundfarbe','infoschriftfarbe','infomenueschriftfarbe','infomenuehintergrundfarbe','infotophintergrundfarbe','transparenz','raumnameschriftfarbe'].includes(key)) {
+      if (['hintergrundfarbe','infoschriftfarbe','infomenueschriftfarbe','infomenuehintergrundfarbe','infotophintergrundfarbe','transparenz','raumnameschriftfarbe','infomiddlecolor'].includes(key)) {
         const root = document.getElementById(id);
         if (root) root.style.setProperty('--' + key, value);
         // raumnameschriftfarbe applies directly to element color too
         if (key === 'raumnameschriftfarbe') {
           const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.color = value;
+        }
+        if (key === 'infomiddlecolor') {
+          const centers = document.getElementById(id);
+          if (centers) centers.style.setProperty('--infomiddle-color', value);
         }
         return;
       }
@@ -1686,6 +1830,74 @@
           }
           adjustIconSolo(id, g);
           updateInfoContainerVisibility(id);
+          return;
+        }
+      }
+      const midGroups = ['infomiddleleft','infomiddleright'];
+      for (const g of midGroups) {
+        if (key === g + 'name') {
+          const el = document.getElementById(id + '-' + g + 'name');
+          if (el) { el.textContent = value; el.classList.toggle('hidden', !value && value !== 0); }
+          const colon = document.getElementById(id + '-' + g + 'colon');
+          const val = document.getElementById(id + '-' + g + 'asso');
+          if (colon && el && val) colon.classList.toggle('hidden', el.classList.contains('hidden') || val.classList.contains('hidden'));
+          updateMiddleWrapVisibility(id, g);
+          return;
+        }
+        if (key === g + 'showicon') {
+          const el = document.getElementById(id + '-' + g + 'icon');
+          if (el) {
+            const allow = (value === true || value === 1 || value === '1' || value === 'true');
+            el.dataset.showicon = allow ? '1' : '0';
+            if (!allow) { el.className = 'hidden info-icon'; el.style.display = 'none'; }
+            else { el.classList.remove('hidden'); el.style.display = ''; }
+          }
+          updateMiddleWrapVisibility(id, g);
+          return;
+        }
+        if (key === g + 'asso') {
+          const el = document.getElementById(id + '-' + g + 'asso');
+          if (el) {
+            el.textContent = value;
+            const allowShow = !(el.dataset && el.dataset.showvalue === '0');
+            const hide = (!value && value !== 0) || !allowShow;
+            el.classList.toggle('hidden', hide);
+          }
+          const colon = document.getElementById(id + '-' + g + 'colon');
+          const name = document.getElementById(id + '-' + g + 'name');
+          if (colon && name && el) colon.classList.toggle('hidden', name.classList.contains('hidden') || el.classList.contains('hidden'));
+          updateMiddleWrapVisibility(id, g);
+          return;
+        }
+        if (key === g + 'icon') {
+          const elOld = document.getElementById(id + '-' + g + 'icon');
+          if (!elOld) return;
+          const allow = !(elOld.dataset && elOld.dataset.showicon === '0');
+          if (value && value !== 'Transparent' && allow) {
+            const cls = prepareIconClass(value);
+            const elNew = setIconElementById(id + '-' + g + 'icon', cls ? (cls + ' info-icon') : 'hidden info-icon');
+            if (elNew && !(elNew.className || '').includes('hidden')) {
+              elNew.style.display = '';
+              ensureFaSvg(elNew.parentElement || elNew);
+            }
+          } else {
+            const elNew = setIconElementById(id + '-' + g + 'icon', 'hidden info-icon');
+            if (elNew) elNew.style.display = 'none';
+          }
+          updateMiddleWrapVisibility(id, g);
+          return;
+        }
+        if (key === g + 'showvalue') {
+          const valEl = document.getElementById(id + '-' + g + 'asso');
+          const colon = document.getElementById(id + '-' + g + 'colon');
+          const nameEl = document.getElementById(id + '-' + g + 'name');
+          const show = (value === true || value === 1 || value === '1' || value === 'true');
+          if (valEl) {
+            valEl.dataset.showvalue = show ? '1' : '0';
+            valEl.classList.toggle('hidden', !show || (!valEl.textContent && valEl.textContent !== '0'));
+          }
+          if (colon && nameEl && valEl) colon.classList.toggle('hidden', nameEl.classList.contains('hidden') || valEl.classList.contains('hidden'));
+          updateMiddleWrapVisibility(id, g);
           return;
         }
       }
@@ -2068,6 +2280,7 @@
       }
 
       if (decoded.delta) {
+        console.log('[RoomTile] Received Delta:', decoded.delta);
         for (const d of decoded.delta) {
           updateRoomKey(d.idx, d.key, d.value);
         }

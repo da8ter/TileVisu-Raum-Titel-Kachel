@@ -16,7 +16,7 @@
     }
     .tile {
       position: relative;
-      min-height: 220px;
+      min-height: var(--minHeight, 220px);
       background: var(--hintergrundfarbe, #000);
       border-radius: var(--borderRadius, 10px);
       overflow: hidden;
@@ -1216,12 +1216,23 @@
       return btn;
     }
 
-    function computeBgFilterString(percent) {
+    function computeBgFilterString(percent, src) {
       const p = Math.max(0, Math.min(100, Number(percent) || 0));
       const f = p / 100;
-      const brightness = 1 - 0.8 * f; // 1.0 -> 0.2
-      const contrast = 1 - 0.1 * f;   // 1.0 -> 0.9
-      const grayscale = 0.5 * f;      // 0.0 -> 0.5
+      let bmin = 0.2, bmax = 1.0, cmin = 0.9, cmax = 1.0, gmin = 0.0, gmax = 0.5;
+      if (src) {
+        const d = src.dataset ? src.dataset : src;
+        const pf = (v, def) => { const x = parseFloat(v); return isFinite(x) ? x : def; };
+        bmin = pf(d.bmin, bmin);
+        bmax = pf(d.bmax, bmax);
+        cmin = pf(d.cmin, cmin);
+        cmax = pf(d.cmax, cmax);
+        gmin = pf(d.gmin, gmin);
+        gmax = pf(d.gmax, gmax);
+      }
+      const brightness = bmax - (bmax - bmin) * f;
+      const contrast = cmax - (cmax - cmin) * f;
+      const grayscale = gmin + (gmax - gmin) * f;
       return `brightness(${brightness.toFixed(3)}) contrast(${contrast.toFixed(3)}) grayscale(${grayscale.toFixed(3)})`;
     }
 
@@ -1257,6 +1268,14 @@
       // Background image (+ optional palette -> button colors)
       if (room.image1) {
         const bg = document.getElementById(id + '-bg');
+        if (bg) {
+          if (room.bgfilterbrightnessmin !== undefined) bg.dataset.bmin = String(room.bgfilterbrightnessmin);
+          if (room.bgfilterbrightnessmax !== undefined) bg.dataset.bmax = String(room.bgfilterbrightnessmax);
+          if (room.bgfiltercontrastmin !== undefined) bg.dataset.cmin = String(room.bgfiltercontrastmin);
+          if (room.bgfiltercontrastmax !== undefined) bg.dataset.cmax = String(room.bgfiltercontrastmax);
+          if (room.bgfiltergrayscalemin !== undefined) bg.dataset.gmin = String(room.bgfiltergrayscalemin);
+          if (room.bgfiltergrayscalemax !== undefined) bg.dataset.gmax = String(room.bgfiltergrayscalemax);
+        }
         loadImageForTile(room.image1, bg).then((dataUri) => {
           if (dataUri && room.useimagecolors === true) {
             extractPaletteFromDataUri(dataUri, 8).then(pal => {
@@ -1277,7 +1296,8 @@
           let p = Number(room.bgfilter);
           if (!isFinite(p)) p = 0;
           p = Math.max(0, Math.min(100, p));
-          bgEl.style.filter = p <= 0 ? '' : computeBgFilterString(p);
+          bgEl.style.filter = p <= 0 ? '' : computeBgFilterString(p, bgEl);
+          bgEl.dataset.bgfilter = String(p);
         }
       } catch (_) {}
 
@@ -1577,6 +1597,13 @@
                 }
               });
             }
+            // Re-apply cached bgfilter after image has loaded
+            try {
+              const cached = bg && bg.dataset ? Number(bg.dataset.bgfilter) : 0;
+              let p = isFinite(cached) ? cached : 0;
+              p = Math.max(0, Math.min(100, p));
+              if (bg) bg.style.filter = p <= 0 ? '' : computeBgFilterString(p, bg);
+            } catch (_) {}
           });
         }
         return;
@@ -1588,7 +1615,8 @@
           let p = Number(value);
           if (!isFinite(p)) p = 0;
           p = Math.max(0, Math.min(100, p));
-          bg.style.filter = p <= 0 ? '' : computeBgFilterString(p);
+          bg.style.filter = p <= 0 ? '' : computeBgFilterString(p, bg);
+          bg.dataset.bgfilter = String(p);
         }
         return;
       }
@@ -2041,9 +2069,10 @@
       }
     }
 
-    function setGridLayout(minWidth, gap, borderRadius, columns) {
+    function setGridLayout(minWidth, minHeight, gap, borderRadius, columns) {
       const grid = document.getElementById('grid');
       grid.style.setProperty('--minWidth', (minWidth || 300) + 'px');
+      grid.style.setProperty('--minHeight', (minHeight || 220) + 'px');
       grid.style.setProperty('--gap', (gap || 12) + 'px');
       grid.style.setProperty('--borderRadius', (borderRadius || 10) + 'px');
       if (columns && Number(columns) > 0) {
@@ -2058,7 +2087,7 @@
       const decoded = typeof data === 'string' ? JSON.parse(data) : (data || {});
 
       if (decoded.grid) {
-        setGridLayout(decoded.grid.minWidth, decoded.grid.gap, decoded.grid.borderRadius, decoded.grid.columns);
+        setGridLayout(decoded.grid.minWidth, decoded.grid.minHeight, decoded.grid.gap, decoded.grid.borderRadius, decoded.grid.columns);
         GRID_FLAGS.useImageColorsForButtons = !!decoded.grid.useImageColorsForButtons;
       }
 
