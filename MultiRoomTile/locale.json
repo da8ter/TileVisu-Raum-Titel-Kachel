@@ -90,7 +90,13 @@
       "Helligkeit (max, 0..1)": "Helligkeit (max, 0..1)",
       "Kontrast (min, 0..1)": "Kontrast (min, 0..1)",
       "Kontrast (max, 0..1)": "Kontrast (max, 0..1)",
-      "Bild-Filterkonfiguration": "Bild-Filterkonfiguration"
+      "Bild-Filterkonfiguration": "Bild-Filterkonfiguration",
+      "Hintergrundbild Lichtstatus an": "Hintergrundbild Lichtstatus an",
+      "Hintergrundbild Lichtstatus aus": "Hintergrundbild Lichtstatus aus",
+      "Profil-/Darstellungsfarbe als Hintergrund": "Profil-/Darstellungsfarbe als Hintergrund",
+      "Szeneninstanz": "Szeneninstanz",
+      "Hintergrundfarbe: Status True": "Hintergrundfarbe: Status True",
+      "Hintergrundfarbe: Status False": "Hintergrundfarbe: Status False"
     },
     "en": {
       "Multi Raum Kachel": "Multi Room Tile",
@@ -183,7 +189,13 @@
       "Helligkeit (max, 0..1)": "Brightness (max, 0..1)",
       "Kontrast (min, 0..1)": "Contrast (min, 0..1)",
       "Kontrast (max, 0..1)": "Contrast (max, 0..1)",
-      "Bild-Filterkonfiguration": "Image filter configuration"
+      "Bild-Filterkonfiguration": "Image filter configuration",
+      "Hintergrundbild Lichtstatus an": "Background image light on",
+      "Hintergrundbild Lichtstatus aus": "Background image light off",
+      "Profil-/Darstellungsfarbe als Hintergrund": "Use profile/presentation color as background",
+      "Szeneninstanz": "Scene instance",
+      "Hintergrundfarbe: Status = True": "Background color: Status = True",
+      "Hintergrundfarbe: Status = False": "Background color: Status = False"
     }
   }
 }

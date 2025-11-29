@@ -42,6 +42,9 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
 - **Schriftgröße / Schriftfarbe**: Per Raum (−1 = globale Defaults übernehmen).
 - **Hintergrund‑Transparenz / Hintergrundfarbe**: Einheitlich für links/mitte/rechts (−1 = global).
 - **Info‑Elemente (Liste)**: Dynamische Einträge je Bereich (links/mitte/rechts), mit Name/Icon/Wert und optionalem Label‑Override.
+ - **Profil-/Darstellungsfarbe als Hintergrund** (pro Eintrag): Übernimmt automatisch die Hintergrundfarbe aus dem Variablen‑Profil bzw. der Darstellung abhängig vom aktuellen Variablenwert. Änderungen am Variablenwert aktualisieren die Farbe live in der Kachel.
+ - **Hintergrundfarbe: Status = True**: Überschreibt die Hintergrundfarbe, wenn der Status True ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
+ - **Hintergrundfarbe: Status = False**: Überschreibt die Hintergrundfarbe, wenn der Status False ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
 
 #### Raumname
 - **Raumname**: Anzeigetext in der Kachel.
@@ -49,7 +52,11 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
 - **Schriftgröße / Schriftfarbe**: (−1 = globale Defaults übernehmen).
 
 #### Hintergrund
-- **Hintergrundbild**: Medienobjekt (Bild) des Raums.
+- **Hintergrundbild Lichtstatus an** (Bild 1) und **Hintergrundbild Lichtstatus aus** (Bild 2):
+  - Wenn Bild 2 gesetzt ist, wird der Bild‑Filter deaktiviert.
+  - Stattdessen wird Bild 1 über Bild 2 gelegt und abhängig vom Lichtstatus/Dimmwert transparent.
+    - Lichtstatus = aus → Bild 1 wird 100% transparent (nur Bild 2 sichtbar).
+    - Mit Dimmwert → Transparenz entspricht dem Helligkeitsverlauf (0 = keine Transparenz, 100 = volle Transparenz von Bild 1).
 - **Bildtransparenz**: −1..100% (−1 = globaler Default), 0..100 = explizit.
 - **Hintergrundfarbe**: (−1 = globaler Default).
 - **Lichtstatus / Dimmwert (0..100)**: Steuert den Bildfilter.
@@ -68,6 +75,5 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
 - **Buttonfarben aus Hintergrundbild**: Pro Raum (zusätzlich zum globalen Schalter).
 - **Schalter Ausrichtung / Schalter gleichmäßig verteilen**: Layoutsteuerung.
 - **Menü‑Elemente (Liste)**: Dynamische Buttons (Variable optional mit Aktion, optional „Objekt öffnen“, Name/Icon/Wert, Label‑Override, Breite/Maximale Breite).
+  - Szenensteuerung: Wähle bei „Szeneninstanz“ eine Instanz des Moduls „Szenen-Steuerung“. Es wird automatisch ein Multi‑Button mit allen Szenen (Scene1..N) erzeugt.
 
-### Hinweise
-- „−1“ in den Spinners oder Transparent bei Farben bedeutet: Wert vom globalen Default übernehmen.

@@ -14,6 +14,9 @@ Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrun
 - **Hintergrundfarbe (Infoleiste)**: Hintergrundfarbe der Info‑Badges.
 - **Eckenradius (Infoleiste)**: Rundung der Ecken der Info‑Badges.
 - **Info‑Elemente (Liste)**: Dynamische Info‑Einträge (Variable, Name/Icon/Wert anzeigen, Label überschreiben). Bereiche links/rechts.
+- **Profil-/Darstellungsfarbe als Hintergrund**: Wenn aktiviert, wird die Hintergrundfarbe je nach Variablenstatus aus Profil‑Assoziationen bzw. Präsentation (inkl. Template/Guid‑Präsentationen) übernommen. Farbe „-1“ bewirkt Standard‑Hintergrund. Live‑Updates werden unterstützt.
+- **Hintergrundfarbe: Status = True**: Überschreibt die Hintergrundfarbe, wenn der Status True ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
+- **Hintergrundfarbe: Status = False**: Überschreibt die Hintergrundfarbe, wenn der Status False ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
 
 ### Raumname
 - **Raumname**: Anzeigetext in der Mitte der Kachel.
@@ -28,7 +31,12 @@ Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrun
 
 ### Hintergrund
 - **Hintergrund (Kachel)**: Medienobjekt Bild.
-- **Bildtransparenz**: 0..100%.
+- **Hintergrundbild Lichtstatus an** (Bild 1) und **Hintergrundbild Lichtstatus aus** (Bild 2):
+  - Wenn Bild 2 gesetzt ist, wird der Bild‑Filter deaktiviert.
+  - Stattdessen wird Bild 1 über Bild 2 gelegt und abhängig vom Lichtstatus/Dimmwert transparent.
+    - Lichtstatus = aus → Bild 1 wird 100% transparent (nur Bild 2 sichtbar).
+    - Mit Dimmwert → Transparenz entspricht dem Helligkeitsverlauf (0 = keine Transparenz, 100 = volle Transparenz von Bild 1).
+- **Bildtransparenz**: 0..100% (Basis‑Transparenz von Bild 1 im Ein‑Bild‑Modus bzw. Basisfaktor im Zwei‑Bild‑Modus).
 - **Hintergrundfarbe**: Farbe unter dem Bild (sichtbar bei Bildtransparenz).
 - **Lichtstatus / Dimmwert (0..100)**: Steuert die Stärke des Bildfilters. So kann der Lichtstatus über das Hintergrundbild angezeigt werden.
   - Licht aus (false) → maximaler Effekt.
@@ -49,3 +57,4 @@ Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrun
 - **Buttonfarben aus Hintergrundbild**: Leitet Farben aus dem Kachelbild ab (falls vorhanden).
 - **Schalter Ausrichtung / Schalter gleichmäßig verteilen**: Layout der Schalter.
 - **Menü‑Elemente (Liste)**: Dynamische Buttons (Variable optional mit Aktion, optional „Objekt öffnen“, Name/Icon/Wert, Label‑Override, Breite/Maximale Breite).
+  - Szenensteuerung: Wähle bei „Szeneninstanz“ eine Instanz des Moduls „Szenen-Steuerung“. Es wird automatisch ein Multi‑Button mit allen Szenen (Scene1..N) erzeugt.

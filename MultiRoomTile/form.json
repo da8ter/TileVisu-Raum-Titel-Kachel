@@ -23,6 +23,7 @@
           { "type": "CheckBox", "name": "UseImageColorsForButtons", "caption": "Buttonfarben aus Hintergrundbild" }
         ]},
         { "type": "Label", "caption": "Infoleiste", "bold": true },
+        { "type": "NumberSpinner", "name": "Default_Infohoehe", "caption": "Höhe", "digits": 0, "minimum": 20, "maximum": 100, "suffix": "px", "width": "300px" },
         { "type": "RowLayout", "items": [
           { "type": "NumberSpinner", "name": "Default_InfoSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": 8, "maximum": 100, "suffix": "px", "width": "300px" },
           { "type": "SelectColor", "name": "Default_InfoSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true, "width": "300px" }
@@ -123,9 +124,12 @@
                     { "label": "Rechts", "value": "right" }
                   ] } },
                   { "caption": "Variable", "name": "VariableId", "width": "auto", "add": 0, "edit": { "type": "SelectVariable", "validVariableTypes": [0,1,2,3] } },
-                  { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "edit": { "type": "CheckBox" } },
-                  { "caption": "Icon", "name": "ShowIcon", "width": "90px", "add": false, "edit": { "type": "CheckBox" } },
-                  { "caption": "Wert", "name": "ShowValue", "width": "90px", "add": true, "edit": { "type": "CheckBox" } },
+                  { "caption": "Name", "name": "ShowName", "width": "90px", "visible": false, "add": false, "edit": { "type": "CheckBox" } },
+                  { "caption": "Icon", "name": "ShowIcon", "width": "90px", "visible": false, "add": false, "edit": { "type": "CheckBox" } },
+                  { "caption": "Wert", "name": "ShowValue", "width": "90px", "visible": false, "add": true, "edit": { "type": "CheckBox" } },
+                  { "caption": "Profil-/Präsentationsfarbe als Hintergrund", "name": "UseVarColor", "width": "220px", "visible": false, "add": true, "edit": { "type": "CheckBox" } },
+                  { "caption": "Hintergrundfarbe: Status = True", "name": "ColorTrue", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
+                  { "caption": "Hintergrundfarbe: Status = False", "name": "ColorFalse", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
                   { "caption": "Label überschreiben", "name": "AltName", "visible": false, "width": "200px", "add": "", "edit": { "type": "ValidationTextBox" } }
                 ]
               }
@@ -141,7 +145,8 @@
               { "type": "NumberSpinner", "name": "RaumnameSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": -1, "maximum": 200 }
             ]},
             { "type": "ExpansionPanel", "caption": "Hintergrund", "expanded": true, "items": [
-              { "type": "SelectMedia", "name": "bgImage", "caption": "Hintergrundbild" },
+              { "type": "SelectMedia", "name": "bgImage", "caption": "Hintergrundbild Lichtstatus an" },
+              { "type": "SelectMedia", "name": "bgImage2", "caption": "Hintergrundbild Lichtstatus aus" },
               { "type": "HorizontalSlider", "name": "Bildtransparenz", "caption": "Bildtransparenz", "minimum": -1, "maximum": 100, "displayValue": true, "suffix": "%"},
               { "type": "SelectColor", "name": "Kachelhintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true },
               { "type": "RowLayout", "items": [
@@ -182,6 +187,7 @@
               { "type": "RowLayout", "items": [
                 { "type": "Select", "name": "SchalterAlignment", "caption": "Schalter Ausrichtung", "options": [
                   { "label": "Linksbündig", "value": "left" },
+                  { "label": "Zentriert", "value": "center" },
                   { "label": "Rechtsbündig", "value": "right" }
                 ]},
                 { "type": "CheckBox", "name": "SchalterDistribute", "caption": "Schalter gleichmäßig verteilen" }
@@ -190,13 +196,14 @@
                 "columns": [
                   { "caption": "ID", "name": "Id", "width": "180px", "add": "", "edit": { "type": "ValidationTextBox", "visible": false }, "visible": false },
                   { "caption": "Variable", "name": "VariableId", "width": "auto", "add": 0, "edit": { "type": "SelectVariable", "validVariableTypes": [0,1,2,3] } },
-                  { "caption": "Objekt öffnen", "name": "OpenObjectId", "width": "auto", "add": 0, "edit": { "type": "SelectObject" } },
-                  { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "edit": { "type": "CheckBox" } },
-                  { "caption": "Icon", "name": "ShowIcon", "width": "90px", "add": false, "edit": { "type": "CheckBox" } },
-                  { "caption": "Wert", "name": "ShowValue", "width": "90px", "add": false, "edit": { "type": "CheckBox" } },
+                  { "caption": "Objekt öffnen", "name": "OpenObjectId", "width": "auto", "visible": false, "add": "", "edit": { "type": "SelectObject" } },
+                  { "caption": "Szeneninstanz", "name": "SceneControlId", "width": "auto", "visible": false, "add": "", "edit": { "type": "SelectObject" } },
+                  { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
+                  { "caption": "Icon", "name": "ShowIcon", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
+                  { "caption": "Wert", "name": "ShowValue", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
                   { "caption": "Label überschreiben", "name": "AltName", "visible": false, "width": "200px", "add": "", "edit": { "type": "ValidationTextBox" } },
                   { "caption": "Breite", "name": "Width", "width": "110px", "visible": false, "add": 100, "edit": { "type": "NumberSpinner", "digits": 0, "minimum": 10, "maximum": 500, "suffix": "px" } },
-                  { "caption": "Maximale Breite", "name": "FullWidth", "width": "120px", "add": false, "edit": { "type": "CheckBox" } }
+                  { "caption": "Maximale Breite", "name": "FullWidth", "width": "120px", "add": false, "visible": false, "edit": { "type": "CheckBox" } }
                 ]
               }
             ]}

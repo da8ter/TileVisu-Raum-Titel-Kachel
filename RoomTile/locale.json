@@ -96,7 +96,13 @@
       "Kontrast (max, 0..1)": "Kontrast (max, 0..1)",
       "Graustufen (min, 0..1)": "Graustufen (min, 0..1)",
       "Graustufen (max, 0..1)": "Graustufen (max, 0..1)",
-      "Bild-Filterkonfiguration": "Bild-Filterkonfiguration"
+      "Bild-Filterkonfiguration": "Bild-Filterkonfiguration",
+      "Hintergrundbild Lichtstatus an": "Hintergrundbild Lichtstatus an",
+      "Hintergrundbild Lichtstatus aus": "Hintergrundbild Lichtstatus aus",
+      "Szeneninstanz": "Szeneninstanz",
+      "Profil-/Präsentationsfarbe als Hintergrund": "Profil-/Präsentationsfarbe als Hintergrund",
+      "Hintergrundfarbe: Status = True": "Hintergrundfarbe: Status = True",
+      "Hintergrundfarbe: Status = False": "Hintergrundfarbe: Status = False"
     },
     "en": {
       "Raum Kachel": "Room Tile",
@@ -194,7 +200,13 @@
       "Kontrast (max, 0..1)": "Contrast (max, 0..1)",
       "Graustufen (min, 0..1)": "Grayscale (min, 0..1)",
       "Graustufen (max, 0..1)": "Grayscale (max, 0..1)",
-      "Bild-Filterkonfiguration": "Image filter configuration"
+      "Bild-Filterkonfiguration": "Image filter configuration",
+      "Hintergrundbild Lichtstatus an": "Background image light on",
+      "Hintergrundbild Lichtstatus aus": "Background image light off",
+      "Szeneninstanz": "Scene control instance",
+      "Profil-/Darstellungsfarbe als Hintergrund": "Use profile/presentation color as background",
+      "Hintergrundfarbe: Status = True": "Background color: Status = True",
+      "Hintergrundfarbe: Status = False": "Background color: Status = False"  
     }
   }
 }

@@ -35,8 +35,17 @@
       z-index: 1;
       border-radius: var(--borderRadius, 10px);
     }
+    .tile-bg2 {
+      position: absolute;
+      inset: 0;
+      background-position: bottom;
+      background-repeat: no-repeat;
+      background-size: cover;
+      z-index: 0;
+      border-radius: var(--borderRadius, 10px);
+    }
 
-    .tile > :not(.tile-bg):not(.row-top):not(.center) { position: relative; z-index: 2; }
+    .tile > :not(.tile-bg):not(.tile-bg2):not(.row-top):not(.center) { position: relative; z-index: 2; }
 
     .row-top {
       position: static;
@@ -50,22 +59,22 @@
 
     .left, .right, .mid {
       display: flex;
-      gap: 12px;
-      align-items: center;
+      gap: 0;
+      align-items: stretch;
       min-width: 0;
       min-height: 20px;
       flex: 0 0 auto;
       z-index: 3;
-      padding: 4px 8px;
+      padding: 0;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-radius: 50px;
       width: fit-content;
-      height: fit-content;
+      overflow: hidden;
     }
-    .left { background-color: var(--infotopleftbg, rgba(0, 0, 0, 0.3)); grid-column: 1; justify-self: start; }
-    .mid { background-color: var(--infomidbg, rgba(0, 0, 0, 0.3)); grid-column: 2; justify-self: center; }
-    .right { background-color: var(--infotoprightbg, rgba(0, 0, 0, 0.3)); grid-column: 3; justify-self: end; }
+    .left { background-color: transparent; grid-column: 1; justify-self: start; }
+    .mid { background-color: transparent; grid-column: 2; justify-self: center; }
+    .right { background-color: transparent; grid-column: 3; justify-self: end; }
     .left.single-only, .right.single-only, .mid.single-only { justify-content: center; }
     .left.single-only .group, .right.single-only .group, .mid.single-only .group { margin-left: auto; margin-right: auto; }
     .left.single-only .group.only-icon, .right.single-only .group.only-icon, .mid.single-only .group.only-icon { width: 100%; justify-content: center; }
@@ -78,6 +87,9 @@
       display: flex;
       gap: 6px;
       align-items: center;
+      padding: 4px 8px;
+      background-color: var(--infotopleftbg, rgba(0,0,0,0.3));
+      height: var(--infoheight, auto);
     }
     .menu-switches .group {
       display: flex;
@@ -165,7 +177,7 @@
     .menu-switches.align-center { justify-content: center; }
     .menu-switches.align-right { justify-content: flex-end; align-content: flex-end; gap: 0; margin-right: calc(-1 * var(--menu-padding, 12px)); padding-right: var(--menu-padding, 12px); }
     .menu-switches.align-right > * + * { margin-left: var(--switch-gap, 10px); }
-    .menu-switches.distribute { justify-content: space-between; gap: 0; margin: 0 calc(-1 * var(--menu-padding, 12px)); padding: 0 var(--menu-padding, 12px); }
+    .menu-switches.distribute { justify-content: space-between; gap: var(--switch-gap, 10px); margin: 0 calc(-1 * var(--menu-padding, 12px)); padding: 0 var(--menu-padding, 12px); }
     .menu-switches.distribute .switch-group:has(.switch-option + .switch-option) { width: 100%; justify-content: space-between; }
     .menu-switches.distribute .switch-group .switch-option { flex: 1 1 0; }
     /* Full-width overrides for direct children - must come after alignment */
@@ -636,7 +648,9 @@
       if (tile) return tile;
 
       tile = el('div', { id, class: 'tile' });
+      const bg2 = el('div', { id: id + '-bg2', class: 'tile-bg2' });
       const bg = el('div', { id: id + '-bg', class: 'tile-bg' });
+      tile.appendChild(bg2);
       tile.appendChild(bg);
 
       // Top row
@@ -645,17 +659,22 @@
       const mid = el('div', { class: 'mid' });
       const right = el('div', { class: 'right' });
 
+      const createGroup = (key) => {
+         const g = groupInfo(id, key);
+         return g;
+      };
+
       // left groups (links + links2) with separator
-      left.appendChild(groupInfo(id, 'infolinks'));
+      left.appendChild(createGroup('infolinks'));
       const sepL = el('div', { id: id + '-sep-left', class: 'sep sep-left' });
       left.appendChild(sepL);
-      left.appendChild(groupInfo(id, 'infolinks2'));
+      left.appendChild(createGroup('infolinks2'));
 
       // right groups (rechts + rechts2) with separator
-      right.appendChild(groupInfo(id, 'inforechts'));
+      right.appendChild(createGroup('inforechts'));
       const sepR = el('div', { id: id + '-sep-right', class: 'sep sep-right' });
       right.appendChild(sepR);
-      right.appendChild(groupInfo(id, 'inforechts2'));
+      right.appendChild(createGroup('inforechts2'));
 
       row.appendChild(left);
       row.appendChild(mid);
@@ -701,16 +720,21 @@
       const right = row.querySelector('.right');
       if (!left || !right) return;
       root.dataset.hasDynamicInfo = '0';
+      
+      const createGroup = (key) => {
+         const g = groupInfo(prefixId, key);
+         return g;
+      };
 
       left.innerHTML = '';
-      left.appendChild(groupInfo(prefixId, 'infolinks'));
+      left.appendChild(createGroup('infolinks'));
       left.appendChild(el('div', { id: prefixId + '-sep-left', class: 'sep sep-left' }));
-      left.appendChild(groupInfo(prefixId, 'infolinks2'));
+      left.appendChild(createGroup('infolinks2'));
 
       right.innerHTML = '';
-      right.appendChild(groupInfo(prefixId, 'inforechts'));
+      right.appendChild(createGroup('inforechts'));
       right.appendChild(el('div', { id: prefixId + '-sep-right', class: 'sep sep-right' }));
-      right.appendChild(groupInfo(prefixId, 'inforechts2'));
+      right.appendChild(createGroup('inforechts2'));
     }
 
     function ensureLegacyInfoStructureCentered(prefixId) {
@@ -726,15 +750,21 @@
       // Clear side containers and hide
       if (left) { left.innerHTML = ''; left.style.display = 'none'; }
       if (right) { right.innerHTML = ''; right.style.display = 'none'; }
+      
+      const createGroup = (key) => {
+         const g = groupInfo(prefixId, key);
+         return g;
+      };
+
       // Build mid with 4 groups and separators
       mid.innerHTML = '';
-      mid.appendChild(groupInfo(prefixId, 'infolinks'));
+      mid.appendChild(createGroup('infolinks'));
       mid.appendChild(el('div', { id: prefixId + '-sep-mid-1', class: 'sep' }));
-      mid.appendChild(groupInfo(prefixId, 'infolinks2'));
+      mid.appendChild(createGroup('infolinks2'));
       mid.appendChild(el('div', { id: prefixId + '-sep-mid-2', class: 'sep' }));
-      mid.appendChild(groupInfo(prefixId, 'inforechts'));
+      mid.appendChild(createGroup('inforechts'));
       mid.appendChild(el('div', { id: prefixId + '-sep-mid-3', class: 'sep' }));
-      mid.appendChild(groupInfo(prefixId, 'inforechts2'));
+      mid.appendChild(createGroup('inforechts2'));
       mid.style.display = '';
     }
 
@@ -758,11 +788,18 @@
       const leftItems = items.filter(it => (it.area || 'left') === 'left');
       const midItems = items.filter(it => (it.area || 'left') === 'mid');
       const rightItems = items.filter(it => (it.area || 'left') === 'right');
+      
+      const processItem = (it, idx, g) => {
+         if (it.color) {
+            g.style.backgroundColor = it.color;
+         }
+      };
 
       const build = (container, list, alignTarget) => {
         container.style.display = list.length ? '' : 'none';
         list.forEach((it, idx) => {
           const g = groupInfo(prefixId, it.key);
+          processItem(it, idx, g);
           container.appendChild(g);
           applyInfo(prefixId, it.key, roomObj);
           if (idx < list.length - 1) {
@@ -817,7 +854,7 @@
       for (const it of items) {
         const baseId = prefixId + '-menuitem-' + it.id;
         const key = it.key;
-        const hasOptions = Array.isArray(it.options) && it.options.length > 0 && it.hasaction && it.action === 'variable';
+        const hasOptions = Array.isArray(it.options) && it.options.length > 0 && it.hasaction && (it.action === 'variable' || it.action === 'scenecontrol');
         const isObjectAction = it.action === 'object' && it.openObjectId > 0 && typeof openObject === 'function';
 
         if (hasOptions) {
@@ -1260,15 +1297,23 @@
       root.style.setProperty('--infofontsize', (room.infofontsize || 16) + 'px');
       root.style.setProperty('--infoschriftfarbe', room.infoschriftfarbe || '#fff');
       root.style.setProperty('--transparenz', room.transparenz ?? 0.7);
+      if (room.infoheight && Number(room.infoheight) > 0) {
+        root.style.setProperty('--infoheight', room.infoheight + 'px');
+      } else {
+        root.style.removeProperty('--infoheight');
+      }
       // Info-Top Badge BGs
       if (room.infotopleftbg) root.style.setProperty('--infotopleftbg', room.infotopleftbg);
       if (room.infomidbg) root.style.setProperty('--infomidbg', room.infomidbg);
       if (room.infotoprightbg) root.style.setProperty('--infotoprightbg', room.infotoprightbg);
 
-      // Background image (+ optional palette -> button colors)
+      // Background images (+ optional palette -> button colors)
       if (room.image1) {
         const bg = document.getElementById(id + '-bg');
         if (bg) {
+          // store fade/base settings
+          bg.dataset.basealpha = String((typeof room.transparenz === 'number') ? room.transparenz : 0.7);
+          bg.dataset.image2enabled = room.image2enabled ? '1' : '0';
           if (room.bgfilterbrightnessmin !== undefined) bg.dataset.bmin = String(room.bgfilterbrightnessmin);
           if (room.bgfilterbrightnessmax !== undefined) bg.dataset.bmax = String(room.bgfilterbrightnessmax);
           if (room.bgfiltercontrastmin !== undefined) bg.dataset.cmin = String(room.bgfiltercontrastmin);
@@ -1288,16 +1333,35 @@
           }
         });
       }
+      if (room.image2) {
+        const bg2 = document.getElementById(id + '-bg2');
+        if (bg2) {
+          loadImageForTile(room.image2, bg2);
+        }
+      }
 
-      // Hintergrund-Filter: 0 = aus, 100 = max (brightness(0.2) contrast(0.9) grayscale(0.5))
+      // Hintergrund-Filter oder Fade bei 2. Bild
       try {
         const bgEl = document.getElementById(id + '-bg');
         if (bgEl) {
-          let p = Number(room.bgfilter);
-          if (!isFinite(p)) p = 0;
-          p = Math.max(0, Math.min(100, p));
-          bgEl.style.filter = p <= 0 ? '' : computeBgFilterString(p, bgEl);
-          bgEl.dataset.bgfilter = String(p);
+          if (room.image2enabled) {
+            // Deaktiviere Filter, steuere Transparenz von Bild 1 über bgfade
+            bgEl.style.filter = '';
+            const base = (typeof room.transparenz === 'number') ? room.transparenz : (parseFloat(bgEl.dataset.basealpha || '0.7') || 0.7);
+            const fade = (typeof room.bgfade === 'number') ? Math.max(0, Math.min(100, room.bgfade)) : 0;
+            const alpha = Math.max(0, Math.min(1, base * (1 - (fade / 100))));
+            bgEl.style.opacity = String(alpha);
+            bgEl.dataset.bgfilter = '0';
+            bgEl.dataset.bgfade = String(fade);
+          } else {
+            // Klassischer Filter
+            bgEl.style.opacity = '';
+            let p = Number(room.bgfilter);
+            if (!isFinite(p)) p = 0;
+            p = Math.max(0, Math.min(100, p));
+            bgEl.style.filter = p <= 0 ? '' : computeBgFilterString(p, bgEl);
+            bgEl.dataset.bgfilter = String(p);
+          }
         }
       } catch (_) {}
 
@@ -1363,6 +1427,20 @@
 
       if (!iconEl || !nameEl || !colonEl || !valEl) return;
       colonEl.textContent = ': ';
+
+      try {
+        const grp = iconEl.parentElement;
+        const colorKey = key + 'color';
+        if (grp) {
+          const hasExplicit = roomObj && Object.prototype.hasOwnProperty.call(roomObj, colorKey);
+          if (hasExplicit && roomObj[colorKey]) {
+            grp.style.backgroundColor = roomObj[colorKey];
+          } else if (!key.startsWith('infoitem-')) {
+            grp.style.backgroundColor = '';
+          }
+          // For dynamic infoitems without explicit color key, keep whatever renderDynamicInfo set
+        }
+      } catch (e) {}
 
       if (roomObj[nameKey]) { nameEl.textContent = roomObj[nameKey]; nameEl.classList.remove('hidden'); } else { nameEl.classList.add('hidden'); }
       let valueToShow = roomObj[assoKey];
@@ -1597,14 +1675,47 @@
                 }
               });
             }
-            // Re-apply cached bgfilter after image has loaded
+            // Re-apply cached bgfilter after image has loaded (or disable if second image is active)
             try {
               const cached = bg && bg.dataset ? Number(bg.dataset.bgfilter) : 0;
               let p = isFinite(cached) ? cached : 0;
               p = Math.max(0, Math.min(100, p));
-              if (bg) bg.style.filter = p <= 0 ? '' : computeBgFilterString(p, bg);
+              if (bg) {
+                const img2 = (bg.dataset && bg.dataset.image2enabled === '1');
+                bg.style.filter = img2 ? '' : (p <= 0 ? '' : computeBgFilterString(p, bg));
+              }
             } catch (_) {}
           });
+        }
+        return;
+      }
+      if (key === 'image2') {
+        const bg2 = document.getElementById(id + '-bg2');
+        if (bg2) {
+          loadImageForTile(value, bg2);
+        }
+        // Note: image2enabled flag is set by explicit 'image2enabled' delta from backend
+        // Do not automatically assume image2enabled=1 just because image2 URL exists
+        return;
+      }
+      if (key === 'image2enabled') {
+        const bg = document.getElementById(id + '-bg');
+        if (bg && bg.dataset) {
+          const on = (value === true || value === 1 || value === '1' || value === 'true');
+          bg.dataset.image2enabled = on ? '1' : '0';
+          if (on) {
+            bg.style.filter = '';
+            // apply existing bgfade if present
+            const base = parseFloat(bg.dataset.basealpha || '0.7') || 0.7;
+            const f = Math.max(0, Math.min(100, Number(bg.dataset.bgfade || 0)));
+            const alpha = Math.max(0, Math.min(1, base * (1 - (f / 100))));
+            bg.style.opacity = String(alpha);
+          } else {
+            // restore classic filter
+            const p = Math.max(0, Math.min(100, Number(bg.dataset.bgfilter || 0)));
+            bg.style.opacity = '';
+            bg.style.filter = p <= 0 ? '' : computeBgFilterString(p, bg);
+          }
         }
         return;
       }
@@ -1615,8 +1726,28 @@
           let p = Number(value);
           if (!isFinite(p)) p = 0;
           p = Math.max(0, Math.min(100, p));
-          bg.style.filter = p <= 0 ? '' : computeBgFilterString(p, bg);
+          const img2 = (bg.dataset && bg.dataset.image2enabled === '1');
+          bg.style.filter = img2 ? '' : (p <= 0 ? '' : computeBgFilterString(p, bg));
           bg.dataset.bgfilter = String(p);
+        }
+        return;
+      }
+      if (key === 'bgfade') {
+        const bg = document.getElementById(id + '-bg');
+        if (bg) {
+          const hasImg2 = (bg.dataset && bg.dataset.image2enabled === '1');
+          if (hasImg2) {
+            const base = parseFloat(bg.dataset && bg.dataset.basealpha ? bg.dataset.basealpha : '0.7') || 0.7;
+            let f = Number(value);
+            if (!isFinite(f)) f = 0;
+            f = Math.max(0, Math.min(100, f));
+            const alpha = Math.max(0, Math.min(1, base * (1 - (f / 100))));
+            bg.style.opacity = String(alpha);
+            bg.dataset.bgfade = String(f);
+          } else {
+            bg.style.opacity = '';
+            if (bg.dataset) delete bg.dataset.bgfade;
+          }
         }
         return;
       }
@@ -1643,6 +1774,13 @@
       if (key === 'infofontsize' || key === 'infomenuefontsize') {
         const root = document.getElementById(id); if (root) root.style.setProperty('--' + key, value + 'px'); return;
       }
+      if (key === 'infoheight') {
+        const root = document.getElementById(id); if (root) {
+          if (value && Number(value) > 0) root.style.setProperty('--infoheight', value + 'px');
+          else root.style.removeProperty('--infoheight');
+        }
+        return;
+      }
       if (key === 'raumnameschriftgroesse') {
         const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.fontSize = value + 'px'; return;
       }
@@ -1653,6 +1791,15 @@
         // raumnameschriftfarbe applies directly to element color too
         if (key === 'raumnameschriftfarbe') {
           const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.color = value;
+        }
+        return;
+      }
+      if (key.startsWith('infoitem-') && key.endsWith('color')) {
+        const base = key.substring(0, key.length - 'color'.length); // e.g., infoitem-<id>
+        const icon = document.getElementById(id + '-' + base + 'icon');
+        const grp = icon ? icon.parentElement : null;
+        if (grp) {
+          grp.style.backgroundColor = value || '';
         }
         return;
       }

@@ -15,6 +15,8 @@ class MultiRoomTile extends IPSModule
         // optionale globale Defaults
         $this->RegisterPropertyInteger('Default_InfoSchriftgroesse', 14);
         $this->RegisterPropertyInteger('Default_InfoSchriftfarbe', 0xFFFFFF);
+        // Höhe der Infoleiste (Row-Top) in Pixeln
+        $this->RegisterPropertyInteger('Default_Infohoehe', 24);
         $this->RegisterPropertyInteger('Default_InfoMenueSchriftgroesse', 14);
         $this->RegisterPropertyInteger('Default_InfoMenueSchriftfarbe', 0xFFFFFF);
         $this->RegisterPropertyFloat('Default_InfoMenueTransparenz', 30.0);
@@ -86,9 +88,10 @@ class MultiRoomTile extends IPSModule
                                             if (!is_array($mi)) continue;
                                             if (($mi['type'] ?? '') === 'List' && ($mi['name'] ?? '') === 'MenuItems' && isset($mi['columns']) && is_array($mi['columns'])) {
                                                 foreach ($mi['columns'] as &$col) {
-                                                    if (is_array($col) && ($col['name'] ?? '') === 'OpenObjectId') {
-                                                        $col['visible'] = $supportsSelectObject;
-                                                        break;
+                                                    if (!is_array($col)) continue;
+                                                    $n = (string)($col['name'] ?? '');
+                                                    if (in_array($n, ['ShowName','ShowIcon','ShowValue','FullWidth'], true)) {
+                                                        $col['visible'] = false;
                                                     }
                                                 }
                                                 unset($col);
@@ -171,6 +174,26 @@ class MultiRoomTile extends IPSModule
                         $varMap[$varId] = [];
                     }
                     $varMap[$varId][] = ['idx' => $idx, 'prop' => 'menuitem:' . $itemId];
+                }
+                // SceneControl ActiveScene tracking
+                $sceneControlId = (int)($row['SceneControlId'] ?? 0);
+                if ($sceneControlId > 0 && $itemId !== '' && @IPS_InstanceExists($sceneControlId)) {
+                    $hasDynamicMenu = true;
+                    $activeVar = 0;
+                    foreach ((array)@IPS_GetChildrenIDs($sceneControlId) as $cid) {
+                        if (@IPS_VariableExists($cid)) {
+                            $o = @IPS_GetObject($cid);
+                            if (($o['ObjectIdent'] ?? '') === 'ActiveScene') { $activeVar = $cid; break; }
+                        }
+                    }
+                    if ($activeVar > 0) {
+                        $this->RegisterReference($activeVar);
+                        $this->RegisterMessage($activeVar, VM_UPDATE);
+                        if (!isset($varMap[$activeVar]) || !is_array($varMap[$activeVar])) {
+                            $varMap[$activeVar] = [];
+                        }
+                        $varMap[$activeVar][] = ['idx' => $idx, 'prop' => 'menuitem:' . $itemId];
+                    }
                 }
             }
 
@@ -266,7 +289,7 @@ class MultiRoomTile extends IPSModule
             }
             $room = $rooms[$idx];
 
-            // Spezialfall: Lichtstatus/Dimmwert → bgfilter (0..100)
+            // Spezialfall: Lichtstatus/Dimmwert → bgfilter/bgfade (0..100)
             if ($prop === 'Lichtstatus' || $prop === 'Dimmwert') {
                 $boolId = (int)($room['Lichtstatus'] ?? 0);
                 $dimId = (int)($room['Dimmwert'] ?? 0);
@@ -285,26 +308,41 @@ class MultiRoomTile extends IPSModule
                 $pOut = 0.0;
                 if ($hasBool) {
                     if ($boolVal === false) {
-                        // Licht aus -> maximaler Filter, Dimmwert ignorieren
                         $pOut = 100.0;
                     } else {
-                        // Licht an -> Dimmwert steuert, fehlt Dimmwert → kein Effekt
                         if ($hasDim) {
                             $pOut = 100.0 - $dimVal;
                         }
                     }
                 } elseif ($hasDim) {
-                    // Kein Lichtstatus, nur Dimmwert steuert
                     $pOut = 100.0 - $dimVal;
                 }
 
                 if (!$hasBool && !$hasDim) {
-                    $pOut = 0.0;
+                    // Wenn kein Lichtstatus/Dimmwert: Standardfilter nur bei einem Bild
+                    $imageID2 = (int)($room['bgImage2'] ?? 0);
+                    // Validierung: Ungültige Media-ID ignorieren
+                    if ($imageID2 > 0 && !@IPS_MediaExists($imageID2)) { $imageID2 = 0; }
+                    $pOut = ($imageID2 > 0) ? 0.0 : 0;
+                } else {
+                    $imageID2 = (int)($room['bgImage2'] ?? 0);
+                    // Validierung: Ungültige Media-ID ignorieren
+                    if ($imageID2 > 0 && !@IPS_MediaExists($imageID2)) { $imageID2 = 0; }
                 }
                 if ($pOut < 0.0) {
                     $pOut = 0.0;
                 }
+                // Wenn Bild 2 konfiguriert ist, Filter deaktivieren (bgfilter = 0)
+                if ($imageID2 > 0) { $pOut = 0.0; }
                 $delta[] = [ 'idx' => $idx, 'key' => 'bgfilter', 'value' => $pOut ];
+                // bgfade nur senden wenn zweites Bild konfiguriert ist
+                if ($imageID2 > 0) {
+                    $fade = 0.0;
+                    if ($hasBool && $boolVal === false) { $fade = 100.0; }
+                    elseif ($hasDim) { $fade = 100.0 - $dimVal; }
+                    if ($fade < 0.0) $fade = 0.0; if ($fade > 100.0) $fade = 100.0;
+                    $delta[] = [ 'idx' => $idx, 'key' => 'bgfade', 'value' => $fade ];
+                }
                 continue;
             }
 
@@ -312,6 +350,37 @@ class MultiRoomTile extends IPSModule
                 $itemId = substr($prop, strlen('menuitem:'));
                 $varId = $SenderID;
                 if ($varId > 0 && @IPS_VariableExists($varId)) {
+                    // Prüfe ob SceneControl: dann Label -> Index mappen
+                    $value = @GetValue($varId);
+                    $rooms = $this->getRooms();
+                    $sceneId = 0;
+                    $menuList = $this->parseRoomList($rooms[$idx]['MenuItems'] ?? []);
+                    foreach ($menuList as $row) {
+                        if (!is_array($row)) continue;
+                        $rid = (string)($row['Id'] ?? '');
+                        if ($rid === $itemId) { $sceneId = (int)($row['SceneControlId'] ?? 0); break; }
+                    }
+                    if ($sceneId > 0 && @IPS_InstanceExists($sceneId)) {
+                        if (!is_numeric($value)) {
+                            $mapped = 0;
+                            foreach ((array)@IPS_GetChildrenIDs($sceneId) as $cid) {
+                                if (!@IPS_VariableExists($cid)) continue;
+                                $o = @IPS_GetObject($cid);
+                                $ident = (string)($o['ObjectIdent'] ?? '');
+                                if (preg_match('/^Scene(\d+)$/i', $ident, $m)) {
+                                    $label = (string)($o['ObjectName'] ?? $ident);
+                                    if ((string)$label === (string)$value) { $mapped = (int)$m[1]; break; }
+                                }
+                            }
+                            $value = $mapped;
+                        } else {
+                            $value = (int)$value;
+                        }
+                        $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'value', 'value' => $value];
+                        $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'asso', 'value' => (string)@GetValueFormatted($varId)];
+                        continue;
+                    }
+                    // Fallback: Standard-Delta
                     $delta = array_merge($delta, $this->buildMenuItemDelta($idx, $itemId, $varId));
                 }
                 continue;
@@ -370,6 +439,31 @@ class MultiRoomTile extends IPSModule
                     if (!is_array($row)) continue;
                     $rid = (string)($row['Id'] ?? '');
                     if ($rid === '' || $rid !== $itemId) continue;
+                    // SceneControl Aktion
+                    $sceneControlId = (int)($row['SceneControlId'] ?? 0);
+                    if ($sceneControlId > 0 && @IPS_InstanceExists($sceneControlId)) {
+                        try {
+                            $target = $Value;
+                            if (!is_numeric($target)) {
+                                $target = 0;
+                                foreach ((array)@IPS_GetChildrenIDs($sceneControlId) as $cid) {
+                                    if (!@IPS_VariableExists($cid)) continue;
+                                    $o = @IPS_GetObject($cid);
+                                    $ident = (string)($o['ObjectIdent'] ?? '');
+                                    if (preg_match('/^Scene(\d+)$/i', $ident, $m)) {
+                                        $label = (string)($o['ObjectName'] ?? $ident);
+                                        if ((string)$label === (string)$Value) { $target = (int)$m[1]; break; }
+                                    }
+                                }
+                            } else {
+                                $target = (int)$target;
+                            }
+                            if ($target > 0 && function_exists('SZS_CallScene')) {
+                                @SZS_CallScene($sceneControlId, $target);
+                            }
+                        } catch (Throwable $e) {}
+                        return;
+                    }
                     $varId = (int)($row['VariableId'] ?? 0);
                     if ($varId <= 0 || !@IPS_VariableExists($varId)) return;
                     $variable = @IPS_GetVariable($varId);
@@ -483,9 +577,22 @@ class MultiRoomTile extends IPSModule
 
         $rooms = $this->getRooms();
         // Lese optionale Defaults aus den separaten Properties und mappe sie auf die Raum-Keys
+        // Robust: Infohöhe kann in bestehenden Instanzen noch nicht existieren
+        $defInfoHoehe = @($this->ReadPropertyInteger('Default_Infohoehe'));
+        if (!is_int($defInfoHoehe) || $defInfoHoehe <= 0) {
+            // Fallback auf evtl. ältere Schreibweise mit Umlaut
+            $alt = @($this->ReadPropertyInteger('Default_Infohöhe'));
+            if (is_int($alt) && $alt > 0) {
+                $defInfoHoehe = $alt;
+            } else {
+                $defInfoHoehe = 0;
+            }
+        }
+
         $defaults = [
             'InfoSchriftgroesse'       => (int)$this->ReadPropertyInteger('Default_InfoSchriftgroesse'),
             'InfoSchriftfarbe'         => (int)$this->ReadPropertyInteger('Default_InfoSchriftfarbe'),
+            'InfoHoehe'                => (int)$defInfoHoehe,
             'InfoMenueSchriftgroesse'  => (int)$this->ReadPropertyInteger('Default_InfoMenueSchriftgroesse'),
             'InfoMenueSchriftfarbe'    => (int)$this->ReadPropertyInteger('Default_InfoMenueSchriftfarbe'),
             'InfoMenueTransparenz'     => (float)$this->ReadPropertyFloat('Default_InfoMenueTransparenz'),
@@ -533,6 +640,8 @@ class MultiRoomTile extends IPSModule
             $inf = null;
             if (array_key_exists('InfoSchriftgroesse', $room)) { $inf = (int)$room['InfoSchriftgroesse']; }
             $r['infofontsize'] = ($inf === null || $inf <= 0) ? (int)($defaults['InfoSchriftgroesse'] ?? 16) : $inf;
+            // Höhe der Infoleiste (nur globaler Default)
+            $r['infoheight'] = (int)($defaults['InfoHoehe'] ?? 0);
 
             $imf = null;
             if (array_key_exists('InfoMenueSchriftgroesse', $room)) { $imf = (int)$room['InfoMenueSchriftgroesse']; }
@@ -638,9 +747,21 @@ class MultiRoomTile extends IPSModule
                 : (bool)$this->ReadPropertyBoolean('UseImageColorsForButtons');
             $r['useimagecolors'] = $useImgCol || $this->ReadPropertyBoolean('UseImageColorsForButtons');
 
-            // Bild: per WebHook ausliefern (Base64 via JSON)
+            // Bilder: per WebHook ausliefern (Base64 via JSON)
             $imageID = (int)($room['bgImage'] ?? 0);
+            $imageID2 = (int)($room['bgImage2'] ?? 0);
+            // Prüfe ob Media-IDs gültig sind
+            if ($imageID2 > 0 && !@IPS_MediaExists($imageID2)) {
+                $imageID2 = 0; // Ungültige Media-ID ignorieren
+            }
             $r['image1'] = $this->BuildImageHookUrl($imageID);
+            if ($imageID2 > 0) {
+                $r['image2'] = $this->BuildImageHookUrl($imageID2);
+                $r['image2enabled'] = true;
+            } else {
+                $r['image2enabled'] = false;
+                // image2 nicht setzen, um 404-Fehler zu vermeiden
+            }
 
             // Hintergrundfilter aus Lichtstatus/Dimmwert
             try {
@@ -672,12 +793,25 @@ class MultiRoomTile extends IPSModule
                 }
 
                 if (!$hasBool && !$hasDim) {
-                    $pOut = 0.0;
+                    // Wenn kein Lichtstatus/Dimmwert: Standardfilter nur bei einem Bild
+                    $pOut = ($imageID2 > 0) ? 0.0 : 0.0;
                 }
                 if ($pOut < 0.0) {
                     $pOut = 0.0;
                 }
+                // Wenn Bild 2 konfiguriert ist, Filter deaktivieren (bgfilter = 0)
+                if ($imageID2 > 0) { $pOut = 0.0; }
                 $r['bgfilter'] = $pOut;
+                // bgfade nur senden wenn zweites Bild konfiguriert ist
+                if ($imageID2 > 0) {
+                    $fade = 0.0;
+                    if ($hasBool && !$boolVal) { $fade = 100.0; }
+                    elseif ($hasDim) { $fade = 100.0 - $dimVal; }
+                    if ($fade < 0.0) $fade = 0.0; if ($fade > 100.0) $fade = 100.0;
+                    $r['bgfade'] = $fade;
+                } else {
+                    $r['bgfade'] = 0.0;
+                }
             } catch (Throwable $e) {}
 
             $roomInfoList = $this->parseRoomList($room['InfoItems'] ?? []);
@@ -717,6 +851,7 @@ class MultiRoomTile extends IPSModule
             $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
             $showIcon = isset($row['ShowIcon']) ? (bool)$row['ShowIcon'] : false;
             $showValue = isset($row['ShowValue']) ? (bool)$row['ShowValue'] : true;
+            $useVarColor = isset($row['UseVarColor']) ? (bool)$row['UseVarColor'] : false;
             $altName = (string)($row['AltName'] ?? '');
             $order = $idx++;
             if ($id === '') {
@@ -729,7 +864,13 @@ class MultiRoomTile extends IPSModule
             $valueFormatted = '';
             $icon = '';
             $hasVar = ($varId > 0) && @IPS_VariableExists($varId);
+            $bgColor = '';
             if ($hasVar) {
+                $vt = null;
+                try {
+                    $viTmp = @IPS_GetVariable($varId);
+                    if (is_array($viTmp)) { $vt = $viTmp['VariableType'] ?? null; }
+                } catch (Throwable $e) {}
                 try { $valueFormatted = (string)@GetValueFormatted($varId); } catch (Throwable $e) {}
                 if ($showName) {
                     try { $nameVal = $altName !== '' ? $altName : (string)@IPS_GetName($varId); } catch (Throwable $e) { $nameVal = $altName; }
@@ -738,6 +879,25 @@ class MultiRoomTile extends IPSModule
                 }
                 if ($showIcon) {
                     try { $icon = (string)$this->GetIconAdvanced($varId); } catch (Throwable $e) {}
+                }
+                // Fallback: Profil-/Präsentationsfarbe
+                if ($useVarColor) {
+                    try {
+                        $col = (string)$this->GetColor($varId);
+                        if ($col !== '') { $bgColor = '#' . $col; }
+                    } catch (Throwable $e) {}
+                }
+                // Explizite Überschreibung für Bool mit ColorTrue/ColorFalse, wenn gesetzt (nicht Transparent)
+                $ct = isset($row['ColorTrue']) ? (int)$row['ColorTrue'] : -1;
+                $cf = isset($row['ColorFalse']) ? (int)$row['ColorFalse'] : -1;
+                if ($vt === 0 && ($ct !== -1 || $cf !== -1)) {
+                    $isOn = false;
+                    try { $isOn = (bool)@GetValue($varId); } catch (Throwable $e) { $isOn = false; }
+                    if ($isOn && $ct !== -1) {
+                        $bgColor = '#' . sprintf('%06X', $ct);
+                    } elseif (!$isOn && $cf !== -1) {
+                        $bgColor = '#' . sprintf('%06X', $cf);
+                    }
                 }
             } else {
                 $nameVal = $altName;
@@ -761,6 +921,7 @@ class MultiRoomTile extends IPSModule
                 'area' => $areaNorm,
                 'order' => $order,
                 'variableId' => $varId,
+                'color' => $bgColor,
             ];
         }
         usort($items, fn($a, $b) => $a['order'] <=> $b['order']);
@@ -776,6 +937,7 @@ class MultiRoomTile extends IPSModule
             $id = (string)($row['Id'] ?? '');
             $varId = (int)($row['VariableId'] ?? 0);
             $openObjectId = (int)($row['OpenObjectId'] ?? 0);
+            $sceneControlId = (int)($row['SceneControlId'] ?? 0);
             $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
             $showIcon = isset($row['ShowIcon']) ? (bool)$row['ShowIcon'] : false;
             $showValue = isset($row['ShowValue']) ? (bool)$row['ShowValue'] : false;
@@ -834,6 +996,56 @@ class MultiRoomTile extends IPSModule
                 } else {
                     $c = $this->GetColor($varId);
                     if ($c !== '') $color = '#' . $c;
+                }
+            } elseif ($sceneControlId > 0 && @IPS_InstanceExists($sceneControlId)) {
+                // Szenensteuerung: Baue Optionen aus Scene1..N inkl. Icons, ermittle aktive Szene
+                $hasValidAction = true;
+                $actionType = 'scenecontrol';
+                $options = [];
+                $labelToIndex = [];
+                try {
+                    foreach ((array)@IPS_GetChildrenIDs($sceneControlId) as $cid) {
+                        if (!@IPS_VariableExists($cid)) continue;
+                        $o = @IPS_GetObject($cid);
+                        $ident = (string)($o['ObjectIdent'] ?? '');
+                        if (preg_match('/^Scene(\\d+)$/i', $ident, $m)) {
+                            $idxScene = (int)$m[1];
+                            $label = (string)($o['ObjectName'] ?? $ident);
+                            $iconName = (string)($o['ObjectIcon'] ?? '');
+                            $opt = ['value' => $idxScene, 'label' => $label];
+                            if ($iconName !== '') { $opt['icon'] = $iconName; }
+                            $options[] = $opt;
+                            $labelToIndex[$label] = $idxScene;
+                        } elseif ($ident === 'ActiveScene') {
+                            // Wird später zum Auslesen genutzt
+                        }
+                    }
+                    if (!empty($options)) {
+                        usort($options, fn($a, $b) => ((int)($a['value'] ?? 0)) <=> ((int)($b['value'] ?? 0)));
+                    }
+                } catch (Throwable $e) {}
+                try {
+                    $active = null;
+                    if (function_exists('SZS_GetActiveScene')) {
+                        $active = @SZS_GetActiveScene($sceneControlId);
+                    } else {
+                        $activeVar = 0;
+                        foreach ((array)@IPS_GetChildrenIDs($sceneControlId) as $cid) {
+                            if (!@IPS_VariableExists($cid)) continue;
+                            $o = @IPS_GetObject($cid);
+                            if (($o['ObjectIdent'] ?? '') === 'ActiveScene') { $activeVar = $cid; break; }
+                        }
+                        if ($activeVar > 0) { $active = @GetValue($activeVar); }
+                    }
+                    if (is_numeric($active)) {
+                        $rawValue = (int)$active;
+                    } elseif (is_string($active) && isset($labelToIndex[$active])) {
+                        $rawValue = (int)$labelToIndex[$active];
+                    }
+                } catch (Throwable $e) {}
+                // Optional: assoziierter Text
+                if (isset($activeVar) && $activeVar > 0) {
+                    try { $valueFormatted = (string)@GetValueFormatted($activeVar); } catch (Throwable $e) {}
                 }
             }
             if (!$hasValidAction && $hasObject) {
@@ -1269,6 +1481,43 @@ class MultiRoomTile extends IPSModule
             try { $name = (string)@IPS_GetName($varId); } catch (Throwable $e) { $name = ''; }
             if ($name !== '') {
                 $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'name', 'value' => $name];
+            }
+            $useColor = false; $ct = -1; $cf = -1;
+            try {
+                $rooms = $this->getRooms();
+                if (isset($rooms[$idx]) && is_array($rooms[$idx])) {
+                    $room = $rooms[$idx];
+                    $list = $this->parseRoomList($room['InfoItems'] ?? []);
+                    foreach ($list as $row) {
+                        if (!is_array($row)) continue;
+                        $rid = (string)($row['Id'] ?? '');
+                        if ($rid === $itemId) {
+                            $useColor = isset($row['UseVarColor']) ? (bool)$row['UseVarColor'] : false;
+                            $ct = isset($row['ColorTrue']) ? (int)$row['ColorTrue'] : -1;
+                            $cf = isset($row['ColorFalse']) ? (int)$row['ColorFalse'] : -1;
+                            break;
+                        }
+                    }
+                }
+            } catch (Throwable $e) {}
+            // Bestimme zu sendende Farbe: Override für Bool > Profil-Farbe > leer
+            $sendColor = null;
+            $vt = null; $isOn = false;
+            try { $viTmp = @IPS_GetVariable($varId); if (is_array($viTmp)) { $vt = $viTmp['VariableType'] ?? null; } } catch (Throwable $e) {}
+            if ($vt === 0) {
+                try { $isOn = (bool)@GetValue($varId); } catch (Throwable $e) { $isOn = false; }
+                if ($isOn && $ct !== -1) {
+                    $sendColor = '#' . sprintf('%06X', $ct);
+                } elseif (!$isOn && $cf !== -1) {
+                    $sendColor = '#' . sprintf('%06X', $cf);
+                } elseif ($useColor) {
+                    try { $c = (string)$this->GetColor($varId); $sendColor = ($c !== '' ? ('#' . $c) : ''); } catch (Throwable $e) { $sendColor = ''; }
+                }
+            } elseif ($useColor) {
+                try { $c = (string)$this->GetColor($varId); $sendColor = ($c !== '' ? ('#' . $c) : ''); } catch (Throwable $e) { $sendColor = ''; }
+            }
+            if ($sendColor !== null) {
+                $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'color', 'value' => $sendColor];
             }
         } catch (Throwable $e) {
         }
