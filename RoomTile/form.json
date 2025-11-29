@@ -155,9 +155,9 @@
           { "type": "List", "name": "MenuItems", "caption": "Menü-Elemente", "rowCount": 5, "add": true, "delete": true, "changeOrder": true, "reorder": true,
             "columns": [
               { "caption": "ID", "name": "Id", "width": "180px", "add": "", "edit": { "type": "ValidationTextBox", "visible": false }, "visible": false },
-              { "caption": "Variable", "name": "VariableId", "width": "auto", "add": 0, "edit": { "type": "SelectVariable", "validVariableTypes": [0,1,2,3] } },
-              { "caption": "Objekt öffnen", "name": "OpenObjectId", "width": "auto",  "visible": false, "add": "", "edit": { "type": "SelectObject" } },
-              { "caption": "Szeneninstanz", "name": "SceneControlId", "width": "auto", "visible": false, "add": "", "edit": { "type": "SelectObject" } },
+              { "caption": "Variable", "name": "VariableId", "width": "20%", "add": 0, "edit": { "type": "SelectVariable", "validVariableTypes": [0,1,2,3] } },
+              { "caption": "Objekt öffnen", "name": "OpenObjectId", "width": "20%",  "visible": true, "add": "", "edit": { "type": "SelectObject" } },
+              { "caption": "Szeneninstanz", "name": "SceneControlId", "width": "20%", "visible": true, "add": "", "edit": { "type": "SelectObject" } },
               { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
               { "caption": "Icon", "name": "ShowIcon", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
               { "caption": "Wert", "name": "ShowValue", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },

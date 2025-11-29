@@ -127,7 +127,7 @@
                   { "caption": "Name", "name": "ShowName", "width": "90px", "visible": false, "add": false, "edit": { "type": "CheckBox" } },
                   { "caption": "Icon", "name": "ShowIcon", "width": "90px", "visible": false, "add": false, "edit": { "type": "CheckBox" } },
                   { "caption": "Wert", "name": "ShowValue", "width": "90px", "visible": false, "add": true, "edit": { "type": "CheckBox" } },
-                  { "caption": "Profil-/Präsentationsfarbe als Hintergrund", "name": "UseVarColor", "width": "220px", "visible": false, "add": true, "edit": { "type": "CheckBox" } },
+                  { "caption": "Profil-/Darstellungsfarbe als Hintergrund", "name": "UseVarColor", "width": "220px", "visible": false, "add": true, "edit": { "type": "CheckBox" } },
                   { "caption": "Hintergrundfarbe: Status = True", "name": "ColorTrue", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
                   { "caption": "Hintergrundfarbe: Status = False", "name": "ColorFalse", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
                   { "caption": "Label überschreiben", "name": "AltName", "visible": false, "width": "200px", "add": "", "edit": { "type": "ValidationTextBox" } }
@@ -195,9 +195,9 @@
               { "type": "List", "name": "MenuItems", "caption": "Menü-Elemente", "rowCount": 5, "add": true, "delete": true, "changeOrder": true, "reorder": true,
                 "columns": [
                   { "caption": "ID", "name": "Id", "width": "180px", "add": "", "edit": { "type": "ValidationTextBox", "visible": false }, "visible": false },
-                  { "caption": "Variable", "name": "VariableId", "width": "auto", "add": 0, "edit": { "type": "SelectVariable", "validVariableTypes": [0,1,2,3] } },
-                  { "caption": "Objekt öffnen", "name": "OpenObjectId", "width": "auto", "visible": false, "add": "", "edit": { "type": "SelectObject" } },
-                  { "caption": "Szeneninstanz", "name": "SceneControlId", "width": "auto", "visible": false, "add": "", "edit": { "type": "SelectObject" } },
+                  { "caption": "Variable", "name": "VariableId", "width": "20%", "add": 0, "edit": { "type": "SelectVariable", "validVariableTypes": [0,1,2,3] } },
+                  { "caption": "Objekt öffnen", "name": "OpenObjectId", "width": "20%", "visible": true, "add": "", "edit": { "type": "SelectObject" } },
+                  { "caption": "Szeneninstanz", "name": "SceneControlId", "width": "20%", "visible": true, "add": "", "edit": { "type": "SelectObject" } },
                   { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
                   { "caption": "Icon", "name": "ShowIcon", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
                   { "caption": "Wert", "name": "ShowValue", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
