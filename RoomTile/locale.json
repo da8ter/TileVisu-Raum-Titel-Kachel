@@ -101,8 +101,11 @@
       "Hintergrundbild Lichtstatus aus": "Hintergrundbild Lichtstatus aus",
       "Szeneninstanz": "Szeneninstanz",
       "Profil-/Präsentationsfarbe als Hintergrund": "Profil-/Präsentationsfarbe als Hintergrund",
+      "Transparenz bei Statusfarben": "Transparenz bei Statusfarben",
       "Hintergrundfarbe: Status = True": "Hintergrundfarbe: Status = True",
-      "Hintergrundfarbe: Status = False": "Hintergrundfarbe: Status = False"
+      "Hintergrundfarbe: Status = False": "Hintergrundfarbe: Status = False",
+      "Spenden / Schenkung": "Spenden / Schenkung",
+      "Sag Danke und unterstütze den Entwickler dieses Moduls:": "Sag Danke und unterstütze den Entwickler dieses Moduls:"
     },
     "en": {
       "Raum Kachel": "Room Tile",
@@ -205,8 +208,11 @@
       "Hintergrundbild Lichtstatus aus": "Background image light off",
       "Szeneninstanz": "Scene control instance",
       "Profil-/Darstellungsfarbe als Hintergrund": "Use profile/presentation color as background",
+      "Transparenz bei Statusfarben": "Transparency for status colors",
       "Hintergrundfarbe: Status = True": "Background color: Status = True",
-      "Hintergrundfarbe: Status = False": "Background color: Status = False"  
+      "Hintergrundfarbe: Status = False": "Background color: Status = False",
+      "Spenden / Schenkung": "Donations / Gifts",
+      "Sag Danke und unterstütze den Entwickler dieses Moduls:": "Say thank you and support the developer of this module:"
     }
   }
 }

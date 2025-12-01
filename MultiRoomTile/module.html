@@ -289,7 +289,7 @@
   <script>
     const iconMapping = window.iconMapping || {};
     // Global grid flags and per-room palettes
-    const GRID_FLAGS = { useImageColorsForButtons: false };
+    const GRID_FLAGS = { useImageColorsForButtons: false, transparentStatusColors: true };
     const IMAGE_PALETTES = {}; // key: room DOM id (e.g., 'room-0') -> array of colors
     function prepareIconClass(iconName) {
       if (!iconName || iconName === 'Transparent') return '';
@@ -369,6 +369,76 @@
       }
       cur.className = newClass || '';
       return cur;
+    }
+
+    // --- Helpers: Apply room InfoTop alpha to badge background colors ---
+    function _parseAlphaFromRgba(str, def = 0.3) {
+      try {
+        if (!str) return def;
+        const m = String(str).match(/rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+(?:\s*,\s*([0-9.]+))?\s*\)/i);
+        if (!m) return def;
+        if (m[1] === undefined) return def;
+        const a = parseFloat(m[1]);
+        return isFinite(a) ? Math.max(0, Math.min(1, a)) : def;
+      } catch { return def; }
+    }
+    function _hexToRgba(hex, alpha) {
+      try {
+        let h = String(hex).trim();
+        if (h[0] === '#') h = h.substring(1);
+        if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        const r = parseInt(h.substring(0,2), 16) || 0;
+        const g = parseInt(h.substring(2,4), 16) || 0;
+        const b = parseInt(h.substring(4,6), 16) || 0;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      } catch { return hex; }
+    }
+    function _rgbToRgba(rgb, alpha) {
+      try {
+        const m = String(rgb).match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/i);
+        if (!m) return rgb;
+        const r = parseInt(m[1], 10) || 0;
+        const g = parseInt(m[2], 10) || 0;
+        const b = parseInt(m[3], 10) || 0;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      } catch { return rgb; }
+    }
+    function _getInfoTopAlpha(ref) {
+      try {
+        // ref can be roomObj (with infotopleftbg) or an Element (read CSS var)
+        if (ref && typeof ref === 'object' && !('nodeType' in ref)) {
+          return _parseAlphaFromRgba(ref.infotopleftbg, 0.3);
+        }
+        if (ref && ref.nodeType === 1) {
+          const s = getComputedStyle(ref).getPropertyValue('--infotopleftbg');
+          return _parseAlphaFromRgba(s, 0.3);
+        }
+      } catch {}
+      return 0.3;
+    }
+    function applyBadgeBg(grp, color, alphaRef) {
+      if (!grp) return;
+      if (!color) { grp.style.backgroundColor = ''; return; }
+      // If global flag is disabled, render status/profile colors opaque (no alpha)
+      if (GRID_FLAGS.transparentStatusColors === false) {
+        const c0 = String(color).trim();
+        let out0 = c0;
+        if (/^rgba\(/i.test(c0)) {
+          out0 = c0.replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*[0-9.]+\s*\)/i, 'rgb($1, $2, $3)');
+        }
+        grp.style.backgroundColor = out0;
+        return;
+      }
+      const a = _getInfoTopAlpha(alphaRef);
+      const c = String(color).trim();
+      let out = c;
+      if (c.startsWith('#')) out = _hexToRgba(c, a);
+      else if (/^rgb\(/i.test(c)) out = _rgbToRgba(c, a);
+      else if (/^rgba\(/i.test(c)) {
+        // replace alpha with InfoTop alpha
+        out = c.replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*[0-9.]+\s*\)/i, `rgba($1, $2, $3, ${a})`);
+      }
+      grp.style.backgroundColor = out;
     }
 
     async function loadImageForTile(url, bgEl) {
@@ -791,7 +861,7 @@
       
       const processItem = (it, idx, g) => {
          if (it.color) {
-            g.style.backgroundColor = it.color;
+            applyBadgeBg(g, it.color, roomObj);
          }
       };
 
@@ -1370,6 +1440,7 @@
       if (rn && room.raumname !== undefined) rn.textContent = room.raumname;
       if (room.raumnameschriftgroesse !== undefined) rn.style.fontSize = room.raumnameschriftgroesse + 'px';
       if (room.raumnameschriftfarbe) rn.style.color = room.raumnameschriftfarbe;
+      if (rn) rn.classList.toggle('hidden', room.showroomname === false);
 
       const hasDynamicInfo = Array.isArray(room.infoitems) && room.infoitems.length > 0;
       // Set centered flag for legacy mode handling
@@ -1434,7 +1505,7 @@
         if (grp) {
           const hasExplicit = roomObj && Object.prototype.hasOwnProperty.call(roomObj, colorKey);
           if (hasExplicit && roomObj[colorKey]) {
-            grp.style.backgroundColor = roomObj[colorKey];
+            applyBadgeBg(grp, roomObj[colorKey], roomObj);
           } else if (!key.startsWith('infoitem-')) {
             grp.style.backgroundColor = '';
           }
@@ -1770,6 +1841,11 @@
       if (key === 'raumname') {
         const rn = document.getElementById(id + '-raumname'); if (rn) rn.textContent = value; return;
       }
+      if (key === 'showroomname') {
+        const rn = document.getElementById(id + '-raumname');
+        if (rn) rn.classList.toggle('hidden', !(value === true || value === 1 || value === '1' || value === 'true'));
+        return;
+      }
       // Font sizes
       if (key === 'infofontsize' || key === 'infomenuefontsize') {
         const root = document.getElementById(id); if (root) root.style.setProperty('--' + key, value + 'px'); return;
@@ -1799,7 +1875,8 @@
         const icon = document.getElementById(id + '-' + base + 'icon');
         const grp = icon ? icon.parentElement : null;
         if (grp) {
-          grp.style.backgroundColor = value || '';
+          const root = document.getElementById(id);
+          applyBadgeBg(grp, value || '', root);
         }
         return;
       }
@@ -2236,6 +2313,9 @@
       if (decoded.grid) {
         setGridLayout(decoded.grid.minWidth, decoded.grid.minHeight, decoded.grid.gap, decoded.grid.borderRadius, decoded.grid.columns);
         GRID_FLAGS.useImageColorsForButtons = !!decoded.grid.useImageColorsForButtons;
+        if ('transparentStatusColors' in decoded.grid) {
+          GRID_FLAGS.transparentStatusColors = !!decoded.grid.transparentStatusColors;
+        }
       }
 
       if (decoded.rooms) {

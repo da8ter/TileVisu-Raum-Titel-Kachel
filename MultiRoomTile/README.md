@@ -19,6 +19,7 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
   - Schriftfarbe
   - Hintergrund‑Transparenz 0..100%
   - Hintergrundfarbe
+  - Transparenz bei Statusfarben: Steuert, ob die Hintergrund‑Transparenz auch für Farben aus Profilen/Darstellungen gilt (true = ja, false = Statusfarben undurchsichtig).
 - **Menüleiste**
   - Schriftgröße
   - Schriftfarbe
@@ -47,6 +48,7 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
  - **Hintergrundfarbe: Status = False**: Überschreibt die Hintergrundfarbe, wenn der Status False ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
 
 #### Raumname
+- **Name anzeigen**: Schaltet die Anzeige des Raumnamens pro Raum ein/aus.
 - **Raumname**: Anzeigetext in der Kachel.
 - **Objekt welche beim Klick geöffnet wird**: Zielobjekt bei Klick (optional).
 - **Schriftgröße / Schriftfarbe**: (−1 = globale Defaults übernehmen).

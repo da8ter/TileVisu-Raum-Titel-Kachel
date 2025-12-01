@@ -343,7 +343,7 @@
   <script>
     const iconMapping = window.iconMapping || {};
     // Global flags and per-room palettes
-    const GRID_FLAGS = { useImageColorsForButtons: false };
+    const GRID_FLAGS = { useImageColorsForButtons: false, transparentStatusColors: true };
     const IMAGE_PALETTES = {}; // key: room DOM id (e.g., 'room-0') -> array of colors
     function prepareIconClass(iconName) {
       if (!iconName || iconName === 'Transparent') return '';
@@ -423,6 +423,75 @@
       }
       cur.className = newClass || '';
       return cur;
+    }
+
+    // --- Helpers: gleiche Transparenz (InfoTop) auf Badge-Hintergrund anwenden ---
+    function _parseAlphaFromRgba(str, def = 0.3) {
+      try {
+        if (!str) return def;
+        const m = String(str).match(/rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+(?:\s*,\s*([0-9.]+))?\s*\)/i);
+        if (!m) return def;
+        if (m[1] === undefined) return def;
+        const a = parseFloat(m[1]);
+        return isFinite(a) ? Math.max(0, Math.min(1, a)) : def;
+      } catch { return def; }
+    }
+    function _hexToRgba(hex, alpha) {
+      try {
+        let h = String(hex).trim();
+        if (h[0] === '#') h = h.substring(1);
+        if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        const r = parseInt(h.substring(0,2), 16) || 0;
+        const g = parseInt(h.substring(2,4), 16) || 0;
+        const b = parseInt(h.substring(4,6), 16) || 0;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      } catch { return hex; }
+    }
+    function _rgbToRgba(rgb, alpha) {
+      try {
+        const m = String(rgb).match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/i);
+        if (!m) return rgb;
+        const r = parseInt(m[1], 10) || 0;
+        const g = parseInt(m[2], 10) || 0;
+        const b = parseInt(m[3], 10) || 0;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      } catch { return rgb; }
+    }
+    function _getInfoTopAlpha(ref) {
+      try {
+        // ref kann roomObj (mit infotophintergrundfarbe) oder ein Element (CSS Var) sein
+        if (ref && typeof ref === 'object' && !('nodeType' in ref)) {
+          return _parseAlphaFromRgba(ref.infotophintergrundfarbe, 0.3);
+        }
+        if (ref && ref.nodeType === 1) {
+          const s = getComputedStyle(ref).getPropertyValue('--infotophintergrundfarbe');
+          return _parseAlphaFromRgba(s, 0.3);
+        }
+      } catch {}
+      return 0.3;
+    }
+    function applyBadgeBg(grp, color, alphaRef) {
+      if (!grp) return;
+      if (!color) { grp.style.backgroundColor = ''; return; }
+      // global flag: opaque status colors when disabled
+      if (GRID_FLAGS.transparentStatusColors === false) {
+        const c0 = String(color).trim();
+        let out0 = c0;
+        if (/^rgba\(/i.test(c0)) {
+          out0 = c0.replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*[0-9.]+\s*\)/i, 'rgb($1, $2, $3)');
+        }
+        grp.style.backgroundColor = out0;
+        return;
+      }
+      const a = _getInfoTopAlpha(alphaRef);
+      const c = String(color).trim();
+      let out = c;
+      if (c.startsWith('#')) out = _hexToRgba(c, a);
+      else if (/^rgb\(/i.test(c)) out = _rgbToRgba(c, a);
+      else if (/^rgba\(/i.test(c)) {
+        out = c.replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*[0-9.]+\s*\)/i, `rgba($1, $2, $3, ${a})`);
+      }
+      grp.style.backgroundColor = out;
     }
 
     function computeBgFilterString(percent, src) {
@@ -1181,7 +1250,7 @@
 
       const processItem = (it, idx, g) => {
          if (it.color) {
-            g.style.backgroundColor = it.color;
+            applyBadgeBg(g, it.color, roomObj);
          }
       };
 
@@ -1555,7 +1624,7 @@
           } else {
             const hasExplicit = roomObj && Object.prototype.hasOwnProperty.call(roomObj, colorKey);
             if (hasExplicit && roomObj[colorKey]) {
-              grp.style.backgroundColor = roomObj[colorKey];
+              applyBadgeBg(grp, roomObj[colorKey], roomObj);
             } else if (!key.startsWith('infoitem-')) {
               // legacy/static groups: clear if not explicitly provided
               grp.style.backgroundColor = '';
@@ -1741,7 +1810,8 @@
         const icon = document.getElementById(id + '-' + base + 'icon');
         const grp = icon ? icon.parentElement : null;
         if (grp) {
-          grp.style.backgroundColor = value || '';
+          const root = document.getElementById(id);
+          applyBadgeBg(grp, value || '', root);
         }
         return;
       }
@@ -1907,7 +1977,10 @@
         if (key === g + 'color') {
           const icon = document.getElementById(id + '-' + g + 'icon');
           const grp = icon ? icon.parentElement : null;
-          if (grp) grp.style.backgroundColor = value || '';
+          if (grp) {
+            const root = document.getElementById(id);
+            applyBadgeBg(grp, value || '', root);
+          }
           return;
         }
         if (key === g + 'name') {
@@ -2405,6 +2478,9 @@
       if (decoded.grid) {
         setGlobalStyle(decoded.grid.borderRadius, decoded.grid.buttonHeight);
         GRID_FLAGS.useImageColorsForButtons = !!decoded.grid.useImageColorsForButtons;
+        if ('transparentStatusColors' in decoded.grid) {
+          GRID_FLAGS.transparentStatusColors = !!decoded.grid.transparentStatusColors;
+        }
       }
 
       if (decoded.rooms) {

@@ -19,6 +19,8 @@ class RoomTile extends IPSModule
         $this->RegisterPropertyFloat('Default_InfoTopTransparenz', 30.0);
         $this->RegisterPropertyInteger('Default_InfoTopHintergrundfarbe', 0x000000);
         $this->RegisterPropertyInteger('Default_InfoTopBorderRadius', 50);
+        // Transparenz bei Statusfarben (Infoleiste)
+        $this->RegisterPropertyBoolean('TransparentStatusColors', true);
         $this->RegisterPropertyInteger('Default_Kachelhintergrundfarbe', 0x000000);
         $this->RegisterPropertyInteger('Default_RaumnameSchriftgroesse', 45);
         $this->RegisterPropertyFloat('Default_Bildtransparenz', 70.0);
@@ -678,9 +680,34 @@ class RoomTile extends IPSModule
                     if ($icon !== '' && $icon !== 'Transparent') {
                         $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'icon', 'value' => $icon];
                     }
-                    try { $nm = (string)@IPS_GetName($varId); } catch (Throwable $e) { $nm = ''; }
-                    if ($nm !== '') {
-                        $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $nm];
+                    $altName = ''; $showName = false; $openObjectId = 0; $objectName = '';
+                    try {
+                        $menuList = @json_decode($this->ReadPropertyString('MenuItems'), true);
+                        if (is_array($menuList)) {
+                            foreach ($menuList as $row) {
+                                if (!is_array($row)) continue;
+                                $rid = (string)($row['Id'] ?? '');
+                                if ($rid === $itemId) {
+                                    $altName = (string)($row['AltName'] ?? '');
+                                    $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
+                                    $openObjectId = (int)($row['OpenObjectId'] ?? 0);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (Throwable $e) {}
+                    if ($openObjectId > 0 && @IPS_ObjectExists($openObjectId)) {
+                        try { $obj = @IPS_GetObject($openObjectId); $objectName = (string)($obj['ObjectName'] ?? ''); } catch (Throwable $e) { $objectName = ''; }
+                    }
+                    if ($altName !== '') {
+                        $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $altName];
+                    } elseif ($openObjectId > 0 && $objectName !== '') {
+                        $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $objectName];
+                    } elseif ($showName) {
+                        try { $nm = (string)@IPS_GetName($varId); } catch (Throwable $e) { $nm = ''; }
+                        if ($nm !== '') {
+                            $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $nm];
+                        }
                     }
                 }
                 continue;
@@ -694,12 +721,8 @@ class RoomTile extends IPSModule
                     if ($icon !== '' && $icon !== 'Transparent') {
                         $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'icon', 'value' => $icon];
                     }
-                    try { $nm = (string)@IPS_GetName($varId); } catch (Throwable $e) { $nm = ''; }
-                    if ($nm !== '') {
-                        $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'name', 'value' => $nm];
-                    }
-                    // Color delta: Prefer explicit ColorTrue/ColorFalse for bool; otherwise UseVarColor profile color
-                    $useColor = false; $ct = -1; $cf = -1;
+                    // Determine correct name: prefer AltName if set; else only use IPS name when ShowName is true
+                    $useColor = false; $ct = -1; $cf = -1; $altName = ''; $showName = false;
                     try {
                         $infoList = @json_decode($this->ReadPropertyString('InfoItems'), true);
                         if (is_array($infoList)) {
@@ -710,11 +733,22 @@ class RoomTile extends IPSModule
                                     $useColor = isset($row['UseVarColor']) ? (bool)$row['UseVarColor'] : false;
                                     $ct = isset($row['ColorTrue']) ? (int)$row['ColorTrue'] : -1;
                                     $cf = isset($row['ColorFalse']) ? (int)$row['ColorFalse'] : -1;
+                                    $altName = (string)($row['AltName'] ?? '');
+                                    $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
                                     break;
                                 }
                             }
                         }
                     } catch (Throwable $e) {}
+                    if ($altName !== '') {
+                        $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'name', 'value' => $altName];
+                    } elseif ($showName) {
+                        try { $nm = (string)@IPS_GetName($varId); } catch (Throwable $e) { $nm = ''; }
+                        if ($nm !== '') {
+                            $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'name', 'value' => $nm];
+                        }
+                    }
+                    // Color delta: Prefer explicit ColorTrue/ColorFalse for bool; otherwise UseVarColor profile color
                     $sendColor = null; $vType = null; $isOn = false;
                     try { $viTmp = @IPS_GetVariable($varId); if (is_array($viTmp)) { $vType = $viTmp['VariableType'] ?? null; } } catch (Throwable $e) {}
                     if ($vType === 0) {
@@ -956,7 +990,8 @@ class RoomTile extends IPSModule
         $result['grid'] = [
             'borderRadius' => $this->ReadPropertyInteger('BorderRadius'),
             'buttonHeight' => $this->ReadPropertyInteger('Default_ButtonHeight'),
-            'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons')
+            'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons'),
+            'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors')
         ];
 
         $rooms = $this->getRooms();
@@ -1901,6 +1936,12 @@ class RoomTile extends IPSModule
             }
             if (isset($pres['TEMPLATE']) && function_exists('IPS_GetTemplate')) {
                 $tpl = @IPS_GetTemplate($pres['TEMPLATE']);
+                // Direct ICON from template default values
+                if (is_array($tpl) && isset($tpl['Values']) && is_array($tpl['Values'])) {
+                    $vals = $tpl['Values'];
+                    if (!empty($vals['ICON'])) { return (string)$vals['ICON']; }
+                    if (!empty($vals['Icon'])) { return (string)$vals['Icon']; }
+                }
                 if (is_array($tpl) && isset($tpl['Values']['OPTIONS'])) {
                     $optsRaw = $tpl['Values']['OPTIONS'];
                     $opts = is_string($optsRaw) ? @json_decode($optsRaw, true) : $optsRaw;
@@ -2015,9 +2056,35 @@ class RoomTile extends IPSModule
             if ($icon !== '' && $icon !== 'Transparent') {
                 $delta[] = ['idx' => 0, 'key' => $key . 'icon', 'value' => $icon];
             }
-            try { $nm = (string)@IPS_GetName($varId); } catch (Throwable $e) { $nm = ''; }
-            if ($nm !== '') {
-                $delta[] = ['idx' => 0, 'key' => $key . 'name', 'value' => $nm];
+            // Name-Priorität: AltName > Objektname > Variablenname (nur wenn ShowName=true)
+            $altName = ''; $showName = false; $openObjectId = 0; $objectName = '';
+            try {
+                $menuList = @json_decode($this->ReadPropertyString('MenuItems'), true);
+                if (is_array($menuList)) {
+                    foreach ($menuList as $row) {
+                        if (!is_array($row)) continue;
+                        $rid = (string)($row['Id'] ?? '');
+                        if ($rid === $itemId) {
+                            $altName = (string)($row['AltName'] ?? '');
+                            $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
+                            $openObjectId = (int)($row['OpenObjectId'] ?? 0);
+                            break;
+                        }
+                    }
+                }
+            } catch (Throwable $e) {}
+            if ($openObjectId > 0 && @IPS_ObjectExists($openObjectId)) {
+                try { $obj = @IPS_GetObject($openObjectId); $objectName = (string)($obj['ObjectName'] ?? ''); } catch (Throwable $e) { $objectName = ''; }
+            }
+            if ($altName !== '') {
+                $delta[] = ['idx' => 0, 'key' => $key . 'name', 'value' => $altName];
+            } elseif ($openObjectId > 0 && $objectName !== '') {
+                $delta[] = ['idx' => 0, 'key' => $key . 'name', 'value' => $objectName];
+            } elseif ($showName) {
+                try { $nm = (string)@IPS_GetName($varId); } catch (Throwable $e) { $nm = ''; }
+                if ($nm !== '') {
+                    $delta[] = ['idx' => 0, 'key' => $key . 'name', 'value' => $nm];
+                }
             }
             $this->UpdateVisualizationValue(json_encode(['delta' => $delta]));
         } catch (Throwable $e) {

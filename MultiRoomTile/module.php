@@ -28,6 +28,8 @@ class MultiRoomTile extends IPSModule
         // Info-Top Badge Hintergrund (einheitlich)
         $this->RegisterPropertyFloat('Default_InfoTopTransparenz', 30.0);
         $this->RegisterPropertyInteger('Default_InfoTopHintergrundfarbe', 0x000000);
+        // Transparenz bei Statusfarben (Infoleiste)
+        $this->RegisterPropertyBoolean('TransparentStatusColors', true);
         $this->RegisterPropertyBoolean('UseImageColorsForButtons', false);
         // Image filter defaults (brightness/contrast/grayscale ranges)
         $this->RegisterPropertyFloat('Default_BgFilterBrightnessMin', 0.2);
@@ -572,6 +574,7 @@ class MultiRoomTile extends IPSModule
             'gap' => $this->ReadPropertyInteger('Gap'),
             'borderRadius' => $this->ReadPropertyInteger('BorderRadius'),
             'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons'),
+            'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors'),
             'columns' => $this->ReadPropertyInteger('Columns')
         ];
 
@@ -738,6 +741,8 @@ class MultiRoomTile extends IPSModule
             if (array_key_exists('RaumnameSchriftfarbe', $room)) { $rncol = (int)$room['RaumnameSchriftfarbe']; }
             if ($rncol === null || $rncol === -1) { $rncol = (int)($defaults['RaumnameSchriftfarbe'] ?? 0xFFFFFF); }
             $r['raumnameschriftfarbe'] = $this->toCssHex($rncol);
+            // Sichtbarkeit des Raumnamens (Default: true)
+            $r['showroomname'] = array_key_exists('ShowRoomName', $room) ? (bool)$room['ShowRoomName'] : true;
 
             $r['infomenueswitch'] = (bool)($room['InfoMenueSwitch'] ?? true);
 
@@ -1460,9 +1465,37 @@ class MultiRoomTile extends IPSModule
             if ($icon !== '' && $icon !== 'Transparent') {
                 $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'icon', 'value' => $icon];
             }
-            try { $name = (string)@IPS_GetName($varId); } catch (Throwable $e) { $name = ''; }
-            if ($name !== '') {
-                $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $name];
+            // Determine correct name: prefer AltName; then object name; else only use variable name when ShowName is true
+            $altName = ''; $showName = false; $openObjectId = 0; $objectName = '';
+            try {
+                $rooms = $this->getRooms();
+                if (isset($rooms[$idx]) && is_array($rooms[$idx])) {
+                    $room = $rooms[$idx];
+                    $list = $this->parseRoomList($room['MenuItems'] ?? []);
+                    foreach ($list as $row) {
+                        if (!is_array($row)) continue;
+                        $rid = (string)($row['Id'] ?? '');
+                        if ($rid === $itemId) {
+                            $altName = (string)($row['AltName'] ?? '');
+                            $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
+                            $openObjectId = (int)($row['OpenObjectId'] ?? 0);
+                            break;
+                        }
+                    }
+                }
+            } catch (Throwable $e) {}
+            if ($openObjectId > 0 && @IPS_ObjectExists($openObjectId)) {
+                try { $obj = @IPS_GetObject($openObjectId); $objectName = (string)($obj['ObjectName'] ?? ''); } catch (Throwable $e) { $objectName = ''; }
+            }
+            if ($altName !== '') {
+                $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $altName];
+            } elseif ($openObjectId > 0 && $objectName !== '') {
+                $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $objectName];
+            } elseif ($showName) {
+                try { $name = (string)@IPS_GetName($varId); } catch (Throwable $e) { $name = ''; }
+                if ($name !== '') {
+                    $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $name];
+                }
             }
         } catch (Throwable $e) {
         }
@@ -1478,11 +1511,8 @@ class MultiRoomTile extends IPSModule
             if ($icon !== '' && $icon !== 'Transparent') {
                 $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'icon', 'value' => $icon];
             }
-            try { $name = (string)@IPS_GetName($varId); } catch (Throwable $e) { $name = ''; }
-            if ($name !== '') {
-                $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'name', 'value' => $name];
-            }
-            $useColor = false; $ct = -1; $cf = -1;
+            // Determine correct name: prefer AltName if set; else only use variable name when ShowName is true
+            $useColor = false; $ct = -1; $cf = -1; $altName = ''; $showName = false;
             try {
                 $rooms = $this->getRooms();
                 if (isset($rooms[$idx]) && is_array($rooms[$idx])) {
@@ -1495,11 +1525,21 @@ class MultiRoomTile extends IPSModule
                             $useColor = isset($row['UseVarColor']) ? (bool)$row['UseVarColor'] : false;
                             $ct = isset($row['ColorTrue']) ? (int)$row['ColorTrue'] : -1;
                             $cf = isset($row['ColorFalse']) ? (int)$row['ColorFalse'] : -1;
+                            $altName = (string)($row['AltName'] ?? '');
+                            $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
                             break;
                         }
                     }
                 }
             } catch (Throwable $e) {}
+            if ($altName !== '') {
+                $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'name', 'value' => $altName];
+            } elseif ($showName) {
+                try { $name = (string)@IPS_GetName($varId); } catch (Throwable $e) { $name = ''; }
+                if ($name !== '') {
+                    $delta[] = ['idx' => $idx, 'key' => 'infoitem-' . $itemId . 'name', 'value' => $name];
+                }
+            }
             // Bestimme zu sendende Farbe: Override für Bool > Profil-Farbe > leer
             $sendColor = null;
             $vt = null; $isOn = false;
@@ -1831,6 +1871,12 @@ class MultiRoomTile extends IPSModule
             }
             if (isset($pres['TEMPLATE']) && function_exists('IPS_GetTemplate')) {
                 $tpl = @IPS_GetTemplate($pres['TEMPLATE']);
+                // Direct ICON from template default values
+                if (is_array($tpl) && isset($tpl['Values']) && is_array($tpl['Values'])) {
+                    $vals = $tpl['Values'];
+                    if (!empty($vals['ICON'])) { return (string)$vals['ICON']; }
+                    if (!empty($vals['Icon'])) { return (string)$vals['Icon']; }
+                }
                 if (is_array($tpl) && isset($tpl['Values']['OPTIONS'])) {
                     $optsRaw = $tpl['Values']['OPTIONS'];
                     $opts = is_string($optsRaw) ? @json_decode($optsRaw, true) : $optsRaw;

@@ -12,6 +12,7 @@ Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrun
 - **Schriftfarbe (Info)**: Textfarbe der Info‑Badges.
 - **Hintergrund‑Transparenz (Infoleiste)**: 0..100% Transparenz für alle Info‑Badges.
 - **Hintergrundfarbe (Infoleiste)**: Hintergrundfarbe der Info‑Badges.
+- **Transparenz bei Statusfarben**: Steuert, ob die Hintergrund‑Transparenz auch für Statusfarben aus Profilen/Darstellungen gilt (true = ja, false = Statusfarben undurchsichtig).
 - **Eckenradius (Infoleiste)**: Rundung der Ecken der Info‑Badges.
 - **Info‑Elemente (Liste)**: Dynamische Info‑Einträge (Variable, Name/Icon/Wert anzeigen, Label überschreiben). Bereiche links/rechts.
 - **Profil-/Darstellungsfarbe als Hintergrund**: Wenn aktiviert, wird die Hintergrundfarbe je nach Variablenstatus aus Profil‑Assoziationen bzw. Präsentation (inkl. Template/Guid‑Präsentationen) übernommen. Farbe „-1“ bewirkt Standard‑Hintergrund. Live‑Updates werden unterstützt.
