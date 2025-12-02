@@ -1653,7 +1653,12 @@
         if (typeVal === 0) {
           const isOn = (rawVal === true || String(rawVal) === '1');
           btn.classList.toggle('inactive', !isOn);
-          let bg = isOn ? (colOn || roomObj[colorKey] || '') : (colOff || roomObj[colorKey] || '');
+          const dsOn = btn.dataset ? btn.dataset.colorOn : '';
+          const dsOff = btn.dataset ? btn.dataset.colorOff : '';
+          const fb = btn.dataset ? btn.dataset.fallbackcolor : '';
+          let bg = isOn
+            ? (colOn || dsOn || fb || roomObj[colorKey] || '')
+            : (colOff || dsOff || fb || roomObj[colorKey] || '');
           if (!bg) bg = 'var(--accent-color)';
           btn.style.backgroundColor = bg;
         } else {
