@@ -56,6 +56,7 @@ Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrun
 - **Hintergrundfarbe (Menü)**: Hintergrundfarbe der Menüleiste.
 - **Eckenradius (Buttons)**: Rundung der Button‑Ecken.
 - **Buttonfarben aus Hintergrundbild**: Leitet Farben aus dem Kachelbild ab (falls vorhanden).
+  - Wenn aktiv, werden Profil-/Assoziationsfarben (ColorOn/ColorOff/Profilfarbe) ignoriert. Es gelten ausschließlich die aus dem Bild extrahierten Palettenfarben.
 - **Schalter Ausrichtung / Schalter gleichmäßig verteilen**: Layout der Schalter.
 - **Menü‑Elemente (Liste)**: Dynamische Buttons (Variable optional mit Aktion, optional „Objekt öffnen“, Name/Icon/Wert, Label‑Override, Breite/Maximale Breite).
   - Szenensteuerung: Wähle bei „Szeneninstanz“ eine Instanz des Moduls „Szenen-Steuerung“. Es wird automatisch ein Multi‑Button mit allen Szenen (Scene1..N) erzeugt.

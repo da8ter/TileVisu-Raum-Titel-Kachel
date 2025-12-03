@@ -20,11 +20,12 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
   - Hintergrund‑Transparenz 0..100%
   - Hintergrundfarbe
   - Transparenz bei Statusfarben: Steuert, ob die Hintergrund‑Transparenz auch für Farben aus Profilen/Darstellungen gilt (true = ja, false = Statusfarben undurchsichtig).
-- **Menüleiste**
+- **Menü‑Leiste**
   - Schriftgröße
   - Schriftfarbe
   - Hintergrund‑Transparenz 0..100%
   - Hintergrundfarbe
+  - **Priorität**: Wenn "Buttonfarben aus Hintergrundbild" aktiv ist (global oder pro Raum), werden Profil-/Assoziationsfarben ignoriert.
 - **Kachel**
   - Hintergrundfarbe
   - Bildtransparenz 0..100%
@@ -75,6 +76,7 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
 - **Schriftgröße / Schriftfarbe**: (−1 = global).
 - **Hintergrund‑Transparenz / Hintergrundfarbe**: (−1 = global).
 - **Buttonfarben aus Hintergrundbild**: Pro Raum (zusätzlich zum globalen Schalter).
+  - Wenn aktiv (global oder pro Raum), werden Profil-/Assoziationsfarben (ColorOn/ColorOff/Profilfarbe) nicht verwendet. Es gelten ausschließlich die aus dem Hintergrundbild extrahierten Palettenfarben.
 - **Schalter Ausrichtung / Schalter gleichmäßig verteilen**: Layoutsteuerung.
 - **Menü‑Elemente (Liste)**: Dynamische Buttons (Variable optional mit Aktion, optional „Objekt öffnen“, Name/Icon/Wert, Label‑Override, Breite/Maximale Breite).
   - Szenensteuerung: Wähle bei „Szeneninstanz“ eine Instanz des Moduls „Szenen-Steuerung“. Es wird automatisch ein Multi‑Button mit allen Szenen (Scene1..N) erzeugt.

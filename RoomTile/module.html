@@ -695,7 +695,15 @@
             const btn = document.getElementById(baseId);
             if (btn && it.hasaction) {
               const baseCol = palette[0];
-              btn.style.backgroundColor = baseCol;
+              btn.dataset.fallbackcolor = baseCol;
+              if (btn.dataset && btn.dataset.vartype === '0') {
+                btn.dataset.colorOn = baseCol;
+                btn.dataset.colorOff = baseCol;
+                const isOn = (btn.dataset.currentValue === 'true' || btn.dataset.currentValue === '1');
+                btn.style.backgroundColor = isOn ? btn.dataset.colorOn : btn.dataset.colorOff;
+              } else {
+                btn.style.backgroundColor = baseCol;
+              }
             }
           }
         }
@@ -1197,6 +1205,8 @@
       group.classList.toggle('hide-values', showValue !== true);
       group.classList.toggle('hide-icons', showIcon === false);
       if (Array.isArray(options) && options.length > 0) {
+        const rootEl = document.getElementById(prefixId);
+        const useImgCol = !!(rootEl && rootEl.dataset && rootEl.dataset.useimagecolors === '1');
         for (const opt of options) {
           const btn = el('button', { class: 'switch-option' + (String(opt.value) === String(currentValue) ? ' active' : ' inactive'), onclick: `requestAction('room:${idx}:Schalter${n}', ${JSON.stringify(opt.value)})`, 'data-value': String(opt.value) });
           const icon = el('i', { class: 'hidden switch-icon' });
@@ -1208,7 +1218,7 @@
           }
           const label = el('span', { class: 'info-name' }, opt.label ?? '');
           const valueText = el('span', { class: 'info-value' }, String(opt.value ?? ''));
-          if (opt.color) btn.style.backgroundColor = opt.color; else if (fallbackColor) btn.style.backgroundColor = fallbackColor;
+          if (!useImgCol) { if (opt.color) btn.style.backgroundColor = opt.color; else if (fallbackColor) btn.style.backgroundColor = fallbackColor; }
           if (widthPx && !fullWidth) btn.style.minWidth = widthPx + 'px'; else btn.style.minWidth = '';
           if (icon.className.indexOf('hidden') === -1) btn.appendChild(icon);
           btn.appendChild(label);
@@ -1361,14 +1371,12 @@
             const label = (roomObj[`${it.key}name`] || '');
             const v = (roomObj[`${it.key}asso`] || roomObj[`${it.key}`] || '');
             const textWrap = el('span', { class: 'nv' });
-            textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (it.showName === false ? ' hidden' : '') }, label));
-            if (it.showValue && (v || v === 0)) {
-              textWrap.appendChild(el('span', { id: baseId + 'colon', class: 'info-name' }, ': '));
-              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' }, String(v)));
-            } else {
-              // Ensure value span exists for delta updates even if initially hidden
-              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value hidden' }, ''));
-            }
+            const showLabelVis = (it.showName !== false) && !!label;
+            textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (showLabelVis ? '' : ' hidden') }, label));
+            const showValVis = (it.showValue === true) && (v || v === 0);
+            const colonCls = (showLabelVis && showValVis) ? 'info-name' : 'info-name hidden';
+            textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls }, ': '));
+            textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(v)));
             wrapper.appendChild(textWrap);
             cont.appendChild(wrapper);
             lastNoAction = true;
@@ -1379,11 +1387,13 @@
             }
             const btn = el('button', btnAttrs);
             if (it.type !== undefined) btn.dataset.vartype = String(it.type);
-            if (it.colorOn) btn.dataset.colorOn = it.colorOn;
-            if (it.colorOff) btn.dataset.colorOff = it.colorOff;
-            if (it.color) btn.dataset.fallbackcolor = it.color;
-            btn.dataset.currentValue = String(it.value ?? '');
             const useImgCol = (roomObj.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons);
+            if (!useImgCol) {
+              if (it.colorOn) btn.dataset.colorOn = it.colorOn;
+              if (it.colorOff) btn.dataset.colorOff = it.colorOff;
+              if (it.color) btn.dataset.fallbackcolor = it.color;
+            }
+            btn.dataset.currentValue = String(it.value ?? '');
             if (it.type === 0 && !isObjectAction) {
               const isOn = (it.value === true || String(it.value) === '1');
               btn.classList.toggle('inactive', !isOn);
@@ -1418,14 +1428,12 @@
             // Wrap text to avoid flex gap between name and colon
             const textWrap = el('span', { class: 'nv' });
             const showLabel = it.showName !== false || isObjectAction;
-            if (showLabel && label) textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' }, label));
-            if (!isObjectAction && it.showValue && (v || v === 0)) {
-              textWrap.appendChild(el('span', { id: baseId + 'colon', class: 'info-name' }, ': '));
-              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' }, String(v)));
-            }
-            if (isObjectAction) {
-              textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value hidden' }, ''));
-            }
+            const showLabelVis = (showLabel && !!label);
+            textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (showLabelVis ? '' : ' hidden') }, label));
+            const showValVis = (!isObjectAction && it.showValue === true && (v || v === 0));
+            const colonCls2 = (showLabelVis && showValVis) ? 'info-name' : 'info-name hidden';
+            textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls2 }, ': '));
+            textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(v)));
             btn.appendChild(textWrap);
             const isFull = !!it.fullWidth;
             if (isFull) {
@@ -1452,6 +1460,8 @@
       const id = 'room-' + room.idx;
       const root = document.getElementById(id);
       if (!root) return;
+
+      root.dataset.useimagecolors = (room.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons) ? '1' : '0';
 
       root.onclick = null;
       const menuEl = document.getElementById(id + '-menueleiste');
@@ -1758,14 +1768,18 @@
         if (fullWidth) { btn.style.width = ''; btn.style.minWidth = ''; }
         if (group) { group.classList.toggle('full-width', fullWidth); }
         else if (roomObj[widthKey]) { btn.style.minWidth = roomObj[widthKey] + 'px'; btn.style.width = ''; }
-        if (roomObj[colorKey]) { btn.style.backgroundColor = roomObj[colorKey]; btn.dataset.fallbackcolor = roomObj[colorKey]; }
+        const useImgCol2 = (roomObj.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons);
+        if (roomObj[colorKey] && !useImgCol2) { btn.style.backgroundColor = roomObj[colorKey]; btn.dataset.fallbackcolor = roomObj[colorKey]; }
         if (typeVal !== undefined) { btn.dataset.vartype = String(typeVal); }
         const colorOnKey = 'schalter' + n + 'colorOn';
         const colorOffKey = 'schalter' + n + 'colorOff';
         const colOn = roomObj[colorOnKey];
         const colOff = roomObj[colorOffKey];
-        if (colOn) btn.dataset.colorOn = colOn;
-        if (colOff) btn.dataset.colorOff = colOff;
+        const useImgCol = (roomObj.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons);
+        if (!useImgCol) {
+          if (colOn) btn.dataset.colorOn = colOn;
+          if (colOff) btn.dataset.colorOff = colOff;
+        }
         const rawVal = roomObj['schalter' + n + 'value'];
         const isOn = (rawVal === true || String(rawVal) === '1');
         if (typeVal === 0) {
@@ -1773,10 +1787,11 @@
           const dsOn = btn.dataset ? btn.dataset.colorOn : '';
           const dsOff = btn.dataset ? btn.dataset.colorOff : '';
           const fb = btn.dataset ? btn.dataset.fallbackcolor : '';
+          const useImgCol = (roomObj.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons);
           let bg = isOn
-            ? (colOn || dsOn || fb || roomObj[colorKey] || '')
-            : (colOff || dsOff || fb || roomObj[colorKey] || '');
-          if (!bg) bg = 'var(--accent-color)';
+            ? (useImgCol ? (dsOn || fb || '') : (colOn || dsOn || fb || roomObj[colorKey] || ''))
+            : (useImgCol ? (dsOff || fb || '') : (colOff || dsOff || fb || roomObj[colorKey] || ''));
+          if (!bg && !useImgCol) bg = 'var(--accent-color)';
           btn.style.backgroundColor = bg;
         }
         const showNameSingle = (roomObj['schalter' + n + 'showname'] !== undefined)
