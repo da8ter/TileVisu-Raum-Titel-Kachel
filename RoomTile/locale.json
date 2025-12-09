@@ -104,6 +104,9 @@
       "Transparenz bei Statusfarben": "Transparenz bei Statusfarben",
       "Hintergrundfarbe: Status = True": "Hintergrundfarbe: Status = True",
       "Hintergrundfarbe: Status = False": "Hintergrundfarbe: Status = False",
+      "Statusfarbe als Hintergrund (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Statusfarbe als Hintergrund (für Variablen ohne Aktion die als Infoelement angezeigt werden)",
+      "Transparenz bei Menü-Statusfarben (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Transparenz bei Menü-Statusfarben (für Variablen ohne Aktion die als Infoelement angezeigt werden)",
+      "Info-Elemente im Menü gruppieren": "Info-Elemente im Menü gruppieren",
       "Spenden / Schenkung": "Spenden / Schenkung",
       "Sag Danke und unterstütze den Entwickler dieses Moduls:": "Sag Danke und unterstütze den Entwickler dieses Moduls:"
     },
@@ -211,6 +214,9 @@
       "Transparenz bei Statusfarben": "Transparency for status colors",
       "Hintergrundfarbe: Status = True": "Background color: Status = True",
       "Hintergrundfarbe: Status = False": "Background color: Status = False",
+      "Statusfarbe als Hintergrund (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Status color as background (for variables without action that are displayed as info element)",
+      "Transparenz bei Menü-Statusfarben (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Transparency for menu status colors (for variables without action that are displayed as info element)",
+      "Info-Elemente im Menü gruppieren": "Group info elements in menu",
       "Spenden / Schenkung": "Donations / Gifts",
       "Sag Danke und unterstütze den Entwickler dieses Moduls:": "Say thank you and support the developer of this module:"
     }

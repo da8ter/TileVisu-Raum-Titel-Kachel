@@ -58,7 +58,7 @@
       "Bildfilter (0..100 / Bool)": "Bildfilter (0..100 / Bool)",
       "Schalter Ausrichtung": "Schalter Ausrichtung",
       "Schalter gleichmäßig verteilen": "Schalter gleichmäßig verteilen",
-      "Objekt welche beim Klick geöffnet wird:": "Objekt welche beim Klick geöffnet wird:",
+      "Objekt das beim Klick geöffnet wird:": "Objekt das beim Klick geöffnet wird:",
       "Hintergrund-Transparenz (Info links)": "Hintergrund-Transparenz (Info links)",
       "Hintergrundfarbe (Info links)": "Hintergrundfarbe (Info links)",
       "Hintergrund-Transparenz (Info mitte)": "Hintergrund-Transparenz (Info mitte)",
@@ -98,6 +98,9 @@
       "Transparenz bei Statusfarben": "Transparenz bei Statusfarben",
       "Hintergrundfarbe: Status True": "Hintergrundfarbe: Status True",
       "Hintergrundfarbe: Status False": "Hintergrundfarbe: Status False",
+      "Statusfarbe als Hintergrund (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Statusfarbe als Hintergrund (für Variablen ohne Aktion die als Infoelement angezeigt werden)",
+      "Transparenz bei Menü-Statusfarben (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Transparenz bei Menü-Statusfarben (für Variablen ohne Aktion die als Infoelement angezeigt werden)",
+      "Info-Elemente im Menü gruppieren": "Info-Elemente im Menü gruppieren",
       "Spenden / Schenkung": "Spenden / Schenkung",
       "Sag Danke und unterstütze den Entwickler dieses Moduls:": "Sag Danke und unterstütze den Entwickler dieses Moduls:"
     },
@@ -160,7 +163,7 @@
       "Bildfilter (0..100 / Bool)": "Image filter (0..100 / bool)",
       "Schalter Ausrichtung": "Switch alignment",
       "Schalter gleichmäßig verteilen": "Distribute switches evenly",
-      "Objekt welche beim Klick geöffnet wird:": "Object to open on click:",
+      "Objekt das beim Klick geöffnet wird:": "Object to open on click:",
       "Hintergrund-Transparenz (Info links)": "Background transparency (info left)",
       "Hintergrundfarbe (Info links)": "Background color (info left)",
       "Hintergrund-Transparenz (Info mitte)": "Background transparency (info middle)",
@@ -200,6 +203,9 @@
       "Transparenz bei Statusfarben": "Transparency for status colors",
       "Hintergrundfarbe: Status = True": "Background color: Status = True",
       "Hintergrundfarbe: Status = False": "Background color: Status = False",
+      "Statusfarbe als Hintergrund (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Status color as background (for variables without action that are displayed as info element)",
+      "Transparenz bei Menü-Statusfarben (für Variablen ohne Aktion die als Infoelement angezeigt werden)": "Transparency for menu status colors (for variables without action that are displayed as info element)",
+      "Info-Elemente im Menü gruppieren": "Group info elements in menu",
       "Spenden / Schenkung": "Donations / Gifts",
       "Sag Danke und unterstütze den Entwickler dieses Moduls:": "Say thank you and support the developer of this module:"
     }

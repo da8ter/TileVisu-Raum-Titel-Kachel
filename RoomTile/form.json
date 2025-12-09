@@ -144,6 +144,8 @@
           { "type": "SelectColor", "name": "Default_InfoMenueHintergrundfarbe", "caption": "Hintergrundfarbe (Menü)", "allowTransparent": true },
           { "type": "NumberSpinner", "name": "Default_ButtonBorderRadius", "caption": "Eckenradius (Buttons)", "digits": 0, "minimum": 0, "maximum": 50, "suffix": "px" },
           { "type": "CheckBox", "name": "UseImageColorsForButtons", "caption": "Buttonfarben aus Hintergrundbild" },
+          { "type": "CheckBox", "name": "TransparentMenuStatusColors", "caption": "Transparenz bei Menü-Statusfarben" },
+          { "type": "CheckBox", "name": "GroupMenuInfoElements", "caption": "Info-Elemente im Menü gruppieren" },
           { "type": "RowLayout", "items": [
             { "type": "Select", "name": "SchalterAlignment", "caption": "Schalter Ausrichtung", "options": [
               { "label": "Linksbündig", "value": "left" },
@@ -162,6 +164,9 @@
               { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
               { "caption": "Icon", "name": "ShowIcon", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
               { "caption": "Wert", "name": "ShowValue", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
+              { "caption": "Statusfarbe als Hintergrund", "name": "UseVarColor", "width": "180px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
+              { "caption": "Hintergrundfarbe: Status = True", "name": "ColorTrue", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
+              { "caption": "Hintergrundfarbe: Status = False", "name": "ColorFalse", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
               { "caption": "Label überschreiben", "name": "AltName", "visible": false, "width": "200px", "add": "", "edit": { "type": "ValidationTextBox" } },
               { "caption": "Breite", "name": "Width", "width": "110px", "visible": false, "add": 100, "edit": { "type": "NumberSpinner", "digits": 0, "minimum": 10, "maximum": 500, "suffix": "px" } },
               { "caption": "Maximale Breite", "name": "FullWidth", "width": "120px", "add": false, "visible": false, "edit": { "type": "CheckBox" } }              

@@ -151,7 +151,7 @@
       color: var(--infomenueschriftfarbe, #fff);
       display: flex;
       justify-content: flex-start;
-      align-items: center;
+      align-items: stretch;
       padding: var(--menu-padding, 6px);
       flex-shrink: 0;
       border-radius: 0 0 var(--borderRadius, 10px) var(--borderRadius, 10px);
@@ -166,7 +166,7 @@
     .menu-switches { 
       --switch-gap: 10px;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       gap: var(--switch-gap, 10px);
       flex-wrap: wrap;
       width: 100%;
@@ -175,8 +175,8 @@
     .menu-switches > .switch-group, .menu-switches > .group { flex: 0 0 auto; }
     .menu-switches.align-left { justify-content: flex-start; margin-left: calc(-1 * var(--menu-padding, 12px)); padding-left: var(--menu-padding, 12px); }
     .menu-switches.align-center { justify-content: center; }
-    .menu-switches.align-right { justify-content: flex-end; align-content: flex-end; gap: 0; margin-right: calc(-1 * var(--menu-padding, 12px)); padding-right: var(--menu-padding, 12px); }
-    .menu-switches.align-right > * + * { margin-left: var(--switch-gap, 10px); }
+    .menu-switches.align-right { justify-content: flex-end; align-content: flex-end; gap: var(--switch-gap, 10px); margin-right: calc(-1 * var(--menu-padding, 12px)); padding-right: var(--menu-padding, 12px); }
+    .menu-switches.align-right > * + * { margin-left: 0; }
     .menu-switches.distribute { justify-content: space-between; gap: var(--switch-gap, 10px); margin: 0 calc(-1 * var(--menu-padding, 12px)); padding: 0 var(--menu-padding, 12px); }
     .menu-switches.distribute .switch-group:has(.switch-option + .switch-option) { width: 100%; justify-content: space-between; }
     .menu-switches.distribute .switch-group .switch-option { flex: 1 1 0; }
@@ -194,6 +194,163 @@
     .row-top .group .info-name, .row-top .group .info-value { color: var(--infoschriftfarbe, #fff); }
     .row-top .info-icon { font-size: calc(var(--infofontsize, 16px) * 0.805); color: var(--infoschriftfarbe, #fff); }
     .menueleiste .info-icon, .menueleiste .switch-icon { font-size: calc(var(--infomenuefontsize, 16px) * 0.805); color: var(--infomenueschriftfarbe, #fff); }
+
+    /* Fixed spacing for menu text items (no-action) */
+    .menueleiste .group.no-action { padding: 0 12px; display: flex; align-items: center; justify-content: center; }
+    .menueleiste .group.no-action .info-icon { margin-right: 0px; }
+    /* Status background for no-action items - full height of menu bar */
+    .menueleiste .group.no-action.has-status-bg {
+      margin-top: calc(-1 * var(--menu-padding, 6px));
+      margin-bottom: calc(-1 * var(--menu-padding, 6px));
+      padding-top: var(--menu-padding, 6px);
+      padding-bottom: var(--menu-padding, 6px);
+      border-radius: 0;
+      align-self: stretch;
+    }
+    /* No gap between adjacent no-action elements (when not grouped) */
+    .menueleiste .group.no-action + .group.no-action {
+      margin-left: calc(-1 * var(--switch-gap, 10px));
+    }
+    /* First/last no-action with status bg extends to tile edge */
+    .menueleiste .group.no-action.has-status-bg:first-child {
+      margin-left: calc(-1 * var(--menu-padding, 6px));
+      padding-left: var(--menu-padding, 6px);
+    }
+    .menueleiste .group.no-action.has-status-bg:last-child {
+      margin-right: calc(-1 * var(--menu-padding, 6px));
+      padding-right: var(--menu-padding, 6px);
+    }
+    /* Icon-only: symmetric padding for centering */
+    .menueleiste .group.no-action.icon-only.has-status-bg:first-child {
+      padding-right: var(--menu-padding, 6px);
+    }
+    .menueleiste .group.no-action.icon-only.has-status-bg:last-child {
+      padding-left: var(--menu-padding, 6px);
+    }
+    /* Grouped info elements container - treated as single element */
+    .menueleiste .info-group-container {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      padding: 0; /* outer padding comes from first/last item */
+      flex-grow: 0 !important;
+      flex-shrink: 0 !important;
+      flex-basis: auto !important;
+      align-self: stretch; /* fill bar height */
+      background-color: transparent !important;
+    }
+    /* In distribute mode, push the grouped container to the right so it stays as one block */
+    .menu-switches.distribute .info-group-container {
+      margin-left: auto;
+    }
+    /* Remove flex gap before the grouped container in distribute mode (but not when right-aligned) */
+    .menu-switches.distribute:not(.align-right) > *:has(+ .info-group-container) {
+      margin-right: calc(-1 * var(--switch-gap, 10px));
+    }
+    /* Extend first/last grouped container to tile edge like ungrouped items */
+    .menueleiste .info-group-container:first-child {
+      margin-left: 0;
+      padding-left: 0;
+    }
+    .menueleiste .info-group-container:first-child .info-group-item:first-child {
+      padding-left: var(--menu-padding, 6px);
+      margin-left: calc(-1 * var(--menu-padding, 6px));
+    }
+    /* Default: no right-edge compensation for grouped info */
+    .menueleiste .info-group-container:last-child {
+      margin-right: 0;
+      padding-right: 0;
+    }
+    /* If first element is an ungrouped info item, extend to left tile edge
+       for center/right alignment (align-left container already compensates) */
+    .menu-switches.align-center .group.no-action:first-child,
+    .menu-switches.align-right  .group.no-action:first-child {
+      margin-left: calc(-1 * var(--menu-padding, 6px));
+      padding-left: var(--menu-padding, 6px);
+    }
+    .menueleiste .info-group-container .info-group-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 12px; /* inner padding per chip */
+      box-sizing: border-box;
+      /* full bar height like ungrouped no-action */
+      margin-top: calc(-1 * var(--menu-padding, 6px));
+      margin-bottom: calc(-1 * var(--menu-padding, 6px));
+      padding-top: var(--menu-padding, 6px);
+      padding-bottom: var(--menu-padding, 6px);
+      align-self: stretch;
+    }
+    .menueleiste .info-group-container .info-group-item:first-child { padding-left: 12px; }
+    .menueleiste .info-group-container .info-group-item:last-child { padding-right: 12px; margin-right: 0; }
+    /* When aligned right, outer container already compensates menubar padding.
+       Do NOT apply inner negative margins/padding-right hacks. */
+    .menu-switches.align-right .info-group-container:last-child {
+      margin-right: 0;
+      padding-right: 0;
+    }
+    .menu-switches.align-right .info-group-container .info-group-item:last-child {
+      margin-right: 0;
+      padding-right: 12px;
+    }
+    /* Distribute: last grouped info extends to right tile edge */
+    .menu-switches.distribute .info-group-container:last-child {
+      margin-right: 0;
+      padding-right: 0;
+    }
+    /* When grouped info is last and aligned right or distribute, let the LAST item bleed to the edge */
+    .menu-switches.align-right .info-group-container:last-child .info-group-item:last-child,
+    .menu-switches.distribute .info-group-container:last-child .info-group-item:last-child {
+      padding-right: var(--menu-padding, 6px);
+      margin-right: calc(-1 * var(--menu-padding, 6px));
+    }
+    /* Align-right: rely on flex gap, do not add extra margins */
+    .menu-switches.align-right .group.no-action + .group.no-action {
+      margin-left: 0;
+    }
+    .menu-switches.align-right .info-group-container + .group.no-action,
+    .menu-switches.align-right .group.no-action + .info-group-container,
+    .menu-switches.align-right .info-group-container + .info-group-container {
+      margin-left: 0;
+    }
+    /* Align-right/Distribute: last ungrouped info extends to right tile edge */
+    .menu-switches.align-right .group.no-action:last-child,
+    .menu-switches.distribute .group.no-action:last-child {
+      margin-right: calc(-1 * var(--menu-padding, 6px));
+      padding-right: var(--menu-padding, 6px);
+    }
+    /* Keep first-badge neutralization for align-right (left side handled elsewhere) */
+    .menu-switches.align-right .group.no-action.has-status-bg:first-child {
+      margin-left: calc(-1 * var(--menu-padding, 6px));
+      padding-left: var(--menu-padding, 6px);
+    }
+    /* Icon-only items: remove margin-right from icon for centering */
+    .menueleiste .info-group-container .info-group-item.icon-only .info-icon { margin-right: 0; }
+    /* Adjacent grouped items: no gap and draw a 1px divider on the following item */
+    .menueleiste .info-group-container .info-group-item + .info-group-item {
+      margin-left: 0;
+      border-left: 1px solid rgba(255,255,255,0.35);
+    }
+    .menueleiste .info-group-container .info-group-item.has-status-bg + .info-group-item.has-status-bg { margin-left: 0; }
+    .menueleiste .info-group-container .info-icon { margin-right: 6px; }
+    /* Fallback (only in distribute, not when right-aligned): remove flex gap between grouped container and neighbors */
+    .menu-switches.distribute:not(.align-right) .info-group-container + .group.no-action,
+    .menu-switches.distribute:not(.align-right) .group.no-action + .info-group-container,
+    .menu-switches.distribute:not(.align-right) .info-group-container + .info-group-container {
+      margin-left: calc(-1 * var(--switch-gap, 10px));
+    }
+    /* Thin separator line between grouped items without adding gap */
+    .info-group-container > .sep {
+      display: block; /* override global .sep { display: none } */
+      width: 1px;
+      min-width: 1px;
+      background-color: rgba(255,255,255,0.75);
+      align-self: stretch;
+      margin-top: calc(-1 * var(--menu-padding, 6px));
+      margin-bottom: calc(-1 * var(--menu-padding, 6px));
+      position: relative;
+      z-index: 1;
+    }
 
     .switch {
       display: inline-flex;
@@ -289,7 +446,7 @@
   <script>
     const iconMapping = window.iconMapping || {};
     // Global grid flags and per-room palettes
-    const GRID_FLAGS = { useImageColorsForButtons: false, transparentStatusColors: true };
+    const GRID_FLAGS = { useImageColorsForButtons: false, transparentStatusColors: true, transparentMenuStatusColors: true, groupMenuInfoElements: false };
     const IMAGE_PALETTES = {}; // key: room DOM id (e.g., 'room-0') -> array of colors
     function prepareIconClass(iconName) {
       if (!iconName || iconName === 'Transparent') return '';
@@ -436,6 +593,30 @@
       else if (/^rgb\(/i.test(c)) out = _rgbToRgba(c, a);
       else if (/^rgba\(/i.test(c)) {
         // replace alpha with InfoTop alpha
+        out = c.replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*[0-9.]+\s*\)/i, `rgba($1, $2, $3, ${a})`);
+      }
+      grp.style.backgroundColor = out;
+    }
+    function applyMenuBadgeBg(grp, color, menuTransparency) {
+      if (!grp) return;
+      if (!color) { grp.style.backgroundColor = ''; return; }
+      // global flag: opaque status colors when disabled
+      if (GRID_FLAGS.transparentMenuStatusColors === false) {
+        const c0 = String(color).trim();
+        let out0 = c0;
+        if (/^rgba\(/i.test(c0)) {
+          out0 = c0.replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*[0-9.]+\s*\)/i, 'rgb($1, $2, $3)');
+        }
+        grp.style.backgroundColor = out0;
+        return;
+      }
+      // Use menu transparency from room data (0% = unsichtbar, 100% = voll sichtbar)
+      const a = (menuTransparency !== null && menuTransparency !== undefined && !isNaN(menuTransparency) ? menuTransparency : 30) / 100;
+      const c = String(color).trim();
+      let out = c;
+      if (c.startsWith('#')) out = _hexToRgba(c, a);
+      else if (/^rgb\(/i.test(c)) out = _rgbToRgba(c, a);
+      else if (/^rgba\(/i.test(c)) {
         out = c.replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*[0-9.]+\s*\)/i, `rgba($1, $2, $3, ${a})`);
       }
       grp.style.backgroundColor = out;
@@ -923,11 +1104,25 @@
       const items = Array.isArray(roomObj.menuitems) ? roomObj.menuitems.slice().sort((a, b) => (a.order || 0) - (b.order || 0)) : [];
       const useImgCol = (roomObj.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons);
 
-      for (const it of items) {
+      // Pre-scan grouping: create a single info group at the position of the first no-action item
+      // Use per-room setting if available, fallback to global flag
+      const groupingEnabled = (roomObj.groupmenuinfoelements !== undefined) ? !!roomObj.groupmenuinfoelements : !!GRID_FLAGS.groupMenuInfoElements;
+      const sorted = items;
+      const noActionIdxs = groupingEnabled ? sorted.map((it, idx) => (!it.hasaction ? idx : -1)).filter(i => i >= 0) : [];
+      const firstNoActionIdx = noActionIdxs.length > 0 ? noActionIdxs[0] : -1;
+      let infoGroupContainer = (groupingEnabled && firstNoActionIdx >= 0) ? el('div', { class: 'group info-group-container' }) : null;
+
+      for (let i = 0; i < sorted.length; i++) {
+        const it = sorted[i];
         const baseId = prefixId + '-menuitem-' + it.id;
         const key = it.key;
         const hasOptions = Array.isArray(it.options) && it.options.length > 0 && it.hasaction && (it.action === 'variable' || it.action === 'scenecontrol');
         const isObjectAction = it.action === 'object' && it.openObjectId > 0 && typeof openObject === 'function';
+
+        // Insert info group container at the first no-action position
+        if (infoGroupContainer && i === firstNoActionIdx) {
+          cont.appendChild(infoGroupContainer);
+        }
 
         if (hasOptions) {
           const group = el('div', { id: baseId + '-group', class: 'switch-group' + (it.fullWidth ? ' full-width' : '') });
@@ -961,100 +1156,142 @@
             group.appendChild(btn);
           }
           cont.appendChild(group);
-          continue;
-        }
-
-        if (it.hasaction) {
-          const btnAttrs = { id: baseId, class: 'switch' };
-          if (it.fullWidth) btnAttrs.class += ' full-width';
-          const btn = el('button', btnAttrs);
-          if (it.type !== undefined) btn.dataset.vartype = String(it.type);
-          // Nur setzen, wenn Palettenfarben NICHT aktiv sind
-          if (!useImgCol) {
-            if (it.colorOn) btn.dataset.colorOn = it.colorOn;
-            if (it.colorOff) btn.dataset.colorOff = it.colorOff;
-            if (it.color) btn.dataset.fallbackcolor = it.color;
-          }
-          btn.dataset.currentValue = String(it.value ?? '');
-
-          if (isObjectAction) {
-            btn.onclick = () => openObject(Number(it.openObjectId));
-          } else if (it.type === 0) {
-            const isOn = (it.value === true || String(it.value) === '1');
-            btn.classList.toggle('inactive', !isOn);
-            if (!useImgCol) {
-              let bg = isOn ? (it.colorOn || it.color || '') : (it.colorOff || it.color || '');
-              if (bg) btn.style.backgroundColor = bg;
+        } else {
+          const isNoAction = !it.hasaction;
+          if (isNoAction) {
+            // Append to the single info group when enabled; otherwise legacy behavior
+            if (infoGroupContainer) {
+              const innerEl = el('span', { id: baseId + '-inner', class: 'info-group-item' });
+              const hasStatusBg = it.useVarColor && it.statusBgColor;
+              if (hasStatusBg) {
+                innerEl.dataset.statusbgcolor = it.statusBgColor;
+                applyMenuBadgeBg(innerEl, it.statusBgColor, roomObj.menuetransparenz);
+                innerEl.classList.add('has-status-bg');
+              }
+              if (it.showIcon !== false && roomObj[`${key}icon`]) {
+                const cls = prepareIconClass(roomObj[`${key}icon`]);
+                if (cls) {
+                  const icon = el('i', { id: baseId + 'icon', class: cls + ' info-icon' });
+                  innerEl.appendChild(icon);
+                  ensureFaSvg(innerEl);
+                }
+              }
+              const label = roomObj[`${key}name`] || '';
+              const value = roomObj[`${key}asso`] ?? roomObj[`${key}`] ?? '';
+              const showLabelVis = (it.showName !== false) && !!label;
+              const showValVis = (it.showValue === true && (value || value === 0));
+              if (showLabelVis || showValVis) {
+                const textWrap = el('span', { class: 'nv' });
+                textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (showLabelVis ? '' : ' hidden') }, label));
+                const colonCls = (showLabelVis && showValVis) ? 'info-name' : 'info-name hidden';
+                textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls }, ': '));
+                textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(value)));
+                innerEl.appendChild(textWrap);
+              } else {
+                innerEl.classList.add('icon-only');
+              }
+              // Add visual separator only inside grouped container
+              if (infoGroupContainer.childElementCount > 0) {
+                infoGroupContainer.appendChild(el('div', { class: 'sep' }));
+              }
+              infoGroupContainer.appendChild(innerEl);
+            } else {
+              // Original ungrouped behavior
+              const hasStatusBg = it.useVarColor && it.statusBgColor;
+              const wrapper = el('div', { id: baseId + '-group', class: 'group no-action' + (it.fullWidth ? ' full-width' : '') + (hasStatusBg ? ' has-status-bg' : '') });
+              if (hasStatusBg) {
+                wrapper.dataset.statusbgcolor = it.statusBgColor;
+                applyMenuBadgeBg(wrapper, it.statusBgColor, roomObj.menuetransparenz);
+              }
+              if (it.showIcon !== false && roomObj[`${key}icon`]) {
+                const cls = prepareIconClass(roomObj[`${key}icon`]);
+                if (cls) {
+                  const icon = el('i', { id: baseId + 'icon', class: cls + ' info-icon' });
+                  wrapper.appendChild(icon);
+                  ensureFaSvg(wrapper);
+                }
+              }
+              const label = roomObj[`${key}name`] || '';
+              const value = roomObj[`${key}asso`] ?? roomObj[`${key}`] ?? '';
+              const showLabelVis = (it.showName !== false) && !!label;
+              const showValVis = (it.showValue === true && (value || value === 0));
+              if (showLabelVis || showValVis) {
+                const textWrap = el('span', { class: 'nv' });
+                textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (showLabelVis ? '' : ' hidden') }, label));
+                const colonCls = (showLabelVis && showValVis) ? 'info-name' : 'info-name hidden';
+                textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls }, ': '));
+                textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(value)));
+                wrapper.appendChild(textWrap);
+              } else {
+                wrapper.classList.add('icon-only');
+              }
+              cont.appendChild(wrapper);
             }
-            btn.onclick = () => {
-              const wasOn = btn.dataset.currentValue === 'true' || btn.dataset.currentValue === '1';
-              const newVal = !wasOn;
-              // Optimistisches UI-Update
-              btn.dataset.currentValue = String(newVal);
-              btn.classList.toggle('inactive', !newVal);
+          } else {
+            // Action button (not hasOptions)
+            const btnAttrs = { id: baseId, class: 'switch' };
+            if (it.fullWidth) btnAttrs.class += ' full-width';
+            const btn = el('button', btnAttrs);
+            if (it.type !== undefined) btn.dataset.vartype = String(it.type);
+            if (!useImgCol) {
+              if (it.colorOn) btn.dataset.colorOn = it.colorOn;
+              if (it.colorOff) btn.dataset.colorOff = it.colorOff;
+              if (it.color) btn.dataset.fallbackcolor = it.color;
+            }
+            btn.dataset.currentValue = String(it.value ?? '');
+            if (isObjectAction) {
+              btn.onclick = () => openObject(Number(it.openObjectId));
+            } else if (it.type === 0) {
+              const isOn = (it.value === true || String(it.value) === '1');
+              btn.classList.toggle('inactive', !isOn);
               if (!useImgCol) {
-                const colOn = btn.dataset ? btn.dataset.colorOn : undefined;
-                const colOff = btn.dataset ? btn.dataset.colorOff : undefined;
-                const fb = btn.dataset ? btn.dataset.fallbackcolor : undefined;
-                let bg = newVal ? (colOn || it.colorOn || it.color || fb || '') : (colOff || it.colorOff || it.color || fb || '');
+                let bg = isOn ? (it.colorOn || it.color || '') : (it.colorOff || it.color || '');
                 if (bg) btn.style.backgroundColor = bg;
               }
-              requestAction('menuitem:' + it.id, newVal);
-            };
-          } else {
-            if (!useImgCol && it.color) btn.style.backgroundColor = it.color;
-            btn.onclick = () => requestAction('menuitem:' + it.id, 1);
-          }
-
-          if (it.showIcon !== false && roomObj[`${key}icon`]) {
-            const cls = prepareIconClass(roomObj[`${key}icon`]);
-            if (cls) {
-              const icon = el('i', { id: baseId + 'icon', class: cls + ' switch-icon' });
-              btn.appendChild(icon);
-              ensureFaSvg(btn);
+              btn.onclick = () => {
+                const wasOn = btn.dataset.currentValue === 'true' || btn.dataset.currentValue === '1';
+                const newVal = !wasOn;
+                btn.dataset.currentValue = String(newVal);
+                btn.classList.toggle('inactive', !newVal);
+                if (!useImgCol) {
+                  const colOn = btn.dataset ? btn.dataset.colorOn : undefined;
+                  const colOff = btn.dataset ? btn.dataset.colorOff : undefined;
+                  const fb = btn.dataset ? btn.dataset.fallbackcolor : undefined;
+                  let bg = newVal ? (colOn || it.colorOn || it.color || fb || '') : (colOff || it.colorOff || it.color || fb || '');
+                  if (bg) btn.style.backgroundColor = bg;
+                }
+                requestAction('menuitem:' + it.id, newVal);
+              };
+            } else {
+              if (!useImgCol && it.color) btn.style.backgroundColor = it.color;
+              btn.onclick = () => requestAction('menuitem:' + it.id, 1);
             }
-          }
-
-          const textWrap = el('span', { class: 'nv' });
-          const label = roomObj[`${key}name`] || '';
-          const value = roomObj[`${key}asso`] ?? roomObj[`${key}`] ?? '';
-          const showLabel = it.showName !== false || isObjectAction;
-          const showLabelVis = (showLabel && !!label);
-          textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (showLabelVis ? '' : ' hidden') }, label));
-          const showValVis = (!isObjectAction && it.showValue === true && (value || value === 0));
-          const colonCls = (showLabelVis && showValVis) ? 'info-name' : 'info-name hidden';
-          textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls }, ': '));
-          textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(value)));
-          btn.appendChild(textWrap);
-
-          const wrapper = el('div', { id: baseId + '-group', class: 'group' + (it.fullWidth ? ' full-width' : '') });
-          wrapper.appendChild(btn);
-          cont.appendChild(wrapper);
-          continue;
-        }
-
-        const wrapper = el('div', { id: baseId + '-group', class: 'group no-action' + (it.fullWidth ? ' full-width' : '') });
-        if (it.showIcon && roomObj[`${key}icon`]) {
-          const cls = prepareIconClass(roomObj[`${key}icon`]);
-          if (cls) {
-            const icon = el('i', { id: baseId + 'icon', class: cls + ' info-icon' });
-            wrapper.appendChild(icon);
-            ensureFaSvg(wrapper);
+            if (it.showIcon !== false && roomObj[`${key}icon`]) {
+              const cls = prepareIconClass(roomObj[`${key}icon`]);
+              if (cls) {
+                const icon = el('i', { id: baseId + 'icon', class: cls + ' switch-icon' });
+                btn.appendChild(icon);
+                ensureFaSvg(btn);
+              }
+            }
+            const textWrap = el('span', { class: 'nv' });
+            const label = roomObj[`${key}name`] || '';
+            const value = roomObj[`${key}asso`] ?? roomObj[`${key}`] ?? '';
+            const showLabel = it.showName !== false || isObjectAction;
+            const showLabelVis = (showLabel && !!label);
+            textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (showLabelVis ? '' : ' hidden') }, label));
+            const showValVis = (!isObjectAction && it.showValue === true && (value || value === 0));
+            const colonCls = (showLabelVis && showValVis) ? 'info-name' : 'info-name hidden';
+            textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls }, ': '));
+            textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(value)));
+            btn.appendChild(textWrap);
+            const wrapper = el('div', { id: baseId + '-group', class: 'group' + (it.fullWidth ? ' full-width' : '') });
+            wrapper.appendChild(btn);
+            cont.appendChild(wrapper);
           }
         }
-        const label = roomObj[`${key}name`] || '';
-        const value = roomObj[`${key}asso`] ?? roomObj[`${key}`] ?? '';
-        const textWrap = el('span', { class: 'nv' });
-        const showLabelVis = (it.showName !== false) && !!label;
-        textWrap.appendChild(el('span', { id: baseId + 'name', class: 'info-name' + (showLabelVis ? '' : ' hidden') }, label));
-        const showValVis = (it.showValue === true && (value || value === 0));
-        const colonCls2 = (showLabelVis && showValVis) ? 'info-name' : 'info-name hidden';
-        textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls2 }, ': '));
-        textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(value)));
-        wrapper.appendChild(textWrap);
-        cont.appendChild(wrapper);
       }
-
+      // groups are inserted on-the-fly in order
       updateSingleButtonState(prefixId);
       normalizeDistribute(prefixId);
       setSwitchAlignment(prefixId, roomObj.schalteralignment, !!roomObj.schalterdistribute);
@@ -1341,10 +1578,19 @@
 
       root.dataset.useimagecolors = (room.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons) ? '1' : '0';
 
+      // Click-Handling: nur der freie Bereich zwischen Infoleiste (row-top) und Menüleiste
       root.onclick = null;
       const menuEl = document.getElementById(id + '-menueleiste');
-      if (menuEl) menuEl.onclick = (e) => { e.stopPropagation(); };
-      if (room.targetlink && Number(room.targetlink) > 0 && typeof openObject === 'function') {
+      if (menuEl) {
+        menuEl.onclick = (e) => { e.stopPropagation(); };
+        menuEl.style.cursor = 'default';
+      }
+      const rowEl = root.querySelector('.row-top');
+      if (rowEl) {
+        rowEl.onclick = (e) => { e.stopPropagation(); };
+        rowEl.style.cursor = 'default';
+      }
+      if (room.targetlink && Number(room.targetlink) > 1 && typeof openObject === 'function') {
         const target = Number(room.targetlink);
         root.style.cursor = 'pointer';
         root.onclick = () => openObject(target);
@@ -2320,6 +2566,12 @@
         GRID_FLAGS.useImageColorsForButtons = !!decoded.grid.useImageColorsForButtons;
         if ('transparentStatusColors' in decoded.grid) {
           GRID_FLAGS.transparentStatusColors = !!decoded.grid.transparentStatusColors;
+        }
+        if ('transparentMenuStatusColors' in decoded.grid) {
+          GRID_FLAGS.transparentMenuStatusColors = !!decoded.grid.transparentMenuStatusColors;
+        }
+        if ('groupMenuInfoElements' in decoded.grid) {
+          GRID_FLAGS.groupMenuInfoElements = !!decoded.grid.groupMenuInfoElements;
         }
       }
 

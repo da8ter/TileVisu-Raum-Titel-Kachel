@@ -31,6 +31,8 @@ class MultiRoomTile extends IPSModule
         // Transparenz bei Statusfarben (Infoleiste)
         $this->RegisterPropertyBoolean('TransparentStatusColors', true);
         $this->RegisterPropertyBoolean('UseImageColorsForButtons', false);
+        $this->RegisterPropertyBoolean('TransparentMenuStatusColors', true);
+        $this->RegisterPropertyBoolean('GroupMenuInfoElements', false);
         // Image filter defaults (brightness/contrast/grayscale ranges)
         $this->RegisterPropertyFloat('Default_BgFilterBrightnessMin', 0.2);
         $this->RegisterPropertyFloat('Default_BgFilterBrightnessMax', 1.0);
@@ -575,6 +577,8 @@ class MultiRoomTile extends IPSModule
             'borderRadius' => $this->ReadPropertyInteger('BorderRadius'),
             'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons'),
             'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors'),
+            'transparentMenuStatusColors' => $this->ReadPropertyBoolean('TransparentMenuStatusColors'),
+            'groupMenuInfoElements' => $this->ReadPropertyBoolean('GroupMenuInfoElements'),
             'columns' => $this->ReadPropertyInteger('Columns')
         ];
 
@@ -714,6 +718,7 @@ class MultiRoomTile extends IPSModule
                 $bgAlphaPercent = $this->normalizePercent((float)($defaults['InfoMenueTransparenz'] ?? 30.0));
             }
             $r['infomenuehintergrundfarbe'] = $this->cssRgba((int)$bgCol, $this->percentToAlpha($bgAlphaPercent));
+            $r['menuetransparenz'] = $bgAlphaPercent; // For menu status color transparency
             $r['schalteralignment'] = (string)($room['SchalterAlignment'] ?? 'left');
             $r['schalterdistribute'] = (bool)($room['SchalterDistribute'] ?? false);
             $r['transparenz'] = $this->percentToAlpha($this->normalizePercent($this->ReadNumOrDefault($room, 'Bildtransparenz', $defaults, 70.0)));
@@ -751,6 +756,11 @@ class MultiRoomTile extends IPSModule
                 ? (bool)$room['UseImageColorsForButtons']
                 : (bool)$this->ReadPropertyBoolean('UseImageColorsForButtons');
             $r['useimagecolors'] = $useImgCol || $this->ReadPropertyBoolean('UseImageColorsForButtons');
+
+            // Group menu info elements per room (fallback to global flag)
+            $r['groupmenuinfoelements'] = array_key_exists('GroupMenuInfoElements', $room)
+                ? (bool)$room['GroupMenuInfoElements']
+                : (bool)$this->ReadPropertyBoolean('GroupMenuInfoElements');
 
             // Bilder: per WebHook ausliefern (Base64 via JSON)
             $imageID = (int)($room['bgImage'] ?? 0);
@@ -946,6 +956,9 @@ class MultiRoomTile extends IPSModule
             $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
             $showIcon = isset($row['ShowIcon']) ? (bool)$row['ShowIcon'] : false;
             $showValue = isset($row['ShowValue']) ? (bool)$row['ShowValue'] : false;
+            $useVarColor = isset($row['UseVarColor']) ? (bool)$row['UseVarColor'] : false;
+            $colorTrue = isset($row['ColorTrue']) ? (int)$row['ColorTrue'] : -1;
+            $colorFalse = isset($row['ColorFalse']) ? (int)$row['ColorFalse'] : -1;
             $altName = (string)($row['AltName'] ?? '');
             $width = (int)($row['Width'] ?? 0);
             $fullWidth = isset($row['FullWidth']) ? (bool)$row['FullWidth'] : false;
@@ -963,6 +976,7 @@ class MultiRoomTile extends IPSModule
             $color = '';
             $colorOn = '';
             $colorOff = '';
+            $statusBgColor = '';
             $hasVar = ($varId > 0) && @IPS_VariableExists($varId);
             $hasObject = ($openObjectId > 0) && @IPS_ObjectExists($openObjectId);
             $typeVal = null;
@@ -994,13 +1008,30 @@ class MultiRoomTile extends IPSModule
                     }
                 } catch (Throwable $e) {}
                 if ($showIcon) { try { $icon = (string)$this->GetIconAdvanced($varId); } catch (Throwable $e) {} }
+                // Colors for boolean
                 if ($typeVal === 0) {
                     $btnColors = $this->GetButtonColors($varId);
                     if (!empty($btnColors['on'])) { $colorOn = $btnColors['on']; }
                     if (!empty($btnColors['off'])) { $colorOff = $btnColors['off']; }
-                } else {
+                }
+                // Status background color for no-action items - same logic as Info Badges
+                if ($useVarColor) {
+                    // First try GetColor (works for all variable types including Bool)
                     $c = $this->GetColor($varId);
-                    if ($c !== '') $color = '#' . $c;
+                    if ($c !== '') {
+                        $statusBgColor = '#' . $c;
+                        $color = '#' . $c;
+                    }
+                    // Explicit override for Bool using ColorTrue/ColorFalse when set (not Transparent/-1)
+                    if ($typeVal === 0 && ($colorTrue !== -1 || $colorFalse !== -1)) {
+                        $isOn = false;
+                        try { $isOn = (bool)@GetValue($varId); } catch (Throwable $e) {}
+                        if ($isOn && $colorTrue !== -1) {
+                            $statusBgColor = '#' . sprintf('%06X', $colorTrue);
+                        } elseif (!$isOn && $colorFalse !== -1) {
+                            $statusBgColor = '#' . sprintf('%06X', $colorFalse);
+                        }
+                    }
                 }
             } elseif ($sceneControlId > 0 && @IPS_InstanceExists($sceneControlId)) {
                 // Szenensteuerung: Baue Optionen aus Scene1..N inkl. Icons, ermittle aktive Szene
@@ -1091,6 +1122,8 @@ class MultiRoomTile extends IPSModule
                 'color' => $color,
                 'colorOn' => $colorOn,
                 'colorOff' => $colorOff,
+                'useVarColor' => $useVarColor,
+                'statusBgColor' => $statusBgColor,
             ];
         }
         usort($items, fn($a, $b) => $a['order'] <=> $b['order']);

@@ -19,9 +19,6 @@
       "type": "ExpansionPanel",
       "caption": "Globale Standardwerte",
       "items": [
-        { "type": "RowLayout", "items": [
-          { "type": "CheckBox", "name": "UseImageColorsForButtons", "caption": "Buttonfarben aus Hintergrundbild" }
-        ]},
         { "type": "Label", "caption": "Infoleiste", "bold": true },
         { "type": "NumberSpinner", "name": "Default_Infohoehe", "caption": "Höhe", "digits": 0, "minimum": 20, "maximum": 100, "suffix": "px", "width": "300px" },
         { "type": "RowLayout", "items": [
@@ -34,6 +31,7 @@
         ]},
         { "type": "CheckBox", "name": "TransparentStatusColors", "caption": "Transparenz bei Statusfarben" },
         { "type": "Label", "caption": "Menüleiste", "bold": true },
+        { "type": "CheckBox", "name": "UseImageColorsForButtons", "caption": "Buttonfarben aus Hintergrundbild" },
         { "type": "RowLayout", "items": [
           { "type": "NumberSpinner", "name": "Default_InfoMenueSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": 8, "maximum": 100, "suffix": "px", "width": "300px" },
           { "type": "SelectColor", "name": "Default_InfoMenueSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true, "width": "300px" }
@@ -141,7 +139,7 @@
                 { "type": "ValidationTextBox", "name": "Raumname", "caption": "Raumname" }
               ]},
               { "type": "RowLayout", "items": [
-                { "type": "SelectObject", "name": "Target", "caption": "Objekt welche beim Klick geöffnet wird:" }
+                { "type": "SelectObject", "name": "Target", "caption": "Objekt das beim Klick geöffnet wird:" }
               ]},
               { "type": "SelectColor", "name": "RaumnameSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true },
               { "type": "NumberSpinner", "name": "RaumnameSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": -1, "maximum": 200 }
@@ -180,12 +178,14 @@
               }}
             ]},
             { "type": "ExpansionPanel", "caption": "Menü-Leiste", "expanded": true, "items": [
+              { "type": "CheckBox", "name": "InfoMenueSwitch", "caption": "Menü anzeigen" },
               { "type": "NumberSpinner", "name": "InfoMenueSchriftgroesse", "caption": "Schriftgröße", "digits": 0, "minimum": -1, "maximum": 100 },
               { "type": "SelectColor", "name": "InfoMenueSchriftfarbe", "caption": "Schriftfarbe", "allowTransparent": true },
               { "type": "HorizontalSlider", "name": "InfoMenueTransparenz", "caption": "Hintergrund-Transparenz", "minimum": -1, "maximum": 100, "displayValue": true, "suffix": "%" },
               { "type": "SelectColor", "name": "InfoMenueHintergrundfarbe", "caption": "Hintergrundfarbe", "allowTransparent": true },
               { "type": "CheckBox", "name": "UseImageColorsForButtons", "caption": "Buttonfarben aus Hintergrundbild" },
-              { "type": "CheckBox", "name": "InfoMenueSwitch", "caption": "Menü anzeigen" },
+              { "type": "CheckBox", "name": "TransparentMenuStatusColors", "caption": "Transparenz bei Menü-Statusfarben (für Variablen ohne Aktion die als Infoelement angezeigt werden)" },
+              { "type": "CheckBox", "name": "GroupMenuInfoElements", "caption": "Info-Elemente im Menü gruppieren" },
               { "type": "RowLayout", "items": [
                 { "type": "Select", "name": "SchalterAlignment", "caption": "Schalter Ausrichtung", "options": [
                   { "label": "Linksbündig", "value": "left" },
@@ -203,6 +203,9 @@
                   { "caption": "Name", "name": "ShowName", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
                   { "caption": "Icon", "name": "ShowIcon", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
                   { "caption": "Wert", "name": "ShowValue", "width": "90px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
+                  { "caption": "Statusfarbe als Hintergrund (für Variablen ohne Aktion die als Infoelement angezeigt werden)", "name": "UseVarColor", "width": "180px", "add": false, "visible": false, "edit": { "type": "CheckBox" } },
+                  { "caption": "Hintergrundfarbe: Status = True", "name": "ColorTrue", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
+                  { "caption": "Hintergrundfarbe: Status = False", "name": "ColorFalse", "width": "160px", "visible": false, "add": -1, "edit": { "type": "SelectColor", "allowTransparent": true } },
                   { "caption": "Label überschreiben", "name": "AltName", "visible": false, "width": "200px", "add": "", "edit": { "type": "ValidationTextBox" } },
                   { "caption": "Breite", "name": "Width", "width": "110px", "visible": false, "add": 100, "edit": { "type": "NumberSpinner", "digits": 0, "minimum": 10, "maximum": 500, "suffix": "px" } },
                   { "caption": "Maximale Breite", "name": "FullWidth", "width": "120px", "add": false, "visible": false, "edit": { "type": "CheckBox" } }

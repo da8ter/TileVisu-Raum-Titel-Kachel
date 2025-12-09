@@ -27,6 +27,8 @@ class RoomTile extends IPSModule
         $this->RegisterPropertyInteger('Default_ButtonHeight', 25);
         $this->RegisterPropertyInteger('Default_ButtonBorderRadius', 10);
         $this->RegisterPropertyBoolean('UseImageColorsForButtons', false);
+        $this->RegisterPropertyBoolean('TransparentMenuStatusColors', true);
+        $this->RegisterPropertyBoolean('GroupMenuInfoElements', false);
         $this->RegisterPropertyBoolean('InfoTopCentered', false);
         // Dynamic lists (no migration): Info items (top) and menu items
         $this->RegisterPropertyString('InfoItems', '[]');
@@ -268,6 +270,9 @@ class RoomTile extends IPSModule
             $showName = isset($row['ShowName']) ? (bool)$row['ShowName'] : false;
             $showIcon = isset($row['ShowIcon']) ? (bool)$row['ShowIcon'] : false;
             $showValue = isset($row['ShowValue']) ? (bool)$row['ShowValue'] : false;
+            $useVarColor = isset($row['UseVarColor']) ? (bool)$row['UseVarColor'] : false;
+            $colorTrue = isset($row['ColorTrue']) ? (int)$row['ColorTrue'] : -1;
+            $colorFalse = isset($row['ColorFalse']) ? (int)$row['ColorFalse'] : -1;
             $altName = (string)($row['AltName'] ?? '');
             $width = (int)($row['Width'] ?? 100);
             $fullWidth = isset($row['FullWidth']) ? (bool)$row['FullWidth'] : false;
@@ -294,6 +299,7 @@ class RoomTile extends IPSModule
             $color = '';
             $colorOn = '';
             $colorOff = '';
+            $statusBgColor = '';
             $objectIcon = '';
             $objectName = '';
             if ($hasVar) {
@@ -328,10 +334,25 @@ class RoomTile extends IPSModule
                     $btnColors = $this->GetButtonColors($varId);
                     if (!empty($btnColors['on'])) { $colorOn = $btnColors['on']; }
                     if (!empty($btnColors['off'])) { $colorOff = $btnColors['off']; }
-                } else {
-                    // fallback profile color
+                }
+                // Status background color for no-action items - same logic as Info Badges
+                if ($useVarColor) {
+                    // First try GetColor (works for all variable types including Bool)
                     $c = $this->GetColor($varId);
-                    if ($c !== '') $color = '#' . $c;
+                    if ($c !== '') {
+                        $statusBgColor = '#' . $c;
+                        $color = '#' . $c;
+                    }
+                    // Explicit override for Bool using ColorTrue/ColorFalse when set (not Transparent/-1)
+                    if ($typeVal === 0 && ($colorTrue !== -1 || $colorFalse !== -1)) {
+                        $isOn = false;
+                        try { $isOn = (bool)@GetValue($varId); } catch (Throwable $e) {}
+                        if ($isOn && $colorTrue !== -1) {
+                            $statusBgColor = '#' . sprintf('%06X', $colorTrue);
+                        } elseif (!$isOn && $colorFalse !== -1) {
+                            $statusBgColor = '#' . sprintf('%06X', $colorFalse);
+                        }
+                    }
                 }
             } elseif ($hasScene) {
                 // SceneControl: build options from child variables Scene1..SceneN, value from ActiveScene
@@ -429,6 +450,8 @@ class RoomTile extends IPSModule
                 'color' => $color,
                 'colorOn' => $colorOn,
                 'colorOff' => $colorOff,
+                'useVarColor' => $useVarColor,
+                'statusBgColor' => $statusBgColor,
             ];
         }
         usort($items, function ($a, $b) { return ($a['order'] <=> $b['order']); });
@@ -991,7 +1014,10 @@ class RoomTile extends IPSModule
             'borderRadius' => $this->ReadPropertyInteger('BorderRadius'),
             'buttonHeight' => $this->ReadPropertyInteger('Default_ButtonHeight'),
             'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons'),
-            'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors')
+            'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors'),
+            'transparentMenuStatusColors' => $this->ReadPropertyBoolean('TransparentMenuStatusColors'),
+            'groupMenuInfoElements' => $this->ReadPropertyBoolean('GroupMenuInfoElements'),
+            'menuTransparency' => (float)$this->ReadPropertyFloat('Default_InfoMenueTransparenz')
         ];
 
         $rooms = $this->getRooms();
