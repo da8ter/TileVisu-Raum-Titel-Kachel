@@ -2544,6 +2544,8 @@
       }
     }
 
+    let ORIGINAL_BODY_MARGIN_TOP = null;
+
     function setGridLayout(minWidth, minHeight, gap, borderRadius, columns) {
       const grid = document.getElementById('grid');
       grid.style.setProperty('--minWidth', (minWidth || 300) + 'px');
@@ -2562,6 +2564,41 @@
       const decoded = typeof data === 'string' ? JSON.parse(data) : (data || {});
 
       if (decoded.grid) {
+        try {
+          const cs = window.getComputedStyle(document.body);
+          if (ORIGINAL_BODY_MARGIN_TOP === null) {
+            ORIGINAL_BODY_MARGIN_TOP = cs.marginTop || '';
+          }
+          const useFull = !!decoded.grid.useFullTileHeight;
+          const customMargin = Number(decoded.grid.customMargin ?? -1);
+
+          if (customMargin > -1) {
+            const cm = customMargin + 'px';
+            if (useFull) {
+              // alle Ränder auf den angegebenen Wert
+              document.body.style.marginTop = cm;
+              document.body.style.marginLeft = cm;
+              document.body.style.marginRight = cm;
+              document.body.style.marginBottom = cm;
+            } else {
+              // top = Originalwert, left/right/bottom = Custom Margin
+              document.body.style.marginTop = ORIGINAL_BODY_MARGIN_TOP;
+              document.body.style.marginLeft = cm;
+              document.body.style.marginRight = cm;
+              document.body.style.marginBottom = cm;
+            }
+          } else {
+            // kein Custom-Wert: bisheriges Verhalten
+            if (useFull) {
+              const ml = cs.marginLeft || '';
+              if (ml !== '') {
+                document.body.style.marginTop = ml;
+              }
+            } else {
+              document.body.style.marginTop = ORIGINAL_BODY_MARGIN_TOP;
+            }
+          }
+        } catch (e) {}
         setGridLayout(decoded.grid.minWidth, decoded.grid.minHeight, decoded.grid.gap, decoded.grid.borderRadius, decoded.grid.columns);
         GRID_FLAGS.useImageColorsForButtons = !!decoded.grid.useImageColorsForButtons;
         if ('transparentStatusColors' in decoded.grid) {

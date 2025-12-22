@@ -2,8 +2,10 @@
   "elements": [
     {
       "type": "ExpansionPanel",
-      "caption": "Rastereinstellungen",
+      "caption": "Kachel- und Raster-Einstellungen",
       "items": [
+        { "type": "CheckBox", "name": "UseFullTileHeight", "caption": "Volle Kachelhöhe nutzen" },
+        { "type": "NumberSpinner", "name": "CustomMargin", "caption": "individueller Randabstand (-1 = Standardwerte)", "digits": 0, "minimum": -1, "maximum": 200, "suffix": "px", "width": "300px" },
         { "type": "RowLayout", "items": [
           { "type": "NumberSpinner", "name": "MinWidth", "caption": "Minimale Kachelbreite", "minimum": 100, "maximum": 1000, "digits": 0, "suffix": "px" },
           { "type": "NumberSpinner", "name": "MinHeight", "caption": "Minimale Kachelhöhe", "minimum": 100, "maximum": 1000, "digits": 0, "suffix": "px" },

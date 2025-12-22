@@ -6,7 +6,9 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
 
 ## Backend‑Konfiguration
 
-### Rastereinstellungen
+### Kachel- und Raster-Einstellungen
+- **Volle Kachelhöhe nutzen**: Reduziert den oberen Rand-Abstand auf das gleiche Maß wie der untere Rand-Abstand.
+- **individueller Randabstand**: Setzt einen individuellen Randabstand. -1 = Standardwerte.
 - **Minimale Kachelbreite / -höhe (px)**: Basisgröße der Kacheln für die automatische Spaltenberechnung.
 - **Abstand (px)**: Abstand zwischen Kacheln.
 - **Eckenradius (px)**: Abrundung der Kachelecken.

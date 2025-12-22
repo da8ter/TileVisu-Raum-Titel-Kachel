@@ -12,6 +12,8 @@ class MultiRoomTile extends IPSModule
         $this->RegisterPropertyInteger('Gap', 12);
         $this->RegisterPropertyInteger('BorderRadius', 10);
         $this->RegisterPropertyInteger('Columns', 0);
+        $this->RegisterPropertyBoolean('UseFullTileHeight', false);
+        $this->RegisterPropertyInteger('CustomMargin', -1);
         // optionale globale Defaults
         $this->RegisterPropertyInteger('Default_InfoSchriftgroesse', 14);
         $this->RegisterPropertyInteger('Default_InfoSchriftfarbe', 0xFFFFFF);
@@ -579,7 +581,9 @@ class MultiRoomTile extends IPSModule
             'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors'),
             'transparentMenuStatusColors' => $this->ReadPropertyBoolean('TransparentMenuStatusColors'),
             'groupMenuInfoElements' => $this->ReadPropertyBoolean('GroupMenuInfoElements'),
-            'columns' => $this->ReadPropertyInteger('Columns')
+            'columns' => $this->ReadPropertyInteger('Columns'),
+            'useFullTileHeight' => $this->ReadPropertyBoolean('UseFullTileHeight'),
+            'customMargin' => $this->ReadPropertyInteger('CustomMargin')
         ];
 
         $rooms = $this->getRooms();
