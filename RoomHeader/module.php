@@ -227,22 +227,27 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
 
                     if ($VariableProperty != 'BackgroundImage')
                 {
-                        if ($this->ReadPropertyBoolean($VariableProperty . 'NameSwitch')) {
-                            // Verwende SenderID für IPS_GetName
+                        // Info1-Info5 verwenden andere Property-Suffixe als InfoLeft/Right und Switch1-5
+                        $isInfoN = preg_match('/^Info[1-5]$/', $VariableProperty);
+                        $nameSwitchProp = $isInfoN ? $VariableProperty . 'ShowName' : $VariableProperty . 'NameSwitch';
+                        $iconSwitchProp = $isInfoN ? $VariableProperty . 'ShowIcon' : $VariableProperty . 'IconSwitch';
+                        $varIconProp    = $isInfoN ? $VariableProperty . 'UseVarIcon' : $VariableProperty . 'VarIconSwitch';
+                        $assoSwitchProp = $isInfoN ? $VariableProperty . 'ShowAssociation' : $VariableProperty . 'AssoSwitch';
+                        $altNameProp    = $isInfoN ? $VariableProperty . 'AltLabel' : $VariableProperty . 'AltName';
+
+                        if ($this->ReadPropertyBoolean($nameSwitchProp)) {
                             $result[$VariableProperty . 'name'] = IPS_GetName($SenderID);
                         }
                         
-                        // Verwende SenderID für GetIcon
-                        $iconValue = $this->GetIcon($SenderID, $this->ReadPropertyBoolean($VariableProperty . 'VarIconSwitch'));
-                        if ($this->ReadPropertyBoolean($VariableProperty . 'IconSwitch') && $iconValue !== "Transparent") {
+                        $iconValue = $this->GetIcon($SenderID, $this->ReadPropertyBoolean($varIconProp));
+                        if ($this->ReadPropertyBoolean($iconSwitchProp) && $iconValue !== "Transparent") {
                            $result[$VariableProperty . 'icon'] = $iconValue;
                         }
 
-                        if ($this->ReadPropertyBoolean($VariableProperty . 'AssoSwitch')) {
-                            // CheckAndGetValueFormatted benötigt den Namen der Eigenschaft
+                        if ($this->ReadPropertyBoolean($assoSwitchProp)) {
                             $result[$VariableProperty . 'asso'] = $this->CheckAndGetValueFormatted($VariableProperty);
                                 }
-                                $result[$VariableProperty .'AltName'] =  $this->ReadPropertyString($VariableProperty .'AltName');
+                                $result[$VariableProperty . ($isInfoN ? 'AltLabel' : 'AltName')] = $this->ReadPropertyString($altNameProp);
                             }
 
                     // Zweiter Update-Aufruf: Sendet die assoziierten Eigenschaften.
@@ -396,17 +401,23 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
 
             $result[$baseKey] = $this->CheckAndGetValueFormatted($propertyName);
 
-            if ($this->ReadPropertyBoolean($propertyName . 'NameSwitch')) {
+            // Info1-Info5 verwenden andere Property-Suffixe als InfoLeft/Right und Switch1-5
+            $isInfoN = preg_match('/^Info[1-5]$/', $propertyName);
+            $nameSwitchProp = $isInfoN ? $propertyName . 'ShowName' : $propertyName . 'NameSwitch';
+            $iconSwitchProp = $isInfoN ? $propertyName . 'ShowIcon' : $propertyName . 'IconSwitch';
+            $varIconProp    = $isInfoN ? $propertyName . 'UseVarIcon' : $propertyName . 'VarIconSwitch';
+            $assoSwitchProp = $isInfoN ? $propertyName . 'ShowAssociation' : $propertyName . 'AssoSwitch';
+
+            if ($this->ReadPropertyBoolean($nameSwitchProp)) {
                 $result[$baseKey . 'name'] = IPS_GetName($varID);
             }
 
-            // GetIcon nur einmal aufrufen und Wert zwischenspeichern
-            $iconValue = $this->GetIcon($varID, $this->ReadPropertyBoolean($propertyName . 'VarIconSwitch'));
-            if ($this->ReadPropertyBoolean($propertyName . 'IconSwitch') && $iconValue !== "Transparent") {
+            $iconValue = $this->GetIcon($varID, $this->ReadPropertyBoolean($varIconProp));
+            if ($this->ReadPropertyBoolean($iconSwitchProp) && $iconValue !== "Transparent") {
                 $result[$baseKey . 'icon'] = $iconValue;
             }
 
-            if ($this->ReadPropertyBoolean($propertyName . 'AssoSwitch')) {
+            if ($this->ReadPropertyBoolean($assoSwitchProp)) {
                 $result[$baseKey . 'asso'] = $this->CheckAndGetValueFormatted($propertyName);
             }
 
