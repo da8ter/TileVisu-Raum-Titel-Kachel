@@ -664,6 +664,10 @@ class RoomTile extends IPSModule
             }
             return;
         }
+        if (IPS_GetKernelRunlevel() !== KR_READY) {
+            return;
+        }
+        try {
         if ($Message === OM_CHANGEHIDDEN) {
             $this->UpdateVisualizationValue(json_encode($this->GetFullUpdateMessage()));
             return;
@@ -672,7 +676,7 @@ class RoomTile extends IPSModule
             return;
         }
         // Dynamic background image URL variable changed → send new image1 + disable filter
-        $bgUrlVarId = (int)$this->ReadPropertyInteger('BackgroundImageUrl');
+        $bgUrlVarId = (int)@$this->ReadPropertyInteger('BackgroundImageUrl');
         if ($bgUrlVarId > 0 && $SenderID === $bgUrlVarId) {
             $url = (string)@GetValue($bgUrlVarId);
             $delta = [
@@ -682,7 +686,11 @@ class RoomTile extends IPSModule
             $this->UpdateVisualizationValue(json_encode(['delta' => $delta]));
             return;
         }
-        $map = json_decode($this->ReadAttributeString('VarMap'), true) ?: [];
+        $mapRaw = @($this->ReadAttributeString('VarMap'));
+        if (!is_string($mapRaw)) {
+            return;
+        }
+        $map = json_decode($mapRaw, true) ?: [];
         if (!isset($map[$SenderID])) {
             return;
         }
@@ -925,6 +933,7 @@ class RoomTile extends IPSModule
         if (!empty($delta)) {
             $this->UpdateVisualizationValue(json_encode(['delta' => $delta]));
         }
+        } catch (Throwable $e) {}
     }
 
     public function RequestAction($Ident, $Value)

@@ -302,6 +302,10 @@ class MultiRoomTile extends IPSModule
             }
             return;
         }
+        if (IPS_GetKernelRunlevel() !== KR_READY) {
+            return;
+        }
+        try {
         if ($Message === OM_CHANGEHIDDEN) {
             $this->UpdateVisualizationValue(json_encode($this->GetFullUpdateMessage()));
             return;
@@ -309,7 +313,11 @@ class MultiRoomTile extends IPSModule
         if ($Message !== VM_UPDATE) {
             return;
         }
-        $map = json_decode($this->ReadAttributeString('VarMap'), true) ?: [];
+        $mapRaw = @($this->ReadAttributeString('VarMap'));
+        if (!is_string($mapRaw)) {
+            return;
+        }
+        $map = json_decode($mapRaw, true) ?: [];
         if (!isset($map[$SenderID])) {
             return;
         }
@@ -466,6 +474,7 @@ class MultiRoomTile extends IPSModule
         if (!empty($delta)) {
             $this->UpdateVisualizationValue(json_encode(['delta' => $delta]));
         }
+        } catch (Throwable $e) {}
     }
 
     public function RequestAction($Ident, $Value)
