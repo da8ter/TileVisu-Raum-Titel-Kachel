@@ -1,12 +1,37 @@
 # Raum Kachel
 
-## Kurzbeschreibung
+### Inhaltsverzeichnis
 
-Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrundbild, zentralem Raumnamen, Info‑Leiste oben, optionaler Info‑Mitte sowie einer Menüleiste mit Schaltern. Ein konfigurierbarer Bildfilter kann den Lichtstatus/die Helligkeit über das Hintergrundbild simulieren.
+1. [Funktionsumfang](#1-funktionsumfang)
+2. [Voraussetzungen](#2-voraussetzungen)
+3. [Software-Installation](#3-software-installation)
+4. [Einrichten der Instanzen in IP-Symcon](#4-einrichten-der-instanzen-in-ip-symcon)
+5. [Kachelkonfiguration](#5-kachelkonfiguration)
 
-## Backend‑Konfiguration
+### 1. Funktionsumfang
 
-### Infoleiste
+* Visualisiert einen einzelnen Raum als Kachel mit Hintergrundbild, zentralem Raumnamen, Info‑Leiste oben, optionaler Info‑Mitte sowie einer Menüleiste mit Schaltern.
+* Ein konfigurierbarer Bildfilter kann den Lichtstatus/die Helligkeit über das Hintergrundbild simulieren.
+* Dynamisches Hintergrundbild über eine URL‑Variable (z. B. Wetterbild, Webcam).
+
+### 2. Voraussetzungen
+
+- IP-Symcon ab Version 7.1
+
+### 3. Software-Installation
+
+* Über den Module Store, oder
+* Über das Module Control folgende URL hinzufügen:
+  `https://github.com/da8ter/TileVisu-Raum-Titel-Kachel.git`
+
+### 4. Einrichten der Instanzen in IP-Symcon
+
+Unter 'Instanz hinzufügen' kann die Raum Kachel mithilfe des Schnellfilters gefunden werden (Suchbegriff: RoomTile, TileVisu oder Kachel).
+- Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
+
+### 5. Kachelkonfiguration
+
+#### Infoleiste
 - **Zentriert in der Mitte**: Legt die Info‑Leiste zusammen und zentriert sie.
 - **Schriftgröße (Info)**: Textgröße der Info‑Badges oben.
 - **Schriftfarbe (Info)**: Textfarbe der Info‑Badges.
@@ -19,19 +44,19 @@ Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrun
 - **Hintergrundfarbe: Status = True**: Überschreibt die Hintergrundfarbe, wenn der Status True ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
 - **Hintergrundfarbe: Status = False**: Überschreibt die Hintergrundfarbe, wenn der Status False ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
 
-### Raumname
+#### Raumname
 - **Raumname**: Anzeigetext in der Mitte der Kachel.
 - **Objekt welche beim Klick geöffnet wird**: Optionales Zielobjekt für Klick. Benötigt Symcon 8.2.
 - **Schriftgröße / Schriftfarbe**: Darstellung des Raumnamens.
 
-### Info‑Mitte
+#### Info‑Mitte
 - **Variable (links/rechts)**: Zwei optionale Variablen im Kachelzentrum.
 - **Name anzeigen / Wert anzeigen / Icon anzeigen**: Sichtbarkeit je Seite.
 - **Icon‑Größe / Textgröße**: Größen für Icon und Text.
 - **Farbe (Icon/Text)**: Gemeinsame Farbe für beide Seiten.
 
-### Hintergrund
-- **Hintergrund (Kachel)**: Medienobjekt Bild.
+#### Hintergrund
+- **URL Hintergrundbild (String-Variable)**: Optionale String‑Variable mit einer Bild‑URL. Überschreibt das statische Hintergrundbild. Der Bildfilter wird bei aktivem dynamischen Hintergrundbild automatisch deaktiviert. Anwendungsbeispiele: Wetterbild, Webcam, externe Bilder.
 - **Hintergrundbild Lichtstatus an** (Bild 1) und **Hintergrundbild Lichtstatus aus** (Bild 2):
   - Wenn Bild 2 gesetzt ist, wird der Bild‑Filter deaktiviert.
   - Stattdessen wird Bild 1 über Bild 2 gelegt und abhängig vom Lichtstatus/Dimmwert transparent.
@@ -48,7 +73,7 @@ Das RoomTile‑Modul visualisiert einen einzelnen Raum als Kachel mit Hintergrun
   - Kontrast (min/max, 0..1) – nur verringern (Default: 0.9/1.0)
   - Graustufen (min/max, 0..1) (Default: 0.0/0.5)
 
-### Menüleiste
+#### Menüleiste
 - **Menü anzeigen**: Menüleiste ein-/ausblenden.
 - **Schriftgröße (Menü) / Schriftfarbe (Menü)**: Darstellung der Menüelemente.
 - **Buttonhöhe (px)**: Höhe der Buttons.

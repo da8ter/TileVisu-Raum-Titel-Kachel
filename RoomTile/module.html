@@ -17,13 +17,13 @@
             position: fixed;
             width: 100%;
             height: 100%;
-            background-color: var(--hintergrundfarbe);
+            background-color: var(--tilebackgroundcolor);
     }
 
     .tile {
       position: fixed;
       inset: 0;
-      background: var(--hintergrundfarbe, #000);
+      background: var(--tilebackgroundcolor, #000);
       overflow: hidden;
       color: #fff;
       display: flex;
@@ -39,7 +39,7 @@
       background-position: bottom;
       background-repeat: no-repeat;
       background-size: cover;
-      opacity: var(--transparenz, 0.7);
+      opacity: var(--imagetransparency, 0.7);
       z-index: 1;
     }
 
@@ -96,7 +96,7 @@
       gap: 6px;
       align-items: center;
       padding: 4px 8px;
-      background-color: var(--infotophintergrundfarbe, rgba(0,0,0,0.3));
+      background-color: var(--infotopbackgroundcolor, rgba(0,0,0,0.3));
       height: var(--infoheight, auto);
     }
     .menu-switches .group {
@@ -126,7 +126,7 @@
     .sep {
       width: 1px;
       align-self: stretch;
-      background-color: var(--infoschriftfarbe, #fff);
+      background-color: var(--infofontcolor, #fff);
       min-height: 20px;
       flex-shrink: 0;
       opacity: 0.5;
@@ -151,7 +151,7 @@
     .center * {
       pointer-events: none;
     }
-    .center .raumname { 
+    .center .roomname { 
       margin: 0;
       line-height: 1.2; /* Verbesserte Lesbarkeit */
     }
@@ -194,18 +194,18 @@
       color: inherit;
     }
 
-    .menueleiste {
+    .menubar {
       backdrop-filter: blur(10px) brightness(1);
       -webkit-backdrop-filter: blur(10px) brightness(1);
-      background-color: var(--infomenuehintergrundfarbe, rgba(0,0,0,0.3));
-      color: var(--infomenueschriftfarbe, #fff);
+      background-color: var(--menubackgroundcolor, rgba(0,0,0,0.3));
+      color: var(--menufontcolor, #fff);
       display: flex;
       justify-content: flex-start;
       align-items: stretch;
       padding: 6px var(--menu-padding, 20px);
       flex-shrink: 0;
     }
-    .menueleiste.is-hidden {
+    .menubar.is-hidden {
       visibility: hidden;
       pointer-events: none;
     }
@@ -239,17 +239,17 @@
 
     .info-name, .info-value { white-space: nowrap; }
     .row-top .info-name, .row-top .info-value { font-size: var(--infofontsize, 16px); }
-    .menueleiste .info-name, .menueleiste .info-value { font-size: var(--infomenuefontsize, 16px); }
-    .row-top .group .info-name, .row-top .group .info-value { color: var(--infoschriftfarbe, #fff); }
-    .row-top .info-icon { font-size: calc(var(--infofontsize, 16px) * 0.805); color: var(--infoschriftfarbe, #fff); }
-    .menueleiste .info-icon, .menueleiste .switch-icon { font-size: calc(var(--infomenuefontsize, 16px) * 0.805); color: var(--infomenueschriftfarbe, #fff); }
+    .menubar .info-name, .menubar .info-value { font-size: var(--menufontsize, 16px); }
+    .row-top .group .info-name, .row-top .group .info-value { color: var(--infofontcolor, #fff); }
+    .row-top .info-icon { font-size: calc(var(--infofontsize, 16px) * 0.966); color: var(--infofontcolor, #fff); }
+    .menubar .info-icon, .menubar .switch-icon { font-size: calc(var(--menufontsize, 16px) * 0.966); color: var(--menufontcolor, #fff); }
 
     /* Fixed spacing for menu text items (no-action) and separators */
-    .menueleiste .group.no-action { padding: 0 12px; display: flex; align-items: center; justify-content: center; }
-    .menueleiste .group.no-action .info-icon { margin-right: 0px; }
-    .menueleiste .sep { margin: 0 0px; }
+    .menubar .group.no-action { padding: 0 12px; display: flex; align-items: center; justify-content: center; }
+    .menubar .group.no-action .info-icon { margin-right: 0px; }
+    .menubar .sep { margin: 0 0px; }
     /* Status background for no-action items - full height of menu bar */
-    .menueleiste .group.no-action.has-status-bg {
+    .menubar .group.no-action.has-status-bg {
       margin-top: -6px;
       margin-bottom: -6px;
       padding-top: 6px;
@@ -265,23 +265,23 @@
       margin-left: 0;
     }
     /* First/last no-action with status bg extends to tile edge */
-    .menueleiste .group.no-action.has-status-bg:first-child {
+    .menubar .group.no-action.has-status-bg:first-child {
       margin-left: calc(-1 * var(--menu-padding, 20px));
       padding-left: var(--menu-padding, 20px);
     }
-    .menueleiste .group.no-action.has-status-bg:last-child {
+    .menubar .group.no-action.has-status-bg:last-child {
       margin-right: calc(-1 * var(--menu-padding, 20px));
       padding-right: var(--menu-padding, 20px);
     }
     /* Icon-only: symmetric padding for centering */
-    .menueleiste .group.no-action.icon-only.has-status-bg:first-child {
+    .menubar .group.no-action.icon-only.has-status-bg:first-child {
       padding-right: var(--menu-padding, 20px);
     }
-    .menueleiste .group.no-action.icon-only.has-status-bg:last-child {
+    .menubar .group.no-action.icon-only.has-status-bg:last-child {
       padding-left: var(--menu-padding, 20px);
     }
     /* Grouped info elements container - treated as single element */
-    .menueleiste .info-group-container {
+    .menubar .info-group-container {
       display: flex;
       align-items: stretch;
       gap: 0;
@@ -297,16 +297,16 @@
       margin-left: auto;
     }
     /* Extend first grouped container to tile edge - via first item */
-    .menueleiste .info-group-container:first-child {
+    .menubar .info-group-container:first-child {
       margin-left: 0;
       padding-left: 0;
     }
-    .menueleiste .info-group-container:first-child .info-group-item:first-child {
+    .menubar .info-group-container:first-child .info-group-item:first-child {
       padding-left: var(--menu-padding, 20px);
       margin-left: calc(-1 * var(--menu-padding, 20px));
     }
     /* Default: no right-edge compensation for grouped info */
-    .menueleiste .info-group-container:last-child {
+    .menubar .info-group-container:last-child {
       margin-right: 0;
       padding-right: 0;
     }
@@ -316,7 +316,7 @@
       margin-left: calc(-1 * var(--menu-padding, 20px));
       padding-left: var(--menu-padding, 20px);
     }
-    .menueleiste .info-group-container .info-group-item {
+    .menubar .info-group-container .info-group-item {
       display: flex;
       align-items: center;
       padding: 0 12px; /* inner padding per chip */
@@ -328,12 +328,12 @@
       padding-bottom: 6px;
       align-self: stretch;
     }
-    .menueleiste .info-group-container .info-group-item.has-status-bg { border-radius: 0; }
+    .menubar .info-group-container .info-group-item.has-status-bg { border-radius: 0; }
     /* Remove any spacing between grouped items and hide subpixel seam */
-    .menueleiste .info-group-container .info-group-item + .info-group-item { margin-left: 0; }
-    .menueleiste .info-group-container .info-group-item.has-status-bg + .info-group-item.has-status-bg { margin-left: -1px; }
-    .menueleiste .info-group-container .info-group-item:first-child { padding-left: 12px; }
-    .menueleiste .info-group-container .info-group-item:last-child { padding-right: 12px; margin-right: 0; }
+    .menubar .info-group-container .info-group-item + .info-group-item { margin-left: 0; }
+    .menubar .info-group-container .info-group-item.has-status-bg + .info-group-item.has-status-bg { margin-left: -1px; }
+    .menubar .info-group-container .info-group-item:first-child { padding-left: 12px; }
+    .menubar .info-group-container .info-group-item:last-child { padding-right: 12px; margin-right: 0; }
     /* When aligned right, let the LAST grouped item bleed to the edge */
     .menu-switches.align-right .info-group-container:last-child {
       margin-right: 0;
@@ -343,6 +343,9 @@
       padding-right: var(--menu-padding, 20px);
       margin-right: calc(-1 * var(--menu-padding, 20px));
     }
+    .menu-switches.align-right .info-group-container:last-child .info-group-item.icon-only:last-child {
+      padding-left: var(--menu-padding, 20px);
+    }
     /* Distribute: last grouped info extends to right tile edge */
     .menu-switches.distribute .info-group-container:last-child {
       margin-right: 0;
@@ -351,6 +354,9 @@
     .menu-switches.distribute .info-group-container:last-child .info-group-item:last-child {
       padding-right: var(--menu-padding, 20px);
       margin-right: calc(-1 * var(--menu-padding, 20px));
+    }
+    .menu-switches.distribute .info-group-container:last-child .info-group-item.icon-only:last-child {
+      padding-left: var(--menu-padding, 20px);
     }
     /* Align-right: rely on flex gap, do not add extra margins */
     .menu-switches.align-right .info-group-container + .group.no-action,
@@ -364,14 +370,19 @@
       margin-right: calc(-1 * var(--menu-padding, 20px));
       padding-right: var(--menu-padding, 20px);
     }
+    /* Icon-only last-child: symmetric padding for visual centering */
+    .menu-switches.align-right .group.no-action.icon-only:last-child,
+    .menu-switches.distribute .group.no-action.icon-only:last-child {
+      padding-left: var(--menu-padding, 20px);
+    }
     /* First badge with status bg extends to left edge for align-right */
     .menu-switches.align-right .group.no-action.has-status-bg:first-child {
       margin-left: calc(-1 * var(--menu-padding, 20px));
       padding-left: var(--menu-padding, 20px);
     }
     /* Icon-only items: remove margin-right from icon for centering */
-    .menueleiste .info-group-container .info-group-item.icon-only .info-icon { margin-right: 0; }
-    .menueleiste .info-group-container .info-icon { margin-right: 6px; }
+    .menubar .info-group-container .info-group-item.icon-only .info-icon { margin-right: 0; }
+    .menubar .info-group-container .info-icon { margin-right: 6px; }
     /* Fallback (only in distribute, not when right-aligned): remove flex gap between grouped container and neighbors */
     .menu-switches.distribute:not(.align-right) .info-group-container + .group.no-action,
     .menu-switches.distribute:not(.align-right) .group.no-action + .info-group-container,
@@ -379,7 +390,7 @@
       margin-left: calc(-1 * var(--switch-gap, 10px));
     }
     /* Thin separator line between grouped items without adding gap */
-    .menueleiste .info-group-container .sep {
+    .menubar .info-group-container .sep {
       flex: 0 0 0;
       width: 0;
       border-left: 1px solid rgba(255,255,255,0.25);
@@ -399,10 +410,10 @@
       border: none;
       border-radius: var(--progress-bar-border-radius, 10px);
       background-color: var(--accent-color, #f8f9fa);
-      color: var(--infomenueschriftfarbe, #fff);
+      color: var(--menufontcolor, #fff);
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: var(--infomenuefontsize, 16px);
+      font-size: var(--menufontsize, 16px);
       font-weight: 500;
       user-select: none;
       min-width: 80px;
@@ -425,7 +436,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.1);
       border-radius: inherit;
       pointer-events: none;
       z-index: 1;
@@ -439,10 +450,10 @@
       border: none;
       border-radius: var(--progress-bar-border-radius, 10px);
       background-color: var(--accent-color, #f8f9fa);
-      color: var(--infomenueschriftfarbe, #fff);
+      color: var(--menufontcolor, #fff);
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: var(--infomenuefontsize, 16px);
+      font-size: var(--menufontsize, 16px);
       font-weight: 500;
       user-select: none;
       min-width: 60px;
@@ -465,7 +476,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.25);
       border-radius: inherit;
       pointer-events: none;
       z-index: 1;
@@ -567,7 +578,7 @@
       return cur;
     }
 
-    // --- Helpers: gleiche Transparenz (InfoTop) auf Badge-Hintergrund anwenden ---
+    // --- Helpers: gleiche Transparency (InfoTop) auf Badge-Hintergrund anwenden ---
     function _parseAlphaFromRgba(str, def = 0.3) {
       try {
         if (!str) return def;
@@ -601,12 +612,12 @@
     }
     function _getInfoTopAlpha(ref) {
       try {
-        // ref kann roomObj (mit infotophintergrundfarbe) oder ein Element (CSS Var) sein
+        // ref kann roomObj (mit infotopbackgroundcolor) oder ein Element (CSS Var) sein
         if (ref && typeof ref === 'object' && !('nodeType' in ref)) {
-          return _parseAlphaFromRgba(ref.infotophintergrundfarbe, 0.3);
+          return _parseAlphaFromRgba(ref.infotopbackgroundcolor, 0.3);
         }
         if (ref && ref.nodeType === 1) {
-          const s = getComputedStyle(ref).getPropertyValue('--infotophintergrundfarbe');
+          const s = getComputedStyle(ref).getPropertyValue('--infotopbackgroundcolor');
           return _parseAlphaFromRgba(s, 0.3);
         }
       } catch {}
@@ -1020,18 +1031,18 @@
       tile.appendChild(row);
       setTopInfoLayout(id, !!room.infotopcentered);
 
-      // center raumname (as overlay inside tile)
+      // center roomname (as overlay inside tile)
       const center = el('div', { class: 'center' });
       const rnWrap = el('div', { class: 'middle-roomname' });
-      const rn = el('p', { id: id + '-raumname', class: 'raumname' }, '');
+      const rn = el('p', { id: id + '-roomname', class: 'roomname' }, '');
       rnWrap.appendChild(rn);
       center.appendChild(rnWrap);
       center.appendChild(middleInfo(id, 'infomiddleleft', false));
       center.appendChild(middleInfo(id, 'infomiddleright', true));
       tile.appendChild(center);
 
-      // menueleiste
-      const menu = el('div', { id: id + '-menueleiste', class: 'menueleiste' + (room.infomenueswitch ? '' : ' is-hidden') });
+      // menubar
+      const menu = el('div', { id: id + '-menubar', class: 'menubar' + (room.menuswitch ? '' : ' is-hidden') });
       const switchContainer = el('div', { id: id + '-switches', class: 'menu-switches align-left' });
       for (let i = 1; i <= 5; i++) {
         const configured = !!room['schalter' + i + 'configured'];
@@ -1131,14 +1142,14 @@
           return;
         }
         // Statischer Modus (Legacy)
-        const has1 = isGroupVisible(prefixId, 'infolinks');
-        const has2 = isGroupVisible(prefixId, 'infolinks2');
-        const has3 = isGroupVisible(prefixId, 'inforechts');
-        const has4 = isGroupVisible(prefixId, 'inforechts2');
-        const g1Icon = document.getElementById(prefixId + '-infolinksicon');
-        const g2Icon = document.getElementById(prefixId + '-infolinks2icon');
-        const g3Icon = document.getElementById(prefixId + '-inforechtsicon');
-        const g4Icon = document.getElementById(prefixId + '-inforechts2icon');
+        const has1 = isGroupVisible(prefixId, 'infoleft');
+        const has2 = isGroupVisible(prefixId, 'infoleft2');
+        const has3 = isGroupVisible(prefixId, 'inforight');
+        const has4 = isGroupVisible(prefixId, 'inforight2');
+        const g1Icon = document.getElementById(prefixId + '-infolefticon');
+        const g2Icon = document.getElementById(prefixId + '-infoleft2icon');
+        const g3Icon = document.getElementById(prefixId + '-inforighticon');
+        const g4Icon = document.getElementById(prefixId + '-inforight2icon');
         const g1 = g1Icon ? g1Icon.parentElement : null;
         const g2 = g2Icon ? g2Icon.parentElement : null;
         const g3 = g3Icon ? g3Icon.parentElement : null;
@@ -1204,8 +1215,8 @@
             left.appendChild(sepL);
           }
         }
-        const hasLeft1 = isGroupVisible(prefixId, 'infolinks');
-        const hasLeft2 = isGroupVisible(prefixId, 'infolinks2');
+        const hasLeft1 = isGroupVisible(prefixId, 'infoleft');
+        const hasLeft2 = isGroupVisible(prefixId, 'infoleft2');
         const leftGroups = left.querySelectorAll('.group');
         if (leftGroups[0]) leftGroups[0].style.display = hasLeft1 ? '' : 'none';
         if (leftGroups[1]) leftGroups[1].style.display = hasLeft2 ? '' : 'none';
@@ -1228,8 +1239,8 @@
             right.appendChild(sepR);
           }
         }
-        const hasRight1 = isGroupVisible(prefixId, 'inforechts');
-        const hasRight2 = isGroupVisible(prefixId, 'inforechts2');
+        const hasRight1 = isGroupVisible(prefixId, 'inforight');
+        const hasRight2 = isGroupVisible(prefixId, 'inforight2');
         const rightGroups = right.querySelectorAll('.group');
         if (rightGroups[0]) rightGroups[0].style.display = hasRight1 ? '' : 'none';
         if (rightGroups[1]) rightGroups[1].style.display = hasRight2 ? '' : 'none';
@@ -1266,31 +1277,31 @@
         row.classList.add('centered');
         row.classList.remove('sides');
         const mid = el('div', { class: 'mid' });
-        mid.appendChild(createGroup('infolinks', palette[0]));
+        mid.appendChild(createGroup('infoleft', palette[0]));
         const sep1 = el('div', { id: prefixId + '-sep-mid-1', class: 'sep' });
         mid.appendChild(sep1);
-        mid.appendChild(createGroup('infolinks2', palette[1]));
+        mid.appendChild(createGroup('infoleft2', palette[1]));
         const sep2 = el('div', { id: prefixId + '-sep-mid-2', class: 'sep' });
         mid.appendChild(sep2);
-        mid.appendChild(createGroup('inforechts', palette[2]));
+        mid.appendChild(createGroup('inforight', palette[2]));
         const sep3 = el('div', { id: prefixId + '-sep-mid-3', class: 'sep' });
         mid.appendChild(sep3);
-        mid.appendChild(createGroup('inforechts2', palette[3]));
+        mid.appendChild(createGroup('inforight2', palette[3]));
         row.appendChild(mid);
         tile.style.paddingTop = '10px';
       } else {
         row.classList.add('sides');
         row.classList.remove('centered');
         const left = el('div', { class: 'left' });
-        left.appendChild(createGroup('infolinks', palette[0]));
+        left.appendChild(createGroup('infoleft', palette[0]));
         const sepL = el('div', { id: prefixId + '-sep-left', class: 'sep sep-left' });
         left.appendChild(sepL);
-        left.appendChild(createGroup('infolinks2', palette[1]));
+        left.appendChild(createGroup('infoleft2', palette[1]));
         const right = el('div', { class: 'right' });
-        right.appendChild(createGroup('inforechts', palette[2]));
+        right.appendChild(createGroup('inforight', palette[2]));
         const sepR = el('div', { id: prefixId + '-sep-right', class: 'sep sep-right' });
         right.appendChild(sepR);
-        right.appendChild(createGroup('inforechts2', palette[3]));
+        right.appendChild(createGroup('inforight2', palette[3]));
         row.appendChild(left);
         row.appendChild(right);
         tile.style.paddingTop = '60px';
@@ -1566,6 +1577,8 @@
                 textWrap.appendChild(el('span', { id: baseId + 'colon', class: colonCls }, ': '));
                 textWrap.appendChild(el('span', { id: baseId + 'asso', class: 'info-value' + (showValVis ? '' : ' hidden') }, String(v)));
                 innerEl.appendChild(textWrap);
+              } else {
+                innerEl.classList.add('icon-only');
               }
               // Add visual separator only inside grouped container
               if (infoGroupContainer.childElementCount > 0) {
@@ -1681,7 +1694,7 @@
       // nothing to append here; group container was inserted at first no-action
       updateSingleButtonState(prefixId);
       normalizeDistribute(prefixId);
-      setSwitchAlignment(prefixId, roomObj.schalteralignment, !!roomObj.schalterdistribute);
+      setSwitchAlignment(prefixId, roomObj.switchalignment, !!roomObj.switchdistribute);
     }
 
     function applyRoomState(room) {
@@ -1693,7 +1706,7 @@
 
       // Click-Handling: nur der freie Bereich zwischen Infoleiste (row-top) und Menüleiste
       root.onclick = null;
-      const menuEl = document.getElementById(id + '-menueleiste');
+      const menuEl = document.getElementById(id + '-menubar');
       if (menuEl) {
         menuEl.onclick = (e) => { e.stopPropagation(); };
         menuEl.style.cursor = 'default';
@@ -1712,19 +1725,19 @@
       }
 
       // Grid-independent styling per room
-      root.style.setProperty('--hintergrundfarbe', room.hintergrundfarbe || '#000');
-      root.style.setProperty('--infomenuehintergrundfarbe', room.infomenuehintergrundfarbe || 'rgba(0,0,0,0.3)');
-      root.style.setProperty('--infomenueschriftfarbe', room.infomenueschriftfarbe || '#fff');
-      root.style.setProperty('--infomenuefontsize', (room.infomenuefontsize || 16) + 'px');
+      root.style.setProperty('--tilebackgroundcolor', room.tilebackgroundcolor || '#000');
+      root.style.setProperty('--menubackgroundcolor', room.menubackgroundcolor || 'rgba(0,0,0,0.3)');
+      root.style.setProperty('--menufontcolor', room.menufontcolor || '#fff');
+      root.style.setProperty('--menufontsize', (room.menufontsize || 16) + 'px');
       root.style.setProperty('--infofontsize', (room.infofontsize || 16) + 'px');
-      root.style.setProperty('--infoschriftfarbe', room.infoschriftfarbe || '#fff');
-      root.style.setProperty('--infotophintergrundfarbe', room.infotophintergrundfarbe || 'rgba(0,0,0,0.3)');
+      root.style.setProperty('--infofontcolor', room.infofontcolor || '#fff');
+      root.style.setProperty('--infotopbackgroundcolor', room.infotopbackgroundcolor || 'rgba(0,0,0,0.3)');
       root.style.setProperty('--infotop-borderradius', ((room.infotopborderradius !== undefined ? room.infotopborderradius : 50)) + 'px');
       root.style.setProperty('--progress-bar-border-radius', ((room.buttonborderradius !== undefined ? room.buttonborderradius : 10)) + 'px');
-      root.style.setProperty('--transparenz', room.transparenz ?? 0.7);
+      root.style.setProperty('--imagetransparency', room.imagetransparency ?? 0.7);
       root.style.setProperty('--infomiddle-icon-size', (room.infomiddleiconsize || 56) + 'px');
       root.style.setProperty('--infomiddle-text-size', (room.infomiddletextsize || room.infofontsize || 16) + 'px');
-      root.style.setProperty('--infomiddle-color', room.infomiddlecolor || room.infoschriftfarbe || '#fff');
+      root.style.setProperty('--infomiddle-color', room.infomiddlecolor || room.infofontcolor || '#fff');
       if (room.infoheight && Number(room.infoheight) > 0) {
         root.style.setProperty('--infoheight', room.infoheight + 'px');
       } else {
@@ -1736,7 +1749,7 @@
         const bg = document.getElementById(id + '-bg');
         if (bg) {
           // store fade/base settings
-          bg.dataset.basealpha = String((typeof room.transparenz === 'number') ? room.transparenz : 0.7);
+          bg.dataset.basealpha = String((typeof room.imagetransparency === 'number') ? room.imagetransparency : 0.7);
           bg.dataset.image2enabled = room.image2enabled ? '1' : '0';
           // Store filter config on element dataset
           if (room.bgfilterbrightnessmin !== undefined) bg.dataset.bmin = String(room.bgfilterbrightnessmin);
@@ -1781,9 +1794,9 @@
         const bgEl = document.getElementById(id + '-bg');
         if (bgEl) {
           if (room.image2enabled) {
-            // Deaktiviere Filter, steuere Transparenz von Bild 1 über bgfade
+            // Deaktiviere Filter, steuere Transparency von Bild 1 über bgfade
             bgEl.style.filter = '';
-            const base = (typeof room.transparenz === 'number') ? room.transparenz : (parseFloat(bgEl.dataset.basealpha || '0.7') || 0.7);
+            const base = (typeof room.imagetransparency === 'number') ? room.imagetransparency : (parseFloat(bgEl.dataset.basealpha || '0.7') || 0.7);
             const fade = (typeof room.bgfade === 'number') ? Math.max(0, Math.min(100, room.bgfade)) : 0;
             const alpha = Math.max(0, Math.min(1, base * (1 - (fade / 100))));
             bgEl.style.opacity = String(alpha);
@@ -1801,11 +1814,11 @@
         }
       } catch (_) {}
 
-      // Raumname
-      const rn = document.getElementById(id + '-raumname');
-      if (rn && room.raumname !== undefined) rn.textContent = room.raumname;
-      if (room.raumnameschriftgroesse !== undefined) rn.style.fontSize = room.raumnameschriftgroesse + 'px';
-      if (room.raumnameschriftfarbe) rn.style.color = room.raumnameschriftfarbe;
+      // RoomName
+      const rn = document.getElementById(id + '-roomname');
+      if (rn && room.roomname !== undefined) rn.textContent = room.roomname;
+      if (room.roomnamefontsize !== undefined) rn.style.fontSize = room.roomnamefontsize + 'px';
+      if (room.roomnamefontcolor) rn.style.color = room.roomnamefontcolor;
 
       // Ensure top info layout matches setting
       setTopInfoLayout(id, !!room.infotopcentered);
@@ -1813,7 +1826,7 @@
       if (Array.isArray(room.infoitems) && room.infoitems.length > 0) {
         renderDynamicInfo(id, room);
       } else {
-        for (const k of ['infolinks','infolinks2','inforechts','inforechts2']) {
+        for (const k of ['infoleft','infoleft2','inforight','inforight2']) {
           applyInfo(id, k, room);
         }
         updateInfoContainerVisibility(id);
@@ -1824,9 +1837,9 @@
       }
       
       // Menu switch
-      const menu = document.getElementById(id + '-menueleiste');
+      const menu = document.getElementById(id + '-menubar');
       if (menu) {
-        if (room.infomenueswitch) menu.classList.remove('is-hidden'); else menu.classList.add('is-hidden');
+        if (room.menuswitch) menu.classList.remove('is-hidden'); else menu.classList.add('is-hidden');
       }
 
       // Dynamic menu vs. fixed
@@ -1839,7 +1852,7 @@
         updateSingleButtonState(id);
         normalizeDistribute(id);
         updateBadgeMinWidth(id);
-        setSwitchAlignment(id, room.schalteralignment, !!room.schalterdistribute);
+        setSwitchAlignment(id, room.switchalignment, !!room.switchdistribute);
       }
       // If palette already available and enabled, apply now
       if ((room.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons) && IMAGE_PALETTES[id]) {
@@ -1866,7 +1879,7 @@
         const colorKey = key + 'color';
         if (grp) {
           if (key.startsWith('infomiddle')) {
-            // INFO MITTE: niemals Hintergrundfarbe setzen
+            // INFO MITTE: niemals BackgroundColor setzen
             grp.style.backgroundColor = '';
           } else {
             const hasExplicit = roomObj && Object.prototype.hasOwnProperty.call(roomObj, colorKey);
@@ -1922,8 +1935,8 @@
       const hasAction = !!roomObj['schalter' + n + 'hasaction'];
       const typeVal = roomObj['schalter' + n + 'type'];
       const shouldMulti = hasAction && (typeVal === 0 || (Array.isArray(options) && options.length > 0));
-      const iconswitch = !!roomObj['schalter' + n + 'iconswitch'];
-      const fullWidth = !!roomObj['schalter' + n + 'vollebreite'];
+      const iconswitch = !!roomObj['switch' + n + 'iconswitch'];
+      const fullWidth = !!roomObj['switch' + n + 'fullwidth'];
 
       // Ensure correct group type exists
       if (shouldMulti) {
@@ -1959,9 +1972,9 @@
       if (group && Array.isArray(options) && options.length > 0 && shouldMulti) {
         const current = roomObj['schalter' + n + 'value'];
         const color = roomObj['schalter' + n + 'color'];
-        const width = roomObj['schalter' + n + 'breite'];
+        const width = roomObj['switch' + n + 'width'];
         const showName = (roomObj['schalter' + n + 'showname'] !== undefined) ? roomObj['schalter' + n + 'showname'] : roomObj['Schalter' + n + 'ShowName'];
-        const showValue = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? roomObj['schalter' + n + 'showvalue'] : roomObj['Schalter' + n + 'ShowValue'];
+        const showValue = (roomObj['switch' + n + 'showvalue'] !== undefined) ? roomObj['switch' + n + 'showvalue'] : roomObj['Schalter' + n + 'ShowValue'];
         const showIcon = (roomObj['schalter' + n + 'showicon'] !== undefined) ? roomObj['schalter' + n + 'showicon'] : roomObj['Schalter' + n + 'ShowIcon'];
         renderSwitchGroup(prefixId, idx, n, options, current, color, width, iconswitch, showName, showValue, showIcon, fullWidth);
         return;
@@ -1969,11 +1982,11 @@
 
       // Common element refs (works for both button and text group)
       const nameKey = 'schalter' + n + 'name';
-      const altNameKey = 'schalter' + n + 'altname';
+      const altNameKey = 'switch' + n + 'altname';
       const iconKey = 'schalter' + n + 'icon';
       const assoKey = 'schalter' + n + 'asso';
       const colorKey = 'schalter' + n + 'color';
-      const widthKey = 'schalter' + n + 'breite';
+      const widthKey = 'switch' + n + 'width';
       const nameEl = document.getElementById(base + 'name');
       const colonEl = document.getElementById(base + 'colon');
       const valEl = document.getElementById(base + 'asso');
@@ -1983,7 +1996,7 @@
       const displayName = roomObj[altNameKey] ? roomObj[altNameKey] : roomObj[nameKey];
       if (nameEl) { if (displayName) { nameEl.textContent = displayName; nameEl.classList.remove('hidden'); } else { nameEl.classList.add('hidden'); } }
       if (valEl) { if (roomObj[assoKey] || roomObj[assoKey] === 0) { valEl.textContent = roomObj[assoKey]; valEl.classList.remove('hidden'); } else { valEl.classList.add('hidden'); } }
-      const showValSw = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? !!roomObj['schalter' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
+      const showValSw = (roomObj['switch' + n + 'showvalue'] !== undefined) ? !!roomObj['switch' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
       if (valEl) {
         valEl.dataset.showvalue = showValSw ? '1' : '0';
         valEl.classList.toggle('hidden', !showValSw || (!valEl.textContent && valEl.textContent !== '0'));
@@ -2034,7 +2047,7 @@
         const showNameSingle = (roomObj['schalter' + n + 'showname'] !== undefined)
           ? !!roomObj['schalter' + n + 'showname']
           : (roomObj['Schalter' + n + 'ShowName'] !== undefined ? !!roomObj['Schalter' + n + 'ShowName'] : true);
-        const showValueSingle = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? !!roomObj['schalter' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
+        const showValueSingle = (roomObj['switch' + n + 'showvalue'] !== undefined) ? !!roomObj['switch' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
         btn.classList.toggle('hide-labels', !showNameSingle);
         btn.classList.toggle('hide-values', !showValueSingle);
         // Icon for button
@@ -2075,7 +2088,7 @@
       if (key === 'targetlink' || key === 'Target') {
         const root = document.getElementById(id);
         if (root) {
-          const menuEl = document.getElementById(id + '-menueleiste');
+          const menuEl = document.getElementById(id + '-menubar');
           if (menuEl) menuEl.onclick = (e) => { e.stopPropagation(); };
           root.onclick = null;
           if (value && Number(value) > 0 && typeof openObject === 'function') {
@@ -2129,8 +2142,8 @@
         return;
       }
       // Toggle menu
-      if (key === 'infomenueswitch') {
-        const menu = document.getElementById(id + '-menueleiste');
+      if (key === 'menuswitch') {
+        const menu = document.getElementById(id + '-menubar');
         if (menu) value ? menu.classList.remove('is-hidden') : menu.classList.add('is-hidden');
         return;
       }
@@ -2142,20 +2155,20 @@
         return;
       }
       // Switch alignment updates
-      if (key === 'schalteralignment' || key === 'SchalterAlignment') {
+      if (key === 'switchalignment' || key === 'SwitchAlignment') {
         setSwitchAlignment(id, value, undefined);
         return;
       }
-      if (key === 'schalterdistribute' || key === 'SchalterDistribute') {
+      if (key === 'switchdistribute' || key === 'SwitchDistribute') {
         setSwitchAlignment(id, undefined, !!value);
         return;
       }
       // Simple text keys
-      if (key === 'raumname') {
-        const rn = document.getElementById(id + '-raumname'); if (rn) rn.textContent = value; return;
+      if (key === 'roomname') {
+        const rn = document.getElementById(id + '-roomname'); if (rn) rn.textContent = value; return;
       }
       // Font sizes
-      if (key === 'infofontsize' || key === 'infomenuefontsize') {
+      if (key === 'infofontsize' || key === 'menufontsize') {
         const root = document.getElementById(id); if (root) root.style.setProperty('--' + key, value + 'px'); return;
       }
       if (key === 'infoheight') {
@@ -2165,8 +2178,8 @@
         }
         return;
       }
-      if (key === 'raumnameschriftgroesse') {
-        const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.fontSize = value + 'px'; return;
+      if (key === 'roomnamefontsize') {
+        const rn = document.getElementById(id + '-roomname'); if (rn) rn.style.fontSize = value + 'px'; return;
       }
       if (key === 'infomiddleiconsize') {
         const root = document.getElementById(id); if (root) root.style.setProperty('--infomiddle-icon-size', value + 'px'); return;
@@ -2215,12 +2228,12 @@
         return;
       }
       // Colors and transparency
-      if (['hintergrundfarbe','infoschriftfarbe','infomenueschriftfarbe','infomenuehintergrundfarbe','infotophintergrundfarbe','transparenz','raumnameschriftfarbe','infomiddlecolor'].includes(key)) {
+      if (['tilebackgroundcolor','infofontcolor','menufontcolor','menubackgroundcolor','infotopbackgroundcolor','imagetransparency','roomnamefontcolor','infomiddlecolor'].includes(key)) {
         const root = document.getElementById(id);
         if (root) root.style.setProperty('--' + key, value);
-        // raumnameschriftfarbe applies directly to element color too
-        if (key === 'raumnameschriftfarbe') {
-          const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.color = value;
+        // roomnamefontcolor applies directly to element color too
+        if (key === 'roomnamefontcolor') {
+          const rn = document.getElementById(id + '-roomname'); if (rn) rn.style.color = value;
         }
         if (key === 'infomiddlecolor') {
           const centers = document.getElementById(id);
@@ -2229,7 +2242,7 @@
         return;
       }
       // Info groups granular update
-      const infoGroups = ['infolinks','infolinks2','inforechts','inforechts2'];
+      const infoGroups = ['infoleft','infoleft2','inforight','inforight2'];
       for (const g of infoGroups) {
         if (key === g + 'color') {
           const icon = document.getElementById(id + '-' + g + 'icon');
@@ -2707,7 +2720,7 @@
             return;
           }
         }
-        // plain key fallback for switches (e.g., 'schalter1')
+        // plain key fallback for switches (e.g., 'switch1')
         if (key === 'schalter' + i) {
           const el = document.getElementById(base + 'asso');
           if (el) { el.textContent = value; el.classList.toggle('hidden', !value && value !== 0); }

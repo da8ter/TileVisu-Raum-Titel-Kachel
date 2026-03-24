@@ -101,6 +101,180 @@ class TileVisuLib
         return 'Transparent';
     }
 
+    public static function getIconAdvanced(int $id): string
+    {
+        if ($id <= 0 || !@IPS_VariableExists($id)) {
+            return 'Transparent';
+        }
+        $variable = @IPS_GetVariable($id);
+        $value = null;
+        try { $value = @GetValue($id); } catch (\Throwable $e) {}
+        $vt = $variable['VariableType'] ?? 0;
+        $icon = '';
+
+        // 1) IPS_GetVariablePresentation (löst Vorlagen, GUIDs, Vererbung automatisch auf)
+        $legacyGuid = '4153A8D4-5C33-C65F-C1F3-7B61AAF99B1C';
+        $isLegacy = false;
+        $pres = [];
+        if (function_exists('IPS_GetVariablePresentation')) {
+            try {
+                $resolved = @IPS_GetVariablePresentation($id);
+                if (is_array($resolved) && !empty($resolved)) {
+                    $pres = $resolved;
+                }
+            } catch (\Throwable $e) {}
+        }
+        if (isset($pres['PRESENTATION'])) {
+            $isLegacy = (strcasecmp(trim((string)$pres['PRESENTATION'], '{} '), $legacyGuid) === 0);
+        }
+
+        if (!empty($pres) && !$isLegacy) {
+            // Direktes Icon
+            foreach (['ICON', 'Icon', 'icon'] as $field) {
+                if (isset($pres[$field]) && (string)$pres[$field] !== '') {
+                    $icon = (string)$pres[$field];
+                    break;
+                }
+            }
+
+            // Boolean: ICON_TRUE/ICON_FALSE
+            if ($icon === '' && $vt === 0) {
+                $iconTrueSet = isset($pres['ICON_TRUE']) && trim((string)$pres['ICON_TRUE']) !== '';
+                $iconFalseSet = isset($pres['ICON_FALSE']) && trim((string)$pres['ICON_FALSE']) !== '';
+                if ($iconTrueSet || $iconFalseSet) {
+                    $useFalse = $pres['USE_ICON_FALSE'] ?? true;
+                    $isTrue = ($value === true) || ((string)$value === '1') || ($value === 1);
+                    if ($iconTrueSet && $isTrue) {
+                        $icon = (string)$pres['ICON_TRUE'];
+                    } elseif ($iconFalseSet && $useFalse && !$isTrue) {
+                        $icon = (string)$pres['ICON_FALSE'];
+                    }
+                }
+            }
+
+            // INTERVALS für numerische Variablen (Bereichs-Icons)
+            if ($icon === '' && ($vt === 1 || $vt === 2)) {
+                if (isset($pres['INTERVALS'])) {
+                    $intervals = is_string($pres['INTERVALS']) ? @json_decode($pres['INTERVALS'], true) : $pres['INTERVALS'];
+                    $intervalsActive = isset($pres['INTERVALS_ACTIVE']) ? (bool)$pres['INTERVALS_ACTIVE'] : true;
+                    if ($intervalsActive && is_array($intervals)) {
+                        $current = floatval($value);
+                        foreach ($intervals as $interval) {
+                            if (empty($interval['IconActive']) || empty($interval['IconValue'])) continue;
+                            $min = array_key_exists('IntervalMinValue', $interval) ? floatval($interval['IntervalMinValue']) : -INF;
+                            $max = array_key_exists('IntervalMaxValue', $interval) ? floatval($interval['IntervalMaxValue']) : INF;
+                            if ($current >= $min && $current <= $max) {
+                                $icon = (string)$interval['IconValue'];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // OPTIONS aus aufgelöster Präsentation
+            if ($icon === '' && isset($pres['OPTIONS'])) {
+                $opts = is_string($pres['OPTIONS']) ? @json_decode($pres['OPTIONS'], true) : $pres['OPTIONS'];
+                if (is_array($opts)) {
+                    $isNumeric = ($vt === 1 || $vt === 2);
+                    $current = $isNumeric ? floatval($value) : null;
+                    foreach ($opts as $opt) {
+                        if (!is_array($opt)) continue;
+                        $optIcon = $opt['IconValue'] ?? ($opt['Icon'] ?? '');
+                        if (empty($optIcon)) continue;
+                        $hasRange = isset($opt['Min']) || isset($opt['Max']) || isset($opt['MinValue']) || isset($opt['MaxValue']);
+                        if ($hasRange && $current !== null) {
+                            $min = $opt['Min'] ?? ($opt['MinValue'] ?? -INF);
+                            $max = $opt['Max'] ?? ($opt['MaxValue'] ?? INF);
+                            if ($current >= floatval($min) && $current <= floatval($max)) {
+                                $icon = (string)$optIcon;
+                                break;
+                            }
+                        } elseif (array_key_exists('Value', $opt)) {
+                            if ($current !== null && is_numeric($opt['Value'])) {
+                                if (abs(floatval($opt['Value']) - $current) < 1e-9) {
+                                    $icon = (string)$optIcon;
+                                    break;
+                                }
+                            } elseif ((string)($opt['Value'] ?? '') === (string)$value) {
+                                $icon = (string)$optIcon;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2) IPS_GetVariableVisualization Fallback (ValueMappings)
+        if ($icon === '' && function_exists('IPS_GetVariableVisualization')) {
+            try {
+                $vis = @IPS_GetVariableVisualization($id);
+                if (is_array($vis) && isset($vis['ValueMappings'])) {
+                    foreach ($vis['ValueMappings'] as $mapping) {
+                        if (!isset($mapping['Icon']) || $mapping['Icon'] === '') continue;
+                        $v = floatval($value);
+                        $hasRange = isset($mapping['MinValue']) || isset($mapping['MaxValue']) || isset($mapping['Minimum']) || isset($mapping['Maximum']) || isset($mapping['Min']) || isset($mapping['Max']);
+                        if ($hasRange) {
+                            $min = $mapping['MinValue'] ?? ($mapping['Minimum'] ?? ($mapping['Min'] ?? -INF));
+                            $max = $mapping['MaxValue'] ?? ($mapping['Maximum'] ?? ($mapping['Max'] ?? INF));
+                            if ($v >= floatval($min) && $v <= floatval($max)) {
+                                $icon = (string)$mapping['Icon'];
+                                break;
+                            }
+                        } elseif (isset($mapping['Value']) && $mapping['Value'] == $value) {
+                            $icon = (string)$mapping['Icon'];
+                            break;
+                        }
+                    }
+                    if ($icon === '' && isset($vis['Icon']) && $vis['Icon'] !== '') {
+                        $icon = (string)$vis['Icon'];
+                    }
+                }
+            } catch (\Throwable $e) {}
+        }
+
+        // 3) Klassische Variablenprofile (inkl. PROFILE aus Präsentation)
+        if ($icon === '') {
+            $profile = $variable['VariableCustomProfile'] ?: ($variable['VariableProfile'] ?? '');
+            if (empty($profile) && isset($pres['PROFILE']) && !empty($pres['PROFILE'])) {
+                $profile = (string)$pres['PROFILE'];
+            }
+            if (!empty($profile) && @IPS_VariableProfileExists($profile)) {
+                $p = @IPS_GetVariableProfile($profile);
+                if (isset($p['Associations']) && is_array($p['Associations'])) {
+                    foreach ($p['Associations'] as $assoc) {
+                        if (isset($assoc['Value'], $assoc['Icon']) && $assoc['Icon'] !== '' && $assoc['Value'] == $value) {
+                            $icon = (string)$assoc['Icon'];
+                            break;
+                        }
+                    }
+                }
+                if ($icon === '' && isset($p['Icon']) && $p['Icon'] !== '') {
+                    $icon = (string)$p['Icon'];
+                }
+            }
+        }
+
+        return ($icon !== '') ? $icon : 'Transparent';
+    }
+
+    public static function isObjectHidden(int $id): bool
+    {
+        if ($id <= 0) {
+            return false;
+        }
+        if (!function_exists('IPS_ObjectExists') || !@IPS_ObjectExists($id)) {
+            return false;
+        }
+        try {
+            $o = @IPS_GetObject($id);
+            return (bool)($o['ObjectIsHidden'] ?? false);
+        } catch (Throwable $e) {
+            return false;
+        }
+    }
+
     public static function getPresentationColorHex(int $id): string
     {
         if (!function_exists('IPS_VariableExists') || !IPS_VariableExists($id)) {
@@ -637,5 +811,186 @@ class TileVisuLib
     public static function getStringAssociations(int $id): array
     {
         return self::getAssociations($id);
+    }
+
+    /**
+     * Property-Rename-Migration v2: German → English property names.
+     * Returns true if migration was performed (caller should return from ApplyChanges).
+     */
+    public static function migrateV2(IPSModule $module, int $instanceId): bool
+    {
+        $map = [
+            'Bildtransparenz' => 'ImageTransparency',
+            'bgImage' => 'BackgroundImage',
+            'bgImage2' => 'BackgroundImage2',
+            'Raumname' => 'RoomName',
+            'RaumnameSchriftgroesse' => 'RoomNameFontSize',
+            'RaumnameSchriftfarbe' => 'RoomNameFontColor',
+            'Kachelhintergrundfarbe' => 'TileBackgroundColor',
+            'Lichtstatus' => 'LightStatus',
+            'Dimmwert' => 'DimValue',
+            'InfoSchriftgroesse' => 'InfoFontSize',
+            'InfoSchriftfarbe' => 'InfoFontColor',
+            'Infohoehe' => 'InfoHeight',
+            'InfoLinks' => 'InfoLeft',
+            'InfoLinks2' => 'InfoLeft2',
+            'InfoRechts' => 'InfoRight',
+            'InfoRechts2' => 'InfoRight2',
+            'InfoLinksNameSwitch' => 'InfoLeftNameSwitch',
+            'InfoLinksIconSwitch' => 'InfoLeftIconSwitch',
+            'InfoLinksShowValue' => 'InfoLeftShowValue',
+            'InfoLinksVarIconSwitch' => 'InfoLeftVarIconSwitch',
+            'InfoLinksAssoSwitch' => 'InfoLeftAssoSwitch',
+            'InfoLinksAltName' => 'InfoLeftAltName',
+            'InfoLinks2NameSwitch' => 'InfoLeft2NameSwitch',
+            'InfoLinks2IconSwitch' => 'InfoLeft2IconSwitch',
+            'InfoLinks2ShowValue' => 'InfoLeft2ShowValue',
+            'InfoLinks2VarIconSwitch' => 'InfoLeft2VarIconSwitch',
+            'InfoLinks2AssoSwitch' => 'InfoLeft2AssoSwitch',
+            'InfoLinks2AltName' => 'InfoLeft2AltName',
+            'InfoRechtsNameSwitch' => 'InfoRightNameSwitch',
+            'InfoRechtsIconSwitch' => 'InfoRightIconSwitch',
+            'InfoRechtsShowValue' => 'InfoRightShowValue',
+            'InfoRechtsVarIconSwitch' => 'InfoRightVarIconSwitch',
+            'InfoRechtsAssoSwitch' => 'InfoRightAssoSwitch',
+            'InfoRechtsAltName' => 'InfoRightAltName',
+            'InfoRechts2NameSwitch' => 'InfoRight2NameSwitch',
+            'InfoRechts2IconSwitch' => 'InfoRight2IconSwitch',
+            'InfoRechts2ShowValue' => 'InfoRight2ShowValue',
+            'InfoRechts2VarIconSwitch' => 'InfoRight2VarIconSwitch',
+            'InfoRechts2AssoSwitch' => 'InfoRight2AssoSwitch',
+            'InfoRechts2AltName' => 'InfoRight2AltName',
+            'InfoMiddleLeftNameSwitch' => 'InfoMiddleLeftShowName',
+            'InfoMiddleLeftIconSwitch' => 'InfoMiddleLeftShowIcon',
+            'InfoMiddleRightNameSwitch' => 'InfoMiddleRightShowName',
+            'InfoMiddleRightIconSwitch' => 'InfoMiddleRightShowIcon',
+            'InfoMenueSwitch' => 'MenuSwitch',
+            'InfoMenueSchriftgroesse' => 'MenuFontSize',
+            'InfoMenueSchriftfarbe' => 'MenuFontColor',
+            'InfoMenueTransparenz' => 'MenuTransparency',
+            'InfoMenueHintergrundfarbe' => 'MenuBackgroundColor',
+            'SchalterAlignment' => 'SwitchAlignment',
+            'SchalterDistribute' => 'SwitchDistribute',
+            'Default_Bildtransparenz' => 'Default_ImageTransparency',
+            'Default_InfoSchriftgroesse' => 'Default_InfoFontSize',
+            'Default_InfoSchriftfarbe' => 'Default_InfoFontColor',
+            'Default_Infohoehe' => 'Default_InfoHeight',
+            'Default_InfoMenueSchriftgroesse' => 'Default_MenuFontSize',
+            'Default_InfoMenueSchriftfarbe' => 'Default_MenuFontColor',
+            'Default_InfoMenueTransparenz' => 'Default_MenuTransparency',
+            'Default_InfoMenueHintergrundfarbe' => 'Default_MenuBackgroundColor',
+            'Default_InfoTopTransparenz' => 'Default_InfoTopTransparency',
+            'Default_InfoTopHintergrundfarbe' => 'Default_InfoTopBackgroundColor',
+            'Default_Kachelhintergrundfarbe' => 'Default_TileBackgroundColor',
+            'Default_RaumnameSchriftgroesse' => 'Default_RoomNameFontSize',
+            'Default_RaumnameSchriftfarbe' => 'Default_RoomNameFontColor',
+        ];
+
+        // Schalter1..5 + suffixes
+        $suffixes = ['', 'NameSwitch', 'IconSwitch', 'ShowValue', 'AltName', 'Breite', 'VolleBreite', 'Schriftgroesse', 'VarIconSwitch', 'AssoSwitch', 'OpenObjectId'];
+        $newSuffixes = ['', 'NameSwitch', 'IconSwitch', 'ShowValue', 'AltName', 'Width', 'FullWidth', 'FontSize', 'VarIconSwitch', 'AssoSwitch', 'OpenObjectId'];
+        for ($i = 1; $i <= 5; $i++) {
+            for ($j = 0; $j < count($suffixes); $j++) {
+                $map['Schalter' . $i . $suffixes[$j]] = 'Switch' . $i . $newSuffixes[$j];
+            }
+        }
+
+        // RoomHeader: Info1..5 suffix renames
+        for ($i = 1; $i <= 5; $i++) {
+            $map['Info' . $i . 'NameSwitch'] = 'Info' . $i . 'ShowName';
+            $map['Info' . $i . 'IconSwitch'] = 'Info' . $i . 'ShowIcon';
+            $map['Info' . $i . 'VarIconSwitch'] = 'Info' . $i . 'UseVarIcon';
+            $map['Info' . $i . 'AssoSwitch'] = 'Info' . $i . 'ShowAssociation';
+            $map['Info' . $i . 'AltName'] = 'Info' . $i . 'AltLabel';
+        }
+
+        // Room-level keys (inside Rooms JSON)
+        $roomKeyMap = array_merge($map, [
+            'InfoTopHintergrundfarbe' => 'InfoTopBackgroundColor',
+            'InfoTopLeftHintergrundfarbe' => 'InfoTopLeftBackgroundColor',
+            'InfoTopMidHintergrundfarbe' => 'InfoTopMidBackgroundColor',
+            'InfoTopRightHintergrundfarbe' => 'InfoTopRightBackgroundColor',
+            'InfoTopTransparenz' => 'InfoTopTransparency',
+            'InfoTopLeftTransparenz' => 'InfoTopLeftTransparency',
+            'InfoTopMidTransparenz' => 'InfoTopMidTransparency',
+            'InfoTopRightTransparenz' => 'InfoTopRightTransparency',
+            'InfoHoehe' => 'InfoHeight',
+            'ShowRaumname' => 'ShowRoomName',
+        ]);
+
+        $config = @json_decode(IPS_GetConfiguration($instanceId), true);
+        if (!is_array($config)) {
+            return false;
+        }
+
+        $needsMigration = false;
+        $changed = false;
+
+        // 1) Check top-level properties for old names
+        foreach ($map as $old => $new) {
+            if (array_key_exists($old, $config)) {
+                $needsMigration = true;
+                break;
+            }
+        }
+
+        // 2) Also check Rooms JSON keys (Rooms property itself was not renamed,
+        //    but the keys inside each room object were)
+        $rooms = null;
+        if (array_key_exists('Rooms', $config)) {
+            $roomsRaw = $config['Rooms'];
+            $rooms = is_string($roomsRaw) ? @json_decode($roomsRaw, true) : $roomsRaw;
+            if (is_array($rooms) && !$needsMigration) {
+                foreach ($rooms as $room) {
+                    if (!is_array($room)) continue;
+                    foreach ($roomKeyMap as $old => $new) {
+                        if ($old !== $new && array_key_exists($old, $room)) {
+                            $needsMigration = true;
+                            break 2;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!$needsMigration) {
+            return false;
+        }
+
+        // 3) Migrate top-level properties
+        foreach ($map as $old => $new) {
+            if (array_key_exists($old, $config)) {
+                IPS_SetProperty($instanceId, $new, $config[$old]);
+                $changed = true;
+            }
+        }
+
+        // 4) Migrate Rooms JSON keys
+        if (is_array($rooms)) {
+            $roomsChanged = false;
+            foreach ($rooms as &$room) {
+                if (!is_array($room)) continue;
+                foreach ($roomKeyMap as $old => $new) {
+                    if ($old !== $new && array_key_exists($old, $room)) {
+                        $room[$new] = $room[$old];
+                        unset($room[$old]);
+                        $roomsChanged = true;
+                    }
+                }
+            }
+            unset($room);
+            if ($roomsChanged) {
+                IPS_SetProperty($instanceId, 'Rooms', json_encode($rooms));
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            IPS_LogMessage('TileVisu', 'Migrated instance #' . $instanceId . ' to V2 property names');
+            IPS_ApplyChanges($instanceId);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -2,11 +2,11 @@
     "id": "{64C87270-ED3C-D072-7D70-A639204C7A02}",
     "name": "Room Tiles",
     "author": "Stephan Sprick",
-    "url": "https://github.com/da8ter/TileVisu-Raum-Titel-Kachel/blob/testing2/README.md",
+    "url": "https://github.com/da8ter/TileVisu-Raum-Titel-Kachel/blob/main/README.md",
     "compatibility": {
         "version": "7.1"
     },
-    "version": "1.1.6",
-    "build": 7,
+    "version": "1.1.7",
+    "build": 8,
     "date": 0
 }

@@ -1,4 +1,7 @@
 # Raum-Titel Kachel
+
+> **Hinweis: Dieses Modul ist End of Life (EOL).** Bitte verwende stattdessen die [Raum Kachel (RoomTile)](../RoomTile/README.md), die dieses Modul vollständig ersetzt und deutlich mehr Funktionen bietet.
+
 ![Raum-Titel Kachel](https://github.com/da8ter/images/blob/1c5fe63e9757e81e6d8c4c84a63e0b39fa00247c/raum_header.jpg)
 
 Support: https://community.symcon.de/t/html-kachelsammlung-bewohnerstatus-waermepumpe-etc/
@@ -31,7 +34,7 @@ https://github.com/da8ter/TileVisu-Raum-Titel-Kachel.git
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
- Unter 'Instanz hinzufügen' kann die Wallbox-Kachel mithilfe des Schnellfilters gefunden werden. (Suchbegriff: Raum-Titel, TileVisu oder Kachel)  
+ Unter 'Instanz hinzufügen' kann die Raum-Titel Kachel mithilfe des Schnellfilters gefunden werden. (Suchbegriff: Raum-Titel, TileVisu oder Kachel)  
 	- Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
 
 ### 5. Kachelkonfiguration

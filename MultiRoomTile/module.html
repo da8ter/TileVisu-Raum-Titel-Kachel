@@ -17,7 +17,7 @@
     .tile {
       position: relative;
       min-height: var(--minHeight, 220px);
-      background: var(--hintergrundfarbe, #000);
+      background: var(--tilebackgroundcolor, #000);
       border-radius: var(--borderRadius, 10px);
       overflow: hidden;
       color: #fff;
@@ -31,7 +31,7 @@
       background-position: bottom;
       background-repeat: no-repeat;
       background-size: cover;
-      opacity: var(--transparenz, 0.7);
+      opacity: var(--imagetransparency, 0.7);
       z-index: 1;
       border-radius: var(--borderRadius, 10px);
     }
@@ -116,7 +116,7 @@
     .sep {
       width: 1px;
       align-self: stretch;
-      background-color: var(--infoschriftfarbe, #fff);
+      background-color: var(--infofontcolor, #fff);
       display: none;
       min-height: 20px;
       flex-shrink: 0;
@@ -139,16 +139,16 @@
     .center * {
       pointer-events: none;
     }
-    .center .raumname { 
+    .center .roomname { 
       margin: 0;
       line-height: 1.2; /* Verbesserte Lesbarkeit */
     }
 
-    .menueleiste {
+    .menubar {
       backdrop-filter: blur(10px) brightness(1);
       -webkit-backdrop-filter: blur(10px) brightness(1);
-      background-color: var(--infomenuehintergrundfarbe, rgba(0,0,0,0.3));
-      color: var(--infomenueschriftfarbe, #fff);
+      background-color: var(--menubackgroundcolor, rgba(0,0,0,0.3));
+      color: var(--menufontcolor, #fff);
       display: flex;
       justify-content: flex-start;
       align-items: stretch;
@@ -156,7 +156,7 @@
       flex-shrink: 0;
       border-radius: 0 0 var(--borderRadius, 10px) var(--borderRadius, 10px);
     }
-    .menueleiste.is-hidden {
+    .menubar.is-hidden {
       visibility: hidden;
       pointer-events: none;
     }
@@ -190,16 +190,16 @@
 
     .info-name, .info-value { white-space: nowrap; }
     .row-top .info-name, .row-top .info-value { font-size: var(--infofontsize, 16px); }
-    .menueleiste .info-name, .menueleiste .info-value { font-size: var(--infomenuefontsize, 16px); }
-    .row-top .group .info-name, .row-top .group .info-value { color: var(--infoschriftfarbe, #fff); }
-    .row-top .info-icon { font-size: calc(var(--infofontsize, 16px) * 0.805); color: var(--infoschriftfarbe, #fff); }
-    .menueleiste .info-icon, .menueleiste .switch-icon { font-size: calc(var(--infomenuefontsize, 16px) * 0.805); color: var(--infomenueschriftfarbe, #fff); }
+    .menubar .info-name, .menubar .info-value { font-size: var(--menufontsize, 16px); }
+    .row-top .group .info-name, .row-top .group .info-value { color: var(--infofontcolor, #fff); }
+    .row-top .info-icon { font-size: calc(var(--infofontsize, 16px) * 0.966); color: var(--infofontcolor, #fff); }
+    .menubar .info-icon, .menubar .switch-icon { font-size: calc(var(--menufontsize, 16px) * 0.966); color: var(--menufontcolor, #fff); }
 
     /* Fixed spacing for menu text items (no-action) */
-    .menueleiste .group.no-action { padding: 0 12px; display: flex; align-items: center; justify-content: center; }
-    .menueleiste .group.no-action .info-icon { margin-right: 0px; }
+    .menubar .group.no-action { padding: 0 12px; display: flex; align-items: center; justify-content: center; }
+    .menubar .group.no-action .info-icon { margin-right: 0px; }
     /* Status background for no-action items - full height of menu bar */
-    .menueleiste .group.no-action.has-status-bg {
+    .menubar .group.no-action.has-status-bg {
       margin-top: calc(-1 * var(--menu-padding, 6px));
       margin-bottom: calc(-1 * var(--menu-padding, 6px));
       padding-top: var(--menu-padding, 6px);
@@ -208,27 +208,27 @@
       align-self: stretch;
     }
     /* No gap between adjacent no-action elements (when not grouped) */
-    .menueleiste .group.no-action + .group.no-action {
+    .menubar .group.no-action + .group.no-action {
       margin-left: calc(-1 * var(--switch-gap, 10px));
     }
     /* First/last no-action with status bg extends to tile edge */
-    .menueleiste .group.no-action.has-status-bg:first-child {
+    .menubar .group.no-action.has-status-bg:first-child {
       margin-left: calc(-1 * var(--menu-padding, 6px));
       padding-left: var(--menu-padding, 6px);
     }
-    .menueleiste .group.no-action.has-status-bg:last-child {
+    .menubar .group.no-action.has-status-bg:last-child {
       margin-right: calc(-1 * var(--menu-padding, 6px));
       padding-right: var(--menu-padding, 6px);
     }
     /* Icon-only: symmetric padding for centering */
-    .menueleiste .group.no-action.icon-only.has-status-bg:first-child {
+    .menubar .group.no-action.icon-only.has-status-bg:first-child {
       padding-right: var(--menu-padding, 6px);
     }
-    .menueleiste .group.no-action.icon-only.has-status-bg:last-child {
+    .menubar .group.no-action.icon-only.has-status-bg:last-child {
       padding-left: var(--menu-padding, 6px);
     }
     /* Grouped info elements container - treated as single element */
-    .menueleiste .info-group-container {
+    .menubar .info-group-container {
       display: flex;
       align-items: stretch;
       gap: 0;
@@ -248,16 +248,16 @@
       margin-right: calc(-1 * var(--switch-gap, 10px));
     }
     /* Extend first/last grouped container to tile edge like ungrouped items */
-    .menueleiste .info-group-container:first-child {
+    .menubar .info-group-container:first-child {
       margin-left: 0;
       padding-left: 0;
     }
-    .menueleiste .info-group-container:first-child .info-group-item:first-child {
+    .menubar .info-group-container:first-child .info-group-item:first-child {
       padding-left: var(--menu-padding, 6px);
       margin-left: calc(-1 * var(--menu-padding, 6px));
     }
     /* Default: no right-edge compensation for grouped info */
-    .menueleiste .info-group-container:last-child {
+    .menubar .info-group-container:last-child {
       margin-right: 0;
       padding-right: 0;
     }
@@ -268,7 +268,7 @@
       margin-left: calc(-1 * var(--menu-padding, 6px));
       padding-left: var(--menu-padding, 6px);
     }
-    .menueleiste .info-group-container .info-group-item {
+    .menubar .info-group-container .info-group-item {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -281,8 +281,8 @@
       padding-bottom: var(--menu-padding, 6px);
       align-self: stretch;
     }
-    .menueleiste .info-group-container .info-group-item:first-child { padding-left: 12px; }
-    .menueleiste .info-group-container .info-group-item:last-child { padding-right: 12px; margin-right: 0; }
+    .menubar .info-group-container .info-group-item:first-child { padding-left: 12px; }
+    .menubar .info-group-container .info-group-item:last-child { padding-right: 12px; margin-right: 0; }
     /* When aligned right, outer container already compensates menubar padding.
        Do NOT apply inner negative margins/padding-right hacks. */
     .menu-switches.align-right .info-group-container:last-child {
@@ -304,6 +304,10 @@
       padding-right: var(--menu-padding, 6px);
       margin-right: calc(-1 * var(--menu-padding, 6px));
     }
+    .menu-switches.align-right .info-group-container:last-child .info-group-item.icon-only:last-child,
+    .menu-switches.distribute .info-group-container:last-child .info-group-item.icon-only:last-child {
+      padding-left: var(--menu-padding, 6px);
+    }
     /* Align-right: rely on flex gap, do not add extra margins */
     .menu-switches.align-right .group.no-action + .group.no-action {
       margin-left: 0;
@@ -319,20 +323,25 @@
       margin-right: calc(-1 * var(--menu-padding, 6px));
       padding-right: var(--menu-padding, 6px);
     }
+    /* Icon-only last-child: symmetric padding for visual centering */
+    .menu-switches.align-right .group.no-action.icon-only:last-child,
+    .menu-switches.distribute .group.no-action.icon-only:last-child {
+      padding-left: var(--menu-padding, 6px);
+    }
     /* Keep first-badge neutralization for align-right (left side handled elsewhere) */
     .menu-switches.align-right .group.no-action.has-status-bg:first-child {
       margin-left: calc(-1 * var(--menu-padding, 6px));
       padding-left: var(--menu-padding, 6px);
     }
     /* Icon-only items: remove margin-right from icon for centering */
-    .menueleiste .info-group-container .info-group-item.icon-only .info-icon { margin-right: 0; }
+    .menubar .info-group-container .info-group-item.icon-only .info-icon { margin-right: 0; }
     /* Adjacent grouped items: no gap and draw a 1px divider on the following item */
-    .menueleiste .info-group-container .info-group-item + .info-group-item {
+    .menubar .info-group-container .info-group-item + .info-group-item {
       margin-left: 0;
       border-left: 1px solid rgba(255,255,255,0.35);
     }
-    .menueleiste .info-group-container .info-group-item.has-status-bg + .info-group-item.has-status-bg { margin-left: 0; }
-    .menueleiste .info-group-container .info-icon { margin-right: 6px; }
+    .menubar .info-group-container .info-group-item.has-status-bg + .info-group-item.has-status-bg { margin-left: 0; }
+    .menubar .info-group-container .info-icon { margin-right: 6px; }
     /* Fallback (only in distribute, not when right-aligned): remove flex gap between grouped container and neighbors */
     .menu-switches.distribute:not(.align-right) .info-group-container + .group.no-action,
     .menu-switches.distribute:not(.align-right) .group.no-action + .info-group-container,
@@ -360,10 +369,10 @@
       border: none;
       border-radius: var(--progress-bar-border-radius, 10px);
       background-color: var(--accent-color, #f8f9fa);
-      color: var(--infomenueschriftfarbe, #fff);
+      color: var(--menufontcolor, #fff);
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: var(--infomenuefontsize, 16px);
+      font-size: var(--menufontsize, 16px);
       font-weight: 500;
       user-select: none;
       min-width: 80px;
@@ -386,7 +395,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.1);
       border-radius: inherit;
       pointer-events: none;
       z-index: 1;
@@ -400,10 +409,10 @@
       border: none;
       border-radius: var(--progress-bar-border-radius, 10px);
       background-color: var(--accent-color, #f8f9fa);
-      color: var(--infomenueschriftfarbe, #fff);
+      color: var(--menufontcolor, #fff);
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: var(--infomenuefontsize, 16px);
+      font-size: var(--menufontsize, 16px);
       font-weight: 500;
       user-select: none;
       min-width: 60px;
@@ -426,7 +435,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.1);
       border-radius: inherit;
       pointer-events: none;
       z-index: 1;
@@ -918,30 +927,30 @@
       };
 
       // left groups (links + links2) with separator
-      left.appendChild(createGroup('infolinks'));
+      left.appendChild(createGroup('infoleft'));
       const sepL = el('div', { id: id + '-sep-left', class: 'sep sep-left' });
       left.appendChild(sepL);
-      left.appendChild(createGroup('infolinks2'));
+      left.appendChild(createGroup('infoleft2'));
 
       // right groups (rechts + rechts2) with separator
-      right.appendChild(createGroup('inforechts'));
+      right.appendChild(createGroup('inforight'));
       const sepR = el('div', { id: id + '-sep-right', class: 'sep sep-right' });
       right.appendChild(sepR);
-      right.appendChild(createGroup('inforechts2'));
+      right.appendChild(createGroup('inforight2'));
 
       row.appendChild(left);
       row.appendChild(mid);
       row.appendChild(right);
       tile.appendChild(row);
 
-      // center raumname (as overlay inside tile)
+      // center roomname (as overlay inside tile)
       const center = el('div', { class: 'center' });
-      const rn = el('p', { id: id + '-raumname', class: 'raumname' }, '');
+      const rn = el('p', { id: id + '-roomname', class: 'roomname' }, '');
       center.appendChild(rn);
       tile.appendChild(center);
 
-      // menueleiste
-      const menu = el('div', { id: id + '-menueleiste', class: 'menueleiste' + (room.infomenueswitch ? '' : ' is-hidden') });
+      // menubar
+      const menu = el('div', { id: id + '-menubar', class: 'menubar' + (room.menuswitch ? '' : ' is-hidden') });
       const switchContainer = el('div', { id: id + '-switches', class: 'menu-switches align-left' });
       for (let i = 1; i <= 5; i++) {
         const configured = !!room['schalter' + i + 'configured'];
@@ -980,14 +989,14 @@
       };
 
       left.innerHTML = '';
-      left.appendChild(createGroup('infolinks'));
+      left.appendChild(createGroup('infoleft'));
       left.appendChild(el('div', { id: prefixId + '-sep-left', class: 'sep sep-left' }));
-      left.appendChild(createGroup('infolinks2'));
+      left.appendChild(createGroup('infoleft2'));
 
       right.innerHTML = '';
-      right.appendChild(createGroup('inforechts'));
+      right.appendChild(createGroup('inforight'));
       right.appendChild(el('div', { id: prefixId + '-sep-right', class: 'sep sep-right' }));
-      right.appendChild(createGroup('inforechts2'));
+      right.appendChild(createGroup('inforight2'));
     }
 
     function ensureLegacyInfoStructureCentered(prefixId) {
@@ -1011,13 +1020,13 @@
 
       // Build mid with 4 groups and separators
       mid.innerHTML = '';
-      mid.appendChild(createGroup('infolinks'));
+      mid.appendChild(createGroup('infoleft'));
       mid.appendChild(el('div', { id: prefixId + '-sep-mid-1', class: 'sep' }));
-      mid.appendChild(createGroup('infolinks2'));
+      mid.appendChild(createGroup('infoleft2'));
       mid.appendChild(el('div', { id: prefixId + '-sep-mid-2', class: 'sep' }));
-      mid.appendChild(createGroup('inforechts'));
+      mid.appendChild(createGroup('inforight'));
       mid.appendChild(el('div', { id: prefixId + '-sep-mid-3', class: 'sep' }));
-      mid.appendChild(createGroup('inforechts2'));
+      mid.appendChild(createGroup('inforight2'));
       mid.style.display = '';
     }
 
@@ -1165,7 +1174,7 @@
               const hasStatusBg = it.useVarColor && it.statusBgColor;
               if (hasStatusBg) {
                 innerEl.dataset.statusbgcolor = it.statusBgColor;
-                applyMenuBadgeBg(innerEl, it.statusBgColor, roomObj.menuetransparenz);
+                applyMenuBadgeBg(innerEl, it.statusBgColor, roomObj.menueimagetransparency);
                 innerEl.classList.add('has-status-bg');
               }
               if (it.showIcon !== false && roomObj[`${key}icon`]) {
@@ -1201,7 +1210,7 @@
               const wrapper = el('div', { id: baseId + '-group', class: 'group no-action' + (it.fullWidth ? ' full-width' : '') + (hasStatusBg ? ' has-status-bg' : '') });
               if (hasStatusBg) {
                 wrapper.dataset.statusbgcolor = it.statusBgColor;
-                applyMenuBadgeBg(wrapper, it.statusBgColor, roomObj.menuetransparenz);
+                applyMenuBadgeBg(wrapper, it.statusBgColor, roomObj.menueimagetransparency);
               }
               if (it.showIcon !== false && roomObj[`${key}icon`]) {
                 const cls = prepareIconClass(roomObj[`${key}icon`]);
@@ -1294,7 +1303,7 @@
       // groups are inserted on-the-fly in order
       updateSingleButtonState(prefixId);
       normalizeDistribute(prefixId);
-      setSwitchAlignment(prefixId, roomObj.schalteralignment, !!roomObj.schalterdistribute);
+      setSwitchAlignment(prefixId, roomObj.switchalignment, !!roomObj.switchdistribute);
     }
 
     function groupInfo(prefixId, key) {
@@ -1371,10 +1380,10 @@
       }
       // Legacy mode
       if (root.dataset.topCentered === '1' && mid) {
-        const has1 = isGroupVisible(prefixId, 'infolinks');
-        const has2 = isGroupVisible(prefixId, 'infolinks2');
-        const has3 = isGroupVisible(prefixId, 'inforechts');
-        const has4 = isGroupVisible(prefixId, 'inforechts2');
+        const has1 = isGroupVisible(prefixId, 'infoleft');
+        const has2 = isGroupVisible(prefixId, 'infoleft2');
+        const has3 = isGroupVisible(prefixId, 'inforight');
+        const has4 = isGroupVisible(prefixId, 'inforight2');
         const gEls = mid.querySelectorAll('.group');
         if (gEls[0]) gEls[0].style.display = has1 ? '' : 'none';
         if (gEls[1]) gEls[1].style.display = has2 ? '' : 'none';
@@ -1403,8 +1412,8 @@
             left.appendChild(sepL);
           }
         }
-        const hasLeft1 = isGroupVisible(prefixId, 'infolinks');
-        const hasLeft2 = isGroupVisible(prefixId, 'infolinks2');
+        const hasLeft1 = isGroupVisible(prefixId, 'infoleft');
+        const hasLeft2 = isGroupVisible(prefixId, 'infoleft2');
         console.log('[SEP] ' + prefixId + ' Left1:', hasLeft1, 'Left2:', hasLeft2, 'Show sep:', (hasLeft1 && hasLeft2));
         const leftGroups = left.querySelectorAll('.group');
         if (leftGroups[0]) leftGroups[0].style.display = hasLeft1 ? '' : 'none';
@@ -1429,8 +1438,8 @@
             right.appendChild(sepR);
           }
         }
-        const hasRight1 = isGroupVisible(prefixId, 'inforechts');
-        const hasRight2 = isGroupVisible(prefixId, 'inforechts2');
+        const hasRight1 = isGroupVisible(prefixId, 'inforight');
+        const hasRight2 = isGroupVisible(prefixId, 'inforight2');
         console.log('[SEP] ' + prefixId + ' Right1:', hasRight1, 'Right2:', hasRight2, 'Show sep:', (hasRight1 && hasRight2));
         const rightGroups = right.querySelectorAll('.group');
         if (rightGroups[0]) rightGroups[0].style.display = hasRight1 ? '' : 'none';
@@ -1580,7 +1589,7 @@
 
       // Click-Handling: nur der freie Bereich zwischen Infoleiste (row-top) und Menüleiste
       root.onclick = null;
-      const menuEl = document.getElementById(id + '-menueleiste');
+      const menuEl = document.getElementById(id + '-menubar');
       if (menuEl) {
         menuEl.onclick = (e) => { e.stopPropagation(); };
         menuEl.style.cursor = 'default';
@@ -1599,13 +1608,13 @@
       }
 
       // Grid-independent styling per room
-      root.style.setProperty('--hintergrundfarbe', room.hintergrundfarbe || '#000');
-      root.style.setProperty('--infomenuehintergrundfarbe', room.infomenuehintergrundfarbe || 'rgba(0,0,0,0.3)');
-      root.style.setProperty('--infomenueschriftfarbe', room.infomenueschriftfarbe || '#fff');
-      root.style.setProperty('--infomenuefontsize', (room.infomenuefontsize || 16) + 'px');
+      root.style.setProperty('--tilebackgroundcolor', room.tilebackgroundcolor || '#000');
+      root.style.setProperty('--menubackgroundcolor', room.menubackgroundcolor || 'rgba(0,0,0,0.3)');
+      root.style.setProperty('--menufontcolor', room.menufontcolor || '#fff');
+      root.style.setProperty('--menufontsize', (room.menufontsize || 16) + 'px');
       root.style.setProperty('--infofontsize', (room.infofontsize || 16) + 'px');
-      root.style.setProperty('--infoschriftfarbe', room.infoschriftfarbe || '#fff');
-      root.style.setProperty('--transparenz', room.transparenz ?? 0.7);
+      root.style.setProperty('--infofontcolor', room.infofontcolor || '#fff');
+      root.style.setProperty('--imagetransparency', room.imagetransparency ?? 0.7);
       if (room.infoheight && Number(room.infoheight) > 0) {
         root.style.setProperty('--infoheight', room.infoheight + 'px');
       } else {
@@ -1621,7 +1630,7 @@
         const bg = document.getElementById(id + '-bg');
         if (bg) {
           // store fade/base settings
-          bg.dataset.basealpha = String((typeof room.transparenz === 'number') ? room.transparenz : 0.7);
+          bg.dataset.basealpha = String((typeof room.imagetransparency === 'number') ? room.imagetransparency : 0.7);
           bg.dataset.image2enabled = room.image2enabled ? '1' : '0';
           if (room.bgfilterbrightnessmin !== undefined) bg.dataset.bmin = String(room.bgfilterbrightnessmin);
           if (room.bgfilterbrightnessmax !== undefined) bg.dataset.bmax = String(room.bgfilterbrightnessmax);
@@ -1654,9 +1663,9 @@
         const bgEl = document.getElementById(id + '-bg');
         if (bgEl) {
           if (room.image2enabled) {
-            // Deaktiviere Filter, steuere Transparenz von Bild 1 über bgfade
+            // Deaktiviere Filter, steuere Transparency von Bild 1 über bgfade
             bgEl.style.filter = '';
-            const base = (typeof room.transparenz === 'number') ? room.transparenz : (parseFloat(bgEl.dataset.basealpha || '0.7') || 0.7);
+            const base = (typeof room.imagetransparency === 'number') ? room.imagetransparency : (parseFloat(bgEl.dataset.basealpha || '0.7') || 0.7);
             const fade = (typeof room.bgfade === 'number') ? Math.max(0, Math.min(100, room.bgfade)) : 0;
             const alpha = Math.max(0, Math.min(1, base * (1 - (fade / 100))));
             bgEl.style.opacity = String(alpha);
@@ -1674,11 +1683,11 @@
         }
       } catch (_) {}
 
-      // Raumname
-      const rn = document.getElementById(id + '-raumname');
-      if (rn && room.raumname !== undefined) rn.textContent = room.raumname;
-      if (room.raumnameschriftgroesse !== undefined) rn.style.fontSize = room.raumnameschriftgroesse + 'px';
-      if (room.raumnameschriftfarbe) rn.style.color = room.raumnameschriftfarbe;
+      // RoomName
+      const rn = document.getElementById(id + '-roomname');
+      if (rn && room.roomname !== undefined) rn.textContent = room.roomname;
+      if (room.roomnamefontsize !== undefined) rn.style.fontSize = room.roomnamefontsize + 'px';
+      if (room.roomnamefontcolor) rn.style.color = room.roomnamefontcolor;
       if (rn) rn.classList.toggle('hidden', room.showroomname === false);
 
       const hasDynamicInfo = Array.isArray(room.infoitems) && room.infoitems.length > 0;
@@ -1692,19 +1701,19 @@
         } else {
           ensureLegacyInfoStructure(id);
         }
-        for (const k of ['infolinks','infolinks2','inforechts','inforechts2']) {
+        for (const k of ['infoleft','infoleft2','inforight','inforight2']) {
           applyInfo(id, k, room);
         }
         updateInfoContainerVisibility(id);
       }
 
       // Apply switch alignment
-      setSwitchAlignment(id, room.schalteralignment, !!room.schalterdistribute);
+      setSwitchAlignment(id, room.switchalignment, !!room.switchdistribute);
 
       // Menu switch
-      const menu = document.getElementById(id + '-menueleiste');
+      const menu = document.getElementById(id + '-menubar');
       if (menu) {
-        if (room.infomenueswitch) menu.classList.remove('is-hidden'); else menu.classList.add('is-hidden');
+        if (room.menuswitch) menu.classList.remove('is-hidden'); else menu.classList.add('is-hidden');
       }
 
       const hasDynamicMenu = Array.isArray(room.menuitems) && room.menuitems.length > 0;
@@ -1792,8 +1801,8 @@
       const openObjectId = Number(roomObj['schalter' + n + 'openobject'] || 0);
       const isObjectAction = openObjectId > 0;
       const shouldMulti = hasAction && (typeVal === 0 || (Array.isArray(options) && options.length > 0) || isObjectAction);
-      const iconswitch = !!roomObj['schalter' + n + 'iconswitch'];
-      const fullWidth = !!roomObj['schalter' + n + 'vollebreite'];
+      const iconswitch = !!roomObj['switch' + n + 'iconswitch'];
+      const fullWidth = !!roomObj['switch' + n + 'fullwidth'];
 
       // Ensure correct group type exists
       if (shouldMulti) {
@@ -1829,9 +1838,9 @@
       if (group && Array.isArray(options) && options.length > 0 && shouldMulti && !isObjectAction) {
         const current = roomObj['schalter' + n + 'value'];
         const color = roomObj['schalter' + n + 'color'];
-        const width = roomObj['schalter' + n + 'breite'];
+        const width = roomObj['switch' + n + 'width'];
         const showName = (roomObj['schalter' + n + 'showname'] !== undefined) ? roomObj['schalter' + n + 'showname'] : roomObj['Schalter' + n + 'ShowName'];
-        const showValue = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? roomObj['schalter' + n + 'showvalue'] : roomObj['Schalter' + n + 'ShowValue'];
+        const showValue = (roomObj['switch' + n + 'showvalue'] !== undefined) ? roomObj['switch' + n + 'showvalue'] : roomObj['Schalter' + n + 'ShowValue'];
         const showIcon = (roomObj['schalter' + n + 'showicon'] !== undefined) ? roomObj['schalter' + n + 'showicon'] : roomObj['Schalter' + n + 'ShowIcon'];
         renderSwitchGroup(prefixId, idx, n, options, current, color, width, iconswitch, showName, showValue, showIcon, fullWidth);
         return;
@@ -1839,11 +1848,11 @@
 
       // Common element refs (works for both button and text group)
       const nameKey = 'schalter' + n + 'name';
-      const altNameKey = 'schalter' + n + 'altname';
+      const altNameKey = 'switch' + n + 'altname';
       const iconKey = 'schalter' + n + 'icon';
       const assoKey = 'schalter' + n + 'asso';
       const colorKey = 'schalter' + n + 'color';
-      const widthKey = 'schalter' + n + 'breite';
+      const widthKey = 'switch' + n + 'width';
       const nameEl = document.getElementById(base + 'name');
       const colonEl = document.getElementById(base + 'colon');
       const valEl = document.getElementById(base + 'asso');
@@ -1853,7 +1862,7 @@
       const displayName = roomObj[altNameKey] ? roomObj[altNameKey] : roomObj[nameKey];
       if (nameEl) { if (displayName) { nameEl.textContent = displayName; nameEl.classList.remove('hidden'); } else { nameEl.classList.add('hidden'); } }
       if (valEl) { if (roomObj[assoKey] || roomObj[assoKey] === 0) { valEl.textContent = roomObj[assoKey]; valEl.classList.remove('hidden'); } else { valEl.classList.add('hidden'); } }
-      const showValSw = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? !!roomObj['schalter' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
+      const showValSw = (roomObj['switch' + n + 'showvalue'] !== undefined) ? !!roomObj['switch' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
       if (valEl) {
         valEl.dataset.showvalue = showValSw ? '1' : '0';
         valEl.classList.toggle('hidden', !showValSw || (!valEl.textContent && valEl.textContent !== '0'));
@@ -1925,7 +1934,7 @@
         const showNameSingle = (roomObj['schalter' + n + 'showname'] !== undefined)
           ? !!roomObj['schalter' + n + 'showname']
           : (roomObj['Schalter' + n + 'ShowName'] !== undefined ? !!roomObj['Schalter' + n + 'ShowName'] : true);
-        const showValueSingle = (roomObj['schalter' + n + 'showvalue'] !== undefined) ? !!roomObj['schalter' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
+        const showValueSingle = (roomObj['switch' + n + 'showvalue'] !== undefined) ? !!roomObj['switch' + n + 'showvalue'] : !!roomObj['Schalter' + n + 'ShowValue'];
         btn.classList.toggle('hide-labels', !showNameSingle);
         btn.classList.toggle('hide-values', !showValueSingle);
         // Icon for button
@@ -1965,7 +1974,7 @@
       if (key === 'targetlink' || key === 'Target') {
         const root = document.getElementById(id);
         if (root) {
-          const menuEl = document.getElementById(id + '-menueleiste');
+          const menuEl = document.getElementById(id + '-menubar');
           if (menuEl) menuEl.onclick = (e) => { e.stopPropagation(); };
           root.onclick = null;
           if (value && Number(value) > 0 && typeof openObject === 'function') {
@@ -2072,31 +2081,31 @@
         return;
       }
       // Toggle menu
-      if (key === 'infomenueswitch') {
-        const menu = document.getElementById(id + '-menueleiste');
+      if (key === 'menuswitch') {
+        const menu = document.getElementById(id + '-menubar');
         if (menu) value ? menu.classList.remove('is-hidden') : menu.classList.add('is-hidden');
         return;
       }
       // Switch alignment updates
-      if (key === 'schalteralignment' || key === 'SchalterAlignment') {
+      if (key === 'switchalignment' || key === 'SwitchAlignment') {
         setSwitchAlignment(id, value, undefined);
         return;
       }
-      if (key === 'schalterdistribute' || key === 'SchalterDistribute') {
+      if (key === 'switchdistribute' || key === 'SwitchDistribute') {
         setSwitchAlignment(id, undefined, !!value);
         return;
       }
       // Simple text keys
-      if (key === 'raumname') {
-        const rn = document.getElementById(id + '-raumname'); if (rn) rn.textContent = value; return;
+      if (key === 'roomname') {
+        const rn = document.getElementById(id + '-roomname'); if (rn) rn.textContent = value; return;
       }
       if (key === 'showroomname') {
-        const rn = document.getElementById(id + '-raumname');
+        const rn = document.getElementById(id + '-roomname');
         if (rn) rn.classList.toggle('hidden', !(value === true || value === 1 || value === '1' || value === 'true'));
         return;
       }
       // Font sizes
-      if (key === 'infofontsize' || key === 'infomenuefontsize') {
+      if (key === 'infofontsize' || key === 'menufontsize') {
         const root = document.getElementById(id); if (root) root.style.setProperty('--' + key, value + 'px'); return;
       }
       if (key === 'infoheight') {
@@ -2106,16 +2115,16 @@
         }
         return;
       }
-      if (key === 'raumnameschriftgroesse') {
-        const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.fontSize = value + 'px'; return;
+      if (key === 'roomnamefontsize') {
+        const rn = document.getElementById(id + '-roomname'); if (rn) rn.style.fontSize = value + 'px'; return;
       }
       // Colors and transparency
-      if (['hintergrundfarbe','infoschriftfarbe','infomenueschriftfarbe','infomenuehintergrundfarbe','transparenz','raumnameschriftfarbe','infotopleftbg','infomidbg','infotoprightbg'].includes(key)) {
+      if (['tilebackgroundcolor','infofontcolor','menufontcolor','menubackgroundcolor','imagetransparency','roomnamefontcolor','infotopleftbg','infomidbg','infotoprightbg'].includes(key)) {
         const root = document.getElementById(id);
         if (root) root.style.setProperty('--' + key, value);
-        // raumnameschriftfarbe applies directly to element color too
-        if (key === 'raumnameschriftfarbe') {
-          const rn = document.getElementById(id + '-raumname'); if (rn) rn.style.color = value;
+        // roomnamefontcolor applies directly to element color too
+        if (key === 'roomnamefontcolor') {
+          const rn = document.getElementById(id + '-roomname'); if (rn) rn.style.color = value;
         }
         return;
       }
@@ -2314,7 +2323,7 @@
         }
       }
       // Info groups granular update
-      const infoGroups = ['infolinks','infolinks2','inforechts','inforechts2'];
+      const infoGroups = ['infoleft','infoleft2','inforight','inforight2'];
       for (const g of infoGroups) {
         if (key === g + 'name') {
           const el = document.getElementById(id + '-' + g + 'name');
@@ -2530,7 +2539,7 @@
             return;
           }
         }
-        // plain key fallback for switches (e.g., 'schalter1')
+        // plain key fallback for switches (e.g., 'switch1')
         if (key === 'schalter' + i) {
           const el = document.getElementById(base + 'asso');
           if (el) { el.textContent = value; el.classList.toggle('hidden', !value && value !== 0); }

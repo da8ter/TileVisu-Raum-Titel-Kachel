@@ -9,21 +9,21 @@ class RoomTile extends IPSModule
         // Grid globale Einstellungen
         $this->RegisterPropertyInteger('BorderRadius', 10);
         // optionale globale Defaults
-        $this->RegisterPropertyInteger('Default_InfoSchriftgroesse', 14);
-        $this->RegisterPropertyInteger('Default_InfoSchriftfarbe', 0xFFFFFF);
-        $this->RegisterPropertyInteger('Default_Infohoehe', 24);
-        $this->RegisterPropertyInteger('Default_InfoMenueSchriftgroesse', 14);
-        $this->RegisterPropertyInteger('Default_InfoMenueSchriftfarbe', 0xFFFFFF);
-        $this->RegisterPropertyFloat('Default_InfoMenueTransparenz', 30.0);
-        $this->RegisterPropertyInteger('Default_InfoMenueHintergrundfarbe', 0x000000);
-        $this->RegisterPropertyFloat('Default_InfoTopTransparenz', 30.0);
-        $this->RegisterPropertyInteger('Default_InfoTopHintergrundfarbe', 0x000000);
+        $this->RegisterPropertyInteger('Default_InfoFontSize', 14);
+        $this->RegisterPropertyInteger('Default_InfoFontColor', 0xFFFFFF);
+        $this->RegisterPropertyInteger('Default_InfoHeight', 24);
+        $this->RegisterPropertyInteger('Default_MenuFontSize', 14);
+        $this->RegisterPropertyInteger('Default_MenuFontColor', 0xFFFFFF);
+        $this->RegisterPropertyFloat('Default_MenuTransparency', 30.0);
+        $this->RegisterPropertyInteger('Default_MenuBackgroundColor', 0x000000);
+        $this->RegisterPropertyFloat('Default_InfoTopTransparency', 30.0);
+        $this->RegisterPropertyInteger('Default_InfoTopBackgroundColor', 0x000000);
         $this->RegisterPropertyInteger('Default_InfoTopBorderRadius', 50);
-        // Transparenz bei Statusfarben (Infoleiste)
+        // Transparency bei Statusfarben (Infoleiste)
         $this->RegisterPropertyBoolean('TransparentStatusColors', true);
-        $this->RegisterPropertyInteger('Default_Kachelhintergrundfarbe', 0x000000);
-        $this->RegisterPropertyInteger('Default_RaumnameSchriftgroesse', 45);
-        $this->RegisterPropertyFloat('Default_Bildtransparenz', 70.0);
+        $this->RegisterPropertyInteger('Default_TileBackgroundColor', 0x000000);
+        $this->RegisterPropertyInteger('Default_RoomNameFontSize', 45);
+        $this->RegisterPropertyFloat('Default_ImageTransparency', 70.0);
         $this->RegisterPropertyInteger('Default_ButtonHeight', 25);
         $this->RegisterPropertyInteger('Default_ButtonBorderRadius', 10);
         $this->RegisterPropertyBoolean('UseImageColorsForButtons', false);
@@ -35,13 +35,14 @@ class RoomTile extends IPSModule
         $this->RegisterPropertyString('MenuItems', '[]');
 
         
-        $this->RegisterPropertyString('Raumname', 'Raumname');
+        $this->RegisterPropertyString('RoomName', '');
         $this->RegisterPropertyInteger('Target', 0);
-        $this->RegisterPropertyInteger('bgImage', 0);
-        $this->RegisterPropertyInteger('bgImage2', 0);
+        $this->RegisterPropertyInteger('BackgroundImageUrl', 0);
+        $this->RegisterPropertyInteger('BackgroundImage', 0);
+        $this->RegisterPropertyInteger('BackgroundImage2', 0);
         // Hintergrund-Filtersteuerung
-        $this->RegisterPropertyInteger('Lichtstatus', 0);
-        $this->RegisterPropertyInteger('Dimmwert', 0);
+        $this->RegisterPropertyInteger('LightStatus', 0);
+        $this->RegisterPropertyInteger('DimValue', 0);
         // Bildfilter-Parameter (pro Kachel) - Standardwerte
         $this->RegisterPropertyFloat('BgFilterBrightnessMin', 0.2);
         $this->RegisterPropertyFloat('BgFilterBrightnessMax', 1.0);
@@ -50,60 +51,60 @@ class RoomTile extends IPSModule
         $this->RegisterPropertyFloat('BgFilterGrayscaleMin', 0.0);
         $this->RegisterPropertyFloat('BgFilterGrayscaleMax', 1);
         
-        $this->RegisterPropertyInteger('InfoLinks', 0);
-        $this->RegisterPropertyBoolean('InfoLinksNameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinksIconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinksShowValue', true);
-        $this->RegisterPropertyString('InfoLinksAltName', '');
-        $this->RegisterPropertyInteger('InfoLinks2', 0);
-        $this->RegisterPropertyBoolean('InfoLinks2NameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinks2IconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinks2ShowValue', true);
-        $this->RegisterPropertyString('InfoLinks2AltName', '');
-        $this->RegisterPropertyInteger('InfoRechts', 0);
-        $this->RegisterPropertyBoolean('InfoRechtsNameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechtsIconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechtsShowValue', true);
-        $this->RegisterPropertyString('InfoRechtsAltName', '');
-        $this->RegisterPropertyInteger('InfoRechts2', 0);
-        $this->RegisterPropertyBoolean('InfoRechts2NameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechts2IconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechts2ShowValue', true);
-        $this->RegisterPropertyString('InfoRechts2AltName', '');
+        $this->RegisterPropertyInteger('InfoLeft', 0);
+        $this->RegisterPropertyBoolean('InfoLeftNameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeftIconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeftShowValue', true);
+        $this->RegisterPropertyString('InfoLeftAltName', '');
+        $this->RegisterPropertyInteger('InfoLeft2', 0);
+        $this->RegisterPropertyBoolean('InfoLeft2NameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeft2IconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeft2ShowValue', true);
+        $this->RegisterPropertyString('InfoLeft2AltName', '');
+        $this->RegisterPropertyInteger('InfoRight', 0);
+        $this->RegisterPropertyBoolean('InfoRightNameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRightIconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRightShowValue', true);
+        $this->RegisterPropertyString('InfoRightAltName', '');
+        $this->RegisterPropertyInteger('InfoRight2', 0);
+        $this->RegisterPropertyBoolean('InfoRight2NameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRight2IconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRight2ShowValue', true);
+        $this->RegisterPropertyString('InfoRight2AltName', '');
         $this->RegisterPropertyInteger('InfoMiddleLeft', 0);
-        $this->RegisterPropertyBoolean('InfoMiddleLeftNameSwitch', true);
-        $this->RegisterPropertyBoolean('InfoMiddleLeftIconSwitch', true);
+        $this->RegisterPropertyBoolean('InfoMiddleLeftShowName', true);
+        $this->RegisterPropertyBoolean('InfoMiddleLeftShowIcon', true);
         $this->RegisterPropertyBoolean('InfoMiddleLeftShowValue', true);
         $this->RegisterPropertyInteger('InfoMiddleRight', 0);
-        $this->RegisterPropertyBoolean('InfoMiddleRightNameSwitch', true);
-        $this->RegisterPropertyBoolean('InfoMiddleRightIconSwitch', true);
+        $this->RegisterPropertyBoolean('InfoMiddleRightShowName', true);
+        $this->RegisterPropertyBoolean('InfoMiddleRightShowIcon', true);
         $this->RegisterPropertyBoolean('InfoMiddleRightShowValue', true);
         $this->RegisterPropertyInteger('InfoMiddleIconSize', 56);
         $this->RegisterPropertyInteger('InfoMiddleTextSize', 20);
         $this->RegisterPropertyInteger('InfoMiddleColor', -1);
         
-        $this->RegisterPropertyBoolean('InfoMenueSwitch', true);
-        $this->RegisterPropertyString('SchalterAlignment', 'left');
-        $this->RegisterPropertyBoolean('SchalterDistribute', false);
+        $this->RegisterPropertyBoolean('MenuSwitch', true);
+        $this->RegisterPropertyString('SwitchAlignment', 'left');
+        $this->RegisterPropertyBoolean('SwitchDistribute', false);
         for ($i = 1; $i <= 5; $i++) {
-            $this->RegisterPropertyInteger('Schalter' . $i, 0);
-            $this->RegisterPropertyBoolean('Schalter' . $i . 'NameSwitch', false);
-            $this->RegisterPropertyBoolean('Schalter' . $i . 'IconSwitch', false);
-            $this->RegisterPropertyBoolean('Schalter' . $i . 'ShowValue', false);
-            $this->RegisterPropertyString('Schalter' . $i . 'AltName', '');
-            $this->RegisterPropertyInteger('Schalter' . $i . 'Breite', 100);
-            $this->RegisterPropertyBoolean('Schalter' . $i . 'VolleBreite', false);
+            $this->RegisterPropertyInteger('Switch' . $i, 0);
+            $this->RegisterPropertyBoolean('Switch' . $i . 'NameSwitch', false);
+            $this->RegisterPropertyBoolean('Switch' . $i . 'IconSwitch', false);
+            $this->RegisterPropertyBoolean('Switch' . $i . 'ShowValue', false);
+            $this->RegisterPropertyString('Switch' . $i . 'AltName', '');
+            $this->RegisterPropertyInteger('Switch' . $i . 'Width', 100);
+            $this->RegisterPropertyBoolean('Switch' . $i . 'FullWidth', false);
         }
-        $this->RegisterPropertyFloat('Bildtransparenz', 70.0);
-        $this->RegisterPropertyInteger('Kachelhintergrundfarbe', -1);
-        $this->RegisterPropertyInteger('RaumnameSchriftfarbe', -1);
-        $this->RegisterPropertyInteger('RaumnameSchriftgroesse', 50);
-        $this->RegisterPropertyInteger('InfoSchriftgroesse', -1);
-        $this->RegisterPropertyInteger('InfoSchriftfarbe', -1);
-        $this->RegisterPropertyInteger('InfoMenueSchriftgroesse', -1);
-        $this->RegisterPropertyInteger('InfoMenueSchriftfarbe', -1);
-        $this->RegisterPropertyFloat('InfoMenueTransparenz', -1);
-        $this->RegisterPropertyInteger('InfoMenueHintergrundfarbe', -1);
+        $this->RegisterPropertyFloat('ImageTransparency', 70.0);
+        $this->RegisterPropertyInteger('TileBackgroundColor', -1);
+        $this->RegisterPropertyInteger('RoomNameFontColor', -1);
+        $this->RegisterPropertyInteger('RoomNameFontSize', 50);
+        $this->RegisterPropertyInteger('InfoFontSize', -1);
+        $this->RegisterPropertyInteger('InfoFontColor', -1);
+        $this->RegisterPropertyInteger('MenuFontSize', -1);
+        $this->RegisterPropertyInteger('MenuFontColor', -1);
+        $this->RegisterPropertyFloat('MenuTransparency', -1);
+        $this->RegisterPropertyInteger('MenuBackgroundColor', -1);
         $this->RegisterPropertyString('Rooms', '[]');
         $this->RegisterAttributeString('VarMap', '{}');
         $this->RegisterAttributeString('HookToken', '');
@@ -142,6 +143,9 @@ class RoomTile extends IPSModule
             $bgColor = '';
             $vt = null;
             $hasVar = ($varId > 0) && @IPS_VariableExists($varId);
+            if ($hasVar && TileVisuLib::isObjectHidden($varId)) {
+                continue;
+            }
             if ($hasVar) {
                 try {
                     $vi = @IPS_GetVariable($varId);
@@ -206,6 +210,9 @@ class RoomTile extends IPSModule
 
     public function GetConfigurationForm()
     {
+        // Ensure property migration runs before form is displayed
+        TileVisuLib::migrateV2($this, $this->InstanceID);
+
         $form = json_decode(@file_get_contents(__DIR__ . '/form.json'), true);
         if (!is_array($form)) {
             return json_encode(['elements' => []]);
@@ -218,7 +225,7 @@ class RoomTile extends IPSModule
                 if (!is_array($element)) {
                     continue;
                 }
-                if (($element['type'] ?? '') === 'ExpansionPanel' && ($element['caption'] ?? '') === 'Raumname' && isset($element['items']) && is_array($element['items'])) {
+                if (($element['type'] ?? '') === 'ExpansionPanel' && ($element['caption'] ?? '') === 'RoomName' && isset($element['items']) && is_array($element['items'])) {
                     foreach ($element['items'] as &$row) {
                         if (!is_array($row) || ($row['type'] ?? '') !== 'RowLayout' || !isset($row['items']) || !is_array($row['items'])) {
                             continue;
@@ -232,7 +239,7 @@ class RoomTile extends IPSModule
                     }
                     unset($row);
                 }
-                if (($element['type'] ?? '') === 'ExpansionPanel' && ($element['caption'] ?? '') === 'Menüleiste' && isset($element['items']) && is_array($element['items'])) {
+                if (($element['type'] ?? '') === 'ExpansionPanel' && ($element['caption'] ?? '') === 'Menu bar' && isset($element['items']) && is_array($element['items'])) {
                     foreach ($element['items'] as &$item) {
                         if (!is_array($item)) {
                             continue;
@@ -291,6 +298,18 @@ class RoomTile extends IPSModule
             $hasVar = ($varId > 0) && @IPS_VariableExists($varId);
             $hasObject = ($openObjectId > 0) && @IPS_ObjectExists($openObjectId);
             $hasScene = ($sceneControlId > 0) && @IPS_InstanceExists($sceneControlId);
+            if ($hasVar && TileVisuLib::isObjectHidden($varId)) {
+                $hasVar = false;
+            }
+            if ($hasObject && TileVisuLib::isObjectHidden($openObjectId)) {
+                $hasObject = false;
+            }
+            if ($hasScene && TileVisuLib::isObjectHidden($sceneControlId)) {
+                $hasScene = false;
+            }
+            if (!$hasVar && !$hasObject && !$hasScene) {
+                continue;
+            }
             $typeVal = null;
             $hasValidAction = false;
             $actionType = 'none';
@@ -511,6 +530,11 @@ class RoomTile extends IPSModule
     {
         parent::ApplyChanges();
 
+        // One-time migration: German → English property names (v2)
+        if (TileVisuLib::migrateV2($this, $this->InstanceID)) {
+            return;
+        }
+
         // Ensure hidden IDs are auto-assigned once
         if ($this->NormalizeDynamicLists()) {
             return;
@@ -533,7 +557,7 @@ class RoomTile extends IPSModule
 
         $rooms = $this->getRooms();
         $varMap = [];
-        $watchProps = ['InfoLinks','InfoLinks2','InfoRechts','InfoRechts2','InfoMiddleLeft','InfoMiddleRight','Schalter1','Schalter2','Schalter3','Schalter4','Schalter5','Lichtstatus','Dimmwert'];
+        $watchProps = ['InfoLeft','InfoLeft2','InfoRight','InfoRight2','InfoMiddleLeft','InfoMiddleRight','Switch1','Switch2','Switch3','Switch4','Switch5','LightStatus','DimValue'];
 
         // Register dynamic menu items for variable updates
         $menuList = @json_decode($this->ReadPropertyString('MenuItems'), true);
@@ -545,14 +569,22 @@ class RoomTile extends IPSModule
                 if ($varId > 0 && $itemId !== '' && @IPS_VariableExists($varId)) {
                     $this->RegisterReference($varId);
                     $this->RegisterMessage($varId, VM_UPDATE);
+                    $this->RegisterMessage($varId, OM_CHANGEHIDDEN);
                     if (!isset($varMap[$varId]) || !is_array($varMap[$varId])) {
                         $varMap[$varId] = [];
                     }
                     $varMap[$varId][] = ['idx' => 0, 'prop' => 'menuitem:' . $itemId];
                 }
+                $openObjectId = (int)($row['OpenObjectId'] ?? 0);
+                if ($openObjectId > 0 && @IPS_ObjectExists($openObjectId)) {
+                    $this->RegisterReference($openObjectId);
+                    $this->RegisterMessage($openObjectId, OM_CHANGEHIDDEN);
+                }
                 // SceneControl ActiveScene variable tracking
                 $sceneControlId = (int)($row['SceneControlId'] ?? 0);
                 if ($sceneControlId > 0 && $itemId !== '' && @IPS_InstanceExists($sceneControlId)) {
+                    $this->RegisterReference($sceneControlId);
+                    $this->RegisterMessage($sceneControlId, OM_CHANGEHIDDEN);
                     $activeVar = 0;
                     foreach ((array)@IPS_GetChildrenIDs($sceneControlId) as $cid) {
                         if (@IPS_VariableExists($cid)) {
@@ -563,6 +595,7 @@ class RoomTile extends IPSModule
                     if ($activeVar > 0) {
                         $this->RegisterReference($activeVar);
                         $this->RegisterMessage($activeVar, VM_UPDATE);
+                        $this->RegisterMessage($activeVar, OM_CHANGEHIDDEN);
                         if (!isset($varMap[$activeVar]) || !is_array($varMap[$activeVar])) {
                             $varMap[$activeVar] = [];
                         }
@@ -582,6 +615,7 @@ class RoomTile extends IPSModule
                 if ($varId > 0 && $itemId !== '' && @IPS_VariableExists($varId)) {
                     $this->RegisterReference($varId);
                     $this->RegisterMessage($varId, VM_UPDATE);
+                    $this->RegisterMessage($varId, OM_CHANGEHIDDEN);
                     if (!isset($varMap[$varId]) || !is_array($varMap[$varId])) {
                         $varMap[$varId] = [];
                     }
@@ -599,13 +633,21 @@ class RoomTile extends IPSModule
                 if ($id > 0 && IPS_VariableExists($id)) {
                     $this->RegisterReference($id);
                     $this->RegisterMessage($id, VM_UPDATE);
+                    $this->RegisterMessage($id, OM_CHANGEHIDDEN);
                     if (!isset($varMap[$id]) || !is_array($varMap[$id])) {
                         $varMap[$id] = [];
                     }
                     $varMap[$id][] = ['idx' => $idx, 'prop' => $prop];
                 }
             }
-            // bgImage ist Media, nicht Variable -> keine Message
+            // BackgroundImage ist Media, nicht Variable -> keine Message
+        }
+
+        // Dynamic background image URL variable
+        $bgUrlVarId = (int)$this->ReadPropertyInteger('BackgroundImageUrl');
+        if ($bgUrlVarId > 0 && @IPS_VariableExists($bgUrlVarId)) {
+            $this->RegisterReference($bgUrlVarId);
+            $this->RegisterMessage($bgUrlVarId, VM_UPDATE);
         }
 
         $this->WriteAttributeString('VarMap', json_encode($varMap));
@@ -622,7 +664,22 @@ class RoomTile extends IPSModule
             }
             return;
         }
+        if ($Message === OM_CHANGEHIDDEN) {
+            $this->UpdateVisualizationValue(json_encode($this->GetFullUpdateMessage()));
+            return;
+        }
         if ($Message !== VM_UPDATE) {
+            return;
+        }
+        // Dynamic background image URL variable changed → send new image1 + disable filter
+        $bgUrlVarId = (int)$this->ReadPropertyInteger('BackgroundImageUrl');
+        if ($bgUrlVarId > 0 && $SenderID === $bgUrlVarId) {
+            $url = (string)@GetValue($bgUrlVarId);
+            $delta = [
+                ['idx' => 0, 'key' => 'image1', 'value' => $url],
+                ['idx' => 0, 'key' => 'bgfilter', 'value' => 0.0],
+            ];
+            $this->UpdateVisualizationValue(json_encode(['delta' => $delta]));
             return;
         }
         $map = json_decode($this->ReadAttributeString('VarMap'), true) ?: [];
@@ -647,15 +704,18 @@ class RoomTile extends IPSModule
             }
             $room = $rooms[$idx];
 
-            // Spezialfall: Lichtstatus/Dimmwert → bgfilter/bgfade (0..100)
-            if ($prop === 'Lichtstatus' || $prop === 'Dimmwert') {
-                $boolId = (int)($room['Lichtstatus'] ?? 0);
-                $dimId = (int)($room['Dimmwert'] ?? 0);
+            // Spezialfall: LightStatus/DimValue → bgfilter/bgfade (0..100)
+            if ($prop === 'LightStatus' || $prop === 'DimValue') {
+                $boolId = (int)($room['LightStatus'] ?? 0);
+                $dimId = (int)($room['DimValue'] ?? 0);
                 $pOut = $this->computeBgFilterValue($boolId, $dimId);
-                $this->SendDebug('bgfilter Delta', "Prop=$prop, BoolID=$boolId, DimID=$dimId, FilterValue=$pOut", 0);
+                // Filter deaktivieren wenn URL-Variable aktiv oder Bild 2 konfiguriert
+                $bgUrlId = (int)($room['BackgroundImageUrl'] ?? 0);
+                $imageID2 = (int)($room['BackgroundImage2'] ?? 0);
+                if (($bgUrlId > 0 && @IPS_VariableExists($bgUrlId)) || $imageID2 > 0) { $pOut = 0.0; }
                 $delta[] = [ 'idx' => $idx, 'key' => 'bgfilter', 'value' => $pOut ];
                 // bgfade nur senden wenn zweites Bild konfiguriert ist
-                $imageID2 = (int)($room['bgImage2'] ?? 0);
+                $imageID2 = (int)($room['BackgroundImage2'] ?? 0);
                 if ($imageID2 > 0) {
                     $fade = $this->computeBgFadeValue($boolId, $dimId);
                     $delta[] = [ 'idx' => $idx, 'key' => 'bgfade', 'value' => $fade ];
@@ -808,8 +868,8 @@ class RoomTile extends IPSModule
                 'value' => ($col !== '') ? ('#' . $col) : ''
             ];
 
-            // Name/Icon/Asso/AltName wenn nicht bgImage
-            if ($prop !== 'bgImage') {
+            // Name/Icon/Asso/AltName wenn nicht BackgroundImage
+            if ($prop !== 'BackgroundImage') {
                 if ($this->ReadBool($room, $prop . 'NameSwitch')) {
                     $delta[] = [
                         'idx' => $idx,
@@ -837,12 +897,12 @@ class RoomTile extends IPSModule
                 }
             }
 
-            // SchalterN Rohwert als Delta für Active-State
-            if (strpos($prop, 'Schalter') === 0) {
-                $n = (int)substr($prop, 8);
+            // SwitchN raw value as delta for active state
+            if (strpos($prop, 'Switch') === 0 && is_numeric(substr($prop, 6, 1))) {
+                $n = (int)substr($prop, 6);
                 $delta[] = [
                     'idx' => $idx,
-                    'key' => 'schalter' . $n . 'value',
+                    'key' => 'switch' . $n . 'value',
                     'value' => @GetValue($this->ReadInt($room, $prop))
                 ];
             }
@@ -863,7 +923,6 @@ class RoomTile extends IPSModule
             }
         }
         if (!empty($delta)) {
-            $this->SendDebug('MessageSink Delta', json_encode($delta, JSON_PRETTY_PRINT), 0);
             $this->UpdateVisualizationValue(json_encode(['delta' => $delta]));
         }
     }
@@ -900,8 +959,9 @@ class RoomTile extends IPSModule
                         } else {
                             $targetScene = (int)$targetScene;
                         }
-                        if ($targetScene > 0 && function_exists('SZS_CallScene')) {
+                        if ($targetScene > 0) {
                             @SZS_CallScene($sceneControlId, $targetScene);
+                            @SZS_UpdateActive($sceneControlId);
                         }
                     } catch (Throwable $e) {}
                     return;
@@ -939,7 +999,7 @@ class RoomTile extends IPSModule
             return;
         }
 
-        // Schalter/Info aus der Kachel: room:<idx>:SchalterN | InfoN
+        // Switch/Info from tile: room:<idx>:SwitchN | InfoN
         if (strpos($Ident, 'room:') === 0) {
             $parts = explode(':', $Ident);
             if (count($parts) === 3) {
@@ -951,7 +1011,6 @@ class RoomTile extends IPSModule
                 }
                 $varId = (int)$rooms[$idx][$property];
                 if (!IPS_VariableExists($varId)) {
-                    $this->SendDebug('RequestAction', 'Variable for switch not existing', 0);
                     return;
                 }
                 // Typ-spezifisches Setzen
@@ -1017,48 +1076,48 @@ class RoomTile extends IPSModule
             'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors'),
             'transparentMenuStatusColors' => $this->ReadPropertyBoolean('TransparentMenuStatusColors'),
             'groupMenuInfoElements' => $this->ReadPropertyBoolean('GroupMenuInfoElements'),
-            'menuTransparency' => (float)$this->ReadPropertyFloat('Default_InfoMenueTransparenz')
+            'menuTransparency' => (float)$this->ReadPropertyFloat('Default_MenuTransparency')
         ];
 
         $rooms = $this->getRooms();
         // Lese optionale Defaults aus den separaten Properties und mappe sie auf die Raum-Keys
         // Robust lesen: Infohöhe kann in bestehenden Instanzen fehlen
-        $defInfoHoehe = @($this->ReadPropertyInteger('Default_Infohoehe'));
-        if (!is_int($defInfoHoehe) || $defInfoHoehe <= 0) {
+        $defInfoHeight = @($this->ReadPropertyInteger('Default_InfoHeight'));
+        if (!is_int($defInfoHeight) || $defInfoHeight <= 0) {
             $alt = @($this->ReadPropertyInteger('Default_Infohöhe'));
-            if (is_int($alt) && $alt > 0) { $defInfoHoehe = $alt; } else { $defInfoHoehe = 0; }
+            if (is_int($alt) && $alt > 0) { $defInfoHeight = $alt; } else { $defInfoHeight = 0; }
         }
 
         $defaults = [
-            'InfoSchriftgroesse'       => (int)$this->ReadPropertyInteger('Default_InfoSchriftgroesse'),
-            'InfoSchriftfarbe'         => (int)$this->ReadPropertyInteger('Default_InfoSchriftfarbe'),
-            'InfoHoehe'                => (int)$defInfoHoehe,
-            'InfoMenueSchriftgroesse'  => (int)$this->ReadPropertyInteger('Default_InfoMenueSchriftgroesse'),
-            'InfoMenueSchriftfarbe'    => (int)$this->ReadPropertyInteger('Default_InfoMenueSchriftfarbe'),
-            'InfoMenueTransparenz'     => (float)$this->ReadPropertyFloat('Default_InfoMenueTransparenz'),
-            'InfoMenueHintergrundfarbe'=> (int)$this->ReadPropertyInteger('Default_InfoMenueHintergrundfarbe'),
-            'InfoTopTransparenz'       => (float)$this->ReadPropertyFloat('Default_InfoTopTransparenz'),
-            'InfoTopHintergrundfarbe'  => (int)$this->ReadPropertyInteger('Default_InfoTopHintergrundfarbe'),
+            'InfoFontSize'       => (int)$this->ReadPropertyInteger('Default_InfoFontSize'),
+            'InfoFontColor'         => (int)$this->ReadPropertyInteger('Default_InfoFontColor'),
+            'InfoHeight'                => (int)$defInfoHeight,
+            'MenuFontSize'  => (int)$this->ReadPropertyInteger('Default_MenuFontSize'),
+            'MenuFontColor'    => (int)$this->ReadPropertyInteger('Default_MenuFontColor'),
+            'MenuTransparency'     => (float)$this->ReadPropertyFloat('Default_MenuTransparency'),
+            'MenuBackgroundColor'=> (int)$this->ReadPropertyInteger('Default_MenuBackgroundColor'),
+            'InfoTopTransparency'       => (float)$this->ReadPropertyFloat('Default_InfoTopTransparency'),
+            'InfoTopBackgroundColor'  => (int)$this->ReadPropertyInteger('Default_InfoTopBackgroundColor'),
             'InfoTopBorderRadius'      => (int)$this->ReadPropertyInteger('Default_InfoTopBorderRadius'),
-            'Kachelhintergrundfarbe'   => (int)$this->ReadPropertyInteger('Default_Kachelhintergrundfarbe'),
-            'RaumnameSchriftgroesse'   => (int)$this->ReadPropertyInteger('Default_RaumnameSchriftgroesse'),
-            'Bildtransparenz'          => (float)$this->ReadPropertyFloat('Default_Bildtransparenz')
+            'TileBackgroundColor'   => (int)$this->ReadPropertyInteger('Default_TileBackgroundColor'),
+            'RoomNameFontSize'   => (int)$this->ReadPropertyInteger('Default_RoomNameFontSize'),
+            'ImageTransparency'          => (float)$this->ReadPropertyFloat('Default_ImageTransparency')
         ];
         // Normalisiere Transparent(-1) für globale Defaults auf sinnvolle Standardwerte
-        if (isset($defaults['InfoSchriftfarbe']) && (int)$defaults['InfoSchriftfarbe'] === -1) {
-            $defaults['InfoSchriftfarbe'] = 0xFFFFFF; // Weiß
+        if (isset($defaults['InfoFontColor']) && (int)$defaults['InfoFontColor'] === -1) {
+            $defaults['InfoFontColor'] = 0xFFFFFF; // Weiß
         }
-        if (isset($defaults['InfoMenueSchriftfarbe']) && (int)$defaults['InfoMenueSchriftfarbe'] === -1) {
-            $defaults['InfoMenueSchriftfarbe'] = 0xFFFFFF; // Weiß
+        if (isset($defaults['MenuFontColor']) && (int)$defaults['MenuFontColor'] === -1) {
+            $defaults['MenuFontColor'] = 0xFFFFFF; // Weiß
         }
-        if (isset($defaults['InfoMenueHintergrundfarbe']) && (int)$defaults['InfoMenueHintergrundfarbe'] === -1) {
-            $defaults['InfoMenueHintergrundfarbe'] = 0x000000; // Schwarz
+        if (isset($defaults['MenuBackgroundColor']) && (int)$defaults['MenuBackgroundColor'] === -1) {
+            $defaults['MenuBackgroundColor'] = 0x000000; // Schwarz
         }
-        if (isset($defaults['InfoTopHintergrundfarbe']) && (int)$defaults['InfoTopHintergrundfarbe'] === -1) {
-            $defaults['InfoTopHintergrundfarbe'] = 0x000000; // Schwarz
+        if (isset($defaults['InfoTopBackgroundColor']) && (int)$defaults['InfoTopBackgroundColor'] === -1) {
+            $defaults['InfoTopBackgroundColor'] = 0x000000; // Schwarz
         }
-        if (isset($defaults['Kachelhintergrundfarbe']) && (int)$defaults['Kachelhintergrundfarbe'] === -1) {
-            $defaults['Kachelhintergrundfarbe'] = 0x000000; // Schwarz
+        if (isset($defaults['TileBackgroundColor']) && (int)$defaults['TileBackgroundColor'] === -1) {
+            $defaults['TileBackgroundColor'] = 0x000000; // Schwarz
         }
         $resultRooms = [];
 
@@ -1068,52 +1127,52 @@ class RoomTile extends IPSModule
 
             // Styles (kombiniere Defaults + Raum-spezifisch)
             $inf = null;
-            if (array_key_exists('InfoSchriftgroesse', $room)) { $inf = (int)$room['InfoSchriftgroesse']; }
-            $r['infofontsize'] = ($inf === null || $inf <= 0) ? (int)($defaults['InfoSchriftgroesse'] ?? 16) : $inf;
+            if (array_key_exists('InfoFontSize', $room)) { $inf = (int)$room['InfoFontSize']; }
+            $r['infofontsize'] = ($inf === null || $inf <= 0) ? (int)($defaults['InfoFontSize'] ?? 16) : $inf;
             // Höhe der Infoleiste (nur globaler Default)
-            $r['infoheight'] = (int)($defaults['InfoHoehe'] ?? 0);
+            $r['infoheight'] = (int)($defaults['InfoHeight'] ?? 0);
 
             $imf = null;
-            if (array_key_exists('InfoMenueSchriftgroesse', $room)) { $imf = (int)$room['InfoMenueSchriftgroesse']; }
-            $r['infomenuefontsize'] = ($imf === null || $imf <= 0) ? (int)($defaults['InfoMenueSchriftgroesse'] ?? 16) : $imf;
+            if (array_key_exists('MenuFontSize', $room)) { $imf = (int)$room['MenuFontSize']; }
+            $r['menufontsize'] = ($imf === null || $imf <= 0) ? (int)($defaults['MenuFontSize'] ?? 16) : $imf;
 
             $kcol = null;
-            if (array_key_exists('Kachelhintergrundfarbe', $room)) { $kcol = (int)$room['Kachelhintergrundfarbe']; }
-            if ($kcol === null || $kcol === -1) { $kcol = (int)($defaults['Kachelhintergrundfarbe'] ?? 0x000000); }
-            $r['hintergrundfarbe'] = $this->toCssHex($kcol);
+            if (array_key_exists('TileBackgroundColor', $room)) { $kcol = (int)$room['TileBackgroundColor']; }
+            if ($kcol === null || $kcol === -1) { $kcol = (int)($defaults['TileBackgroundColor'] ?? 0x000000); }
+            $r['tilebackgroundcolor'] = $this->toCssHex($kcol);
 
             $icol = null;
-            if (array_key_exists('InfoSchriftfarbe', $room)) { $icol = (int)$room['InfoSchriftfarbe']; }
-            if ($icol === null || $icol === -1) { $icol = (int)($defaults['InfoSchriftfarbe'] ?? 0xFFFFFF); }
-            $r['infoschriftfarbe'] = $this->toCssHex($icol);
+            if (array_key_exists('InfoFontColor', $room)) { $icol = (int)$room['InfoFontColor']; }
+            if ($icol === null || $icol === -1) { $icol = (int)($defaults['InfoFontColor'] ?? 0xFFFFFF); }
+            $r['infofontcolor'] = $this->toCssHex($icol);
 
-            // InfoTop Hintergrundfarbe (badges) aus Defaults (Prozent -> Alpha)
-            $topCol = (int)($defaults['InfoTopHintergrundfarbe'] ?? 0x000000);
-            $topAlphaPercent = $this->normalizePercent((float)($defaults['InfoTopTransparenz'] ?? 30.0));
-            $r['infotophintergrundfarbe'] = $this->cssRgba($topCol, $this->percentToAlpha($topAlphaPercent));
+            // InfoTop BackgroundColor (badges) aus Defaults (Prozent -> Alpha)
+            $topCol = (int)($defaults['InfoTopBackgroundColor'] ?? 0x000000);
+            $topAlphaPercent = $this->normalizePercent((float)($defaults['InfoTopTransparency'] ?? 30.0));
+            $r['infotopbackgroundcolor'] = $this->cssRgba($topCol, $this->percentToAlpha($topAlphaPercent));
             $r['infotopborderradius'] = (int)($defaults['InfoTopBorderRadius'] ?? 50);
             $r['buttonborderradius'] = (int)$this->ReadPropertyInteger('Default_ButtonBorderRadius');
 
             $imcol = null;
-            if (array_key_exists('InfoMenueSchriftfarbe', $room)) { $imcol = (int)$room['InfoMenueSchriftfarbe']; }
-            if ($imcol === null || $imcol === -1) { $imcol = (int)($defaults['InfoMenueSchriftfarbe'] ?? 0xFFFFFF); }
-            $r['infomenueschriftfarbe'] = $this->toCssHex($imcol);
+            if (array_key_exists('MenuFontColor', $room)) { $imcol = (int)$room['MenuFontColor']; }
+            if ($imcol === null || $imcol === -1) { $imcol = (int)($defaults['MenuFontColor'] ?? 0xFFFFFF); }
+            $r['menufontcolor'] = $this->toCssHex($imcol);
 
-            if (array_key_exists('InfoMenueHintergrundfarbe', $room) && (int)$room['InfoMenueHintergrundfarbe'] !== -1) {
-                $bgCol = (int)$room['InfoMenueHintergrundfarbe'];
+            if (array_key_exists('MenuBackgroundColor', $room) && (int)$room['MenuBackgroundColor'] !== -1) {
+                $bgCol = (int)$room['MenuBackgroundColor'];
                 $alphaVal = null;
-                if (array_key_exists('InfoMenueTransparenz', $room)) { $alphaVal = (float)$room['InfoMenueTransparenz']; }
+                if (array_key_exists('MenuTransparency', $room)) { $alphaVal = (float)$room['MenuTransparency']; }
                 $bgAlphaPercent = ($alphaVal === null || $alphaVal < 0)
-                    ? $this->normalizePercent((float)($defaults['InfoMenueTransparenz'] ?? 30.0))
+                    ? $this->normalizePercent((float)($defaults['MenuTransparency'] ?? 30.0))
                     : $this->normalizePercent($alphaVal);
             } else {
-                $bgCol = (int)($defaults['InfoMenueHintergrundfarbe'] ?? 0x000000);
-                $bgAlphaPercent = $this->normalizePercent((float)($defaults['InfoMenueTransparenz'] ?? 30.0));
+                $bgCol = (int)($defaults['MenuBackgroundColor'] ?? 0x000000);
+                $bgAlphaPercent = $this->normalizePercent((float)($defaults['MenuTransparency'] ?? 30.0));
             }
-            $r['infomenuehintergrundfarbe'] = $this->cssRgba((int)$bgCol, $this->percentToAlpha($bgAlphaPercent));
-            $r['schalteralignment'] = (string)($room['SchalterAlignment'] ?? 'left');
-            $r['schalterdistribute'] = (bool)($room['SchalterDistribute'] ?? false);
-            $r['transparenz'] = $this->percentToAlpha($this->normalizePercent($this->ReadNumOrDefault($room, 'Bildtransparenz', $defaults, 70.0)));
+            $r['menubackgroundcolor'] = $this->cssRgba((int)$bgCol, $this->percentToAlpha($bgAlphaPercent));
+            $r['switchalignment'] = (string)($room['SwitchAlignment'] ?? 'left');
+            $r['switchdistribute'] = (bool)($room['SwitchDistribute'] ?? false);
+            $r['imagetransparency'] = $this->percentToAlpha($this->normalizePercent($this->ReadNumOrDefault($room, 'ImageTransparency', $defaults, 70.0)));
             $r['infotopcentered'] = (bool)$this->ReadPropertyBoolean('InfoTopCentered');
 
             // Hintergrundbild-Filter Parameter an Frontend senden
@@ -1124,21 +1183,21 @@ class RoomTile extends IPSModule
             $r['bgfiltergrayscalemin']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMin', [], 0.0);
             $r['bgfiltergrayscalemax']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMax', [], 0.5);
 
-            $r['raumname'] = (string)($room['Raumname'] ?? 'Raumname');
+            $r['roomname'] = (string)($room['RoomName'] ?? '');
             $r['targetlink'] = (int)($room['Target'] ?? 0);
             $rn = null;
-            if (array_key_exists('RaumnameSchriftgroesse', $room)) {
-                $rn = (int)$room['RaumnameSchriftgroesse'];
+            if (array_key_exists('RoomNameFontSize', $room)) {
+                $rn = (int)$room['RoomNameFontSize'];
             }
             if ($rn === null || $rn === -1) {
-                $r['raumnameschriftgroesse'] = (int)($defaults['RaumnameSchriftgroesse'] ?? 64);
+                $r['roomnamefontsize'] = (int)($defaults['RoomNameFontSize'] ?? 64);
             } else {
-                $r['raumnameschriftgroesse'] = $rn;
+                $r['roomnamefontsize'] = $rn;
             }
             $rncol = null;
-            if (array_key_exists('RaumnameSchriftfarbe', $room)) { $rncol = (int)$room['RaumnameSchriftfarbe']; }
+            if (array_key_exists('RoomNameFontColor', $room)) { $rncol = (int)$room['RoomNameFontColor']; }
             if ($rncol === null || $rncol === -1) { $rncol = 0xFFFFFF; }
-            $r['raumnameschriftfarbe'] = $this->toCssHex($rncol);
+            $r['roomnamefontcolor'] = $this->toCssHex($rncol);
 
             $midIconSize = (int)$this->ReadPropertyInteger('InfoMiddleIconSize');
             if ($midIconSize <= 0) {
@@ -1148,18 +1207,18 @@ class RoomTile extends IPSModule
 
             $midTextSize = (int)$this->ReadPropertyInteger('InfoMiddleTextSize');
             if ($midTextSize <= 0) {
-                $midTextSize = (int)($defaults['InfoSchriftgroesse'] ?? 16);
+                $midTextSize = (int)($defaults['InfoFontSize'] ?? 16);
             }
             $r['infomiddletextsize'] = $midTextSize;
 
             $midColor = (int)$this->ReadPropertyInteger('InfoMiddleColor');
             if ($midColor === -1) {
-                $r['infomiddlecolor'] = $r['infoschriftfarbe'];
+                $r['infomiddlecolor'] = $r['infofontcolor'];
             } else {
                 $r['infomiddlecolor'] = $this->toCssHex($midColor);
             }
 
-            $r['infomenueswitch'] = (bool)($room['InfoMenueSwitch'] ?? true);
+            $r['menuswitch'] = (bool)($room['MenuSwitch'] ?? true);
 
             // Use image colors for buttons per room (fallback to global flag)
             $useImgCol = array_key_exists('UseImageColorsForButtons', $room)
@@ -1167,32 +1226,41 @@ class RoomTile extends IPSModule
                 : (bool)$this->ReadPropertyBoolean('UseImageColorsForButtons');
             $r['useimagecolors'] = $useImgCol;
 
+            // Dynamic background image URL variable (overrides media images)
+            $bgUrlVarId = (int)($room['BackgroundImageUrl'] ?? 0);
+            $bgUrlActive = ($bgUrlVarId > 0 && @IPS_VariableExists($bgUrlVarId));
+            $bgUrlValue = $bgUrlActive ? (string)@GetValue($bgUrlVarId) : '';
+
             // Bilder: per WebHook ausliefern (Base64 via JSON)
-            $imageID = (int)($room['bgImage'] ?? 0);
-            $imageID2 = (int)($room['bgImage2'] ?? 0);
+            $imageID = (int)($room['BackgroundImage'] ?? 0);
+            $imageID2 = (int)($room['BackgroundImage2'] ?? 0);
             // Prüfe ob Media-IDs gültig sind
             if ($imageID2 > 0 && !@IPS_MediaExists($imageID2)) {
                 $imageID2 = 0; // Ungültige Media-ID ignorieren
             }
-            $r['image1'] = $this->BuildImageHookUrl($imageID);
-            if ($imageID2 > 0) {
-                $r['image2'] = $this->BuildImageHookUrl($imageID2);
-                $r['image2enabled'] = true;
-            } else {
+            if ($bgUrlActive && $bgUrlValue !== '') {
+                $r['image1'] = $bgUrlValue;
                 $r['image2enabled'] = false;
-                // image2 nicht setzen, um 404-Fehler zu vermeiden
+            } else {
+                $r['image1'] = $this->BuildImageHookUrl($imageID);
+                if ($imageID2 > 0) {
+                    $r['image2'] = $this->BuildImageHookUrl($imageID2);
+                    $r['image2enabled'] = true;
+                } else {
+                    $r['image2enabled'] = false;
+                }
             }
 
-            // Hintergrundfilter & Fade aus Lichtstatus/Dimmwert
+            // Hintergrundfilter & Fade aus LightStatus/DimValue
             try {
-                $boolId = (int)($room['Lichtstatus'] ?? 0);
-                $dimId = (int)($room['Dimmwert'] ?? 0);
+                $boolId = (int)($room['LightStatus'] ?? 0);
+                $dimId = (int)($room['DimValue'] ?? 0);
                 $p = $this->computeBgFilterValue($boolId, $dimId);
-                // Wenn Bild 2 konfiguriert ist, Filter deaktivieren (bgfilter = 0)
-                if ($imageID2 > 0) { $p = 0.0; }
+                // Filter deaktivieren wenn URL-Variable aktiv oder Bild 2 konfiguriert
+                if ($bgUrlActive || $imageID2 > 0) { $p = 0.0; }
                 $r['bgfilter'] = $p;
-                // bgfade nur senden wenn zweites Bild konfiguriert ist
-                if ($imageID2 > 0) {
+                // bgfade nur senden wenn zweites Bild konfiguriert ist (und keine URL-Variable)
+                if (!$bgUrlActive && $imageID2 > 0) {
                     $r['bgfade'] = $this->computeBgFadeValue($boolId, $dimId);
                 } else {
                     $r['bgfade'] = 0.0;
@@ -1218,27 +1286,27 @@ class RoomTile extends IPSModule
             // Schalter-Breiten, Volle Breite und Farben (fixed only)
             for ($i = 1; $i <= 5; $i++) {
                 // Always send breite and vollebreite, even if no variable assigned
-                $r['schalter' . $i . 'breite'] = (float)($room['Schalter' . $i . 'Breite'] ?? 100);
-                $r['schalter' . $i . 'vollebreite'] = (bool)($room['Schalter' . $i . 'VolleBreite'] ?? false);
+                $r['switch' . $i . 'width'] = (float)($room['Switch' . $i . 'Width'] ?? 100);
+                $r['switch' . $i . 'fullwidth'] = (bool)($room['Switch' . $i . 'FullWidth'] ?? false);
                 
-                $sid = (int)($room['Schalter' . $i] ?? 0);
+                $sid = (int)($room['Switch' . $i] ?? 0);
                 if (!$useImgCol && $sid > 0 && IPS_VariableExists($sid)) {
                     $col = $this->GetColor($sid);
                     if ($col !== '') {
-                        $r['schalter' . $i . 'color'] = '#' . $col;
+                        $r['switch' . $i . 'color'] = '#' . $col;
                     }
                 }
             }
 
             // Alt-Namen (fixed only)
             for ($i = 1; $i <= 5; $i++) {
-                $r['schalter' . $i . 'altname'] = (string)($room['Schalter' . $i . 'AltName'] ?? '');
+                $r['switch' . $i . 'altname'] = (string)($room['Switch' . $i . 'AltName'] ?? '');
                 $r['info' . $i . 'altname'] = (string)($room['Info' . $i . 'AltName'] ?? '');
             }
-            $r['infolinksaltname'] = (string)($room['InfoLinksAltName'] ?? '');
-            $r['inforechtsaltname'] = (string)($room['InfoRechtsAltName'] ?? '');
-            $r['infolinks2altname'] = (string)($room['InfoLinks2AltName'] ?? '');
-            $r['inforechts2altname'] = (string)($room['InfoRechts2AltName'] ?? '');
+            $r['infoleftaltname'] = (string)($room['InfoLeftAltName'] ?? '');
+            $r['inforightaltname'] = (string)($room['InfoRightAltName'] ?? '');
+            $r['infoleft2altname'] = (string)($room['InfoLeft2AltName'] ?? '');
+            $r['inforight2altname'] = (string)($room['InfoRight2AltName'] ?? '');
 
             $resultRooms[] = $r;
         }
@@ -1251,17 +1319,17 @@ class RoomTile extends IPSModule
     {
         // InfoSeiten links/rechts + Menü-Infos
         $pairs = [
-            'InfoLinks' => 'infolinks',
-            'InfoLinks2' => 'infolinks2',
-            'InfoRechts' => 'inforechts',
-            'InfoRechts2' => 'inforechts2',
+            'InfoLeft' => 'infoleft',
+            'InfoLeft2' => 'infoleft2',
+            'InfoRight' => 'inforight',
+            'InfoRight2' => 'inforight2',
             'InfoMiddleLeft' => 'infomiddleleft',
             'InfoMiddleRight' => 'infomiddleright'
         ];
         $middleProps = ['InfoMiddleLeft', 'InfoMiddleRight'];
         foreach ($pairs as $prop => $key) {
             $id = (int)($room[$prop] ?? 0);
-            if ($id > 0 && IPS_VariableExists($id)) {
+            if ($id > 0 && IPS_VariableExists($id) && !TileVisuLib::isObjectHidden($id)) {
                 // fallback color from profile/presentation
                 $col = $this->GetColor($id);
                 if ($col !== '') {
@@ -1294,7 +1362,7 @@ class RoomTile extends IPSModule
         for ($i = 1; $i <= 5; $i++) {
             $prop = 'Info' . $i;
             $id = (int)($room[$prop] ?? 0);
-            if ($id > 0 && IPS_VariableExists($id)) {
+            if ($id > 0 && IPS_VariableExists($id) && !TileVisuLib::isObjectHidden($id)) {
                 $key = 'info' . $i;
                 // fallback color from profile/presentation
                 try {
@@ -1357,10 +1425,10 @@ class RoomTile extends IPSModule
         }
 
         for ($i = 1; $i <= 5; $i++) {
-            $prop = 'Schalter' . $i;
+            $prop = 'Switch' . $i;
             $id = (int)($room[$prop] ?? 0);
-            if ($id > 0 && IPS_VariableExists($id)) {
-                $key = 'schalter' . $i;
+            if ($id > 0 && IPS_VariableExists($id) && !TileVisuLib::isObjectHidden($id)) {
+                $key = 'switch' . $i;
                 // aktueller Rohwert (für Active-State im Frontend)
                 try {
                     $out[$key . 'value'] = GetValue($id);
@@ -1478,13 +1546,14 @@ class RoomTile extends IPSModule
         
         $room = [];
         
-        $room['Raumname'] = (string)$this->ReadPropertyString('Raumname');
+        $room['RoomName'] = (string)$this->ReadPropertyString('RoomName');
         $room['Target'] = (int)$this->ReadPropertyInteger('Target');
-        $room['bgImage'] = (int)$this->ReadPropertyInteger('bgImage');
-        $room['bgImage2'] = (int)$this->ReadPropertyInteger('bgImage2');
+        $room['BackgroundImageUrl'] = (int)$this->ReadPropertyInteger('BackgroundImageUrl');
+        $room['BackgroundImage'] = (int)$this->ReadPropertyInteger('BackgroundImage');
+        $room['BackgroundImage2'] = (int)$this->ReadPropertyInteger('BackgroundImage2');
         // Hintergrund-Filtersteuerung
-        $room['Lichtstatus'] = (int)$this->ReadPropertyInteger('Lichtstatus');
-        $room['Dimmwert'] = (int)$this->ReadPropertyInteger('Dimmwert');
+        $room['LightStatus'] = (int)$this->ReadPropertyInteger('LightStatus');
+        $room['DimValue'] = (int)$this->ReadPropertyInteger('DimValue');
         // Bildfilter-Parameter
         $room['BgFilterBrightnessMin'] = (float)$this->ReadPropertyFloat('BgFilterBrightnessMin');
         $room['BgFilterBrightnessMax'] = (float)$this->ReadPropertyFloat('BgFilterBrightnessMax');
@@ -1493,58 +1562,58 @@ class RoomTile extends IPSModule
         $room['BgFilterGrayscaleMin']  = (float)$this->ReadPropertyFloat('BgFilterGrayscaleMin');
         $room['BgFilterGrayscaleMax']  = (float)$this->ReadPropertyFloat('BgFilterGrayscaleMax');
         
-        $room['Bildtransparenz'] = (float)$this->ReadPropertyFloat('Bildtransparenz');
-        $room['Kachelhintergrundfarbe'] = (int)$this->ReadPropertyInteger('Kachelhintergrundfarbe');
-        $room['RaumnameSchriftfarbe'] = (int)$this->ReadPropertyInteger('RaumnameSchriftfarbe');
-        $room['RaumnameSchriftgroesse'] = (int)$this->ReadPropertyInteger('RaumnameSchriftgroesse');
-        $room['InfoSchriftgroesse'] = (int)$this->ReadPropertyInteger('InfoSchriftgroesse');
-        $room['InfoSchriftfarbe'] = (int)$this->ReadPropertyInteger('InfoSchriftfarbe');
-        $room['InfoMenueSchriftgroesse'] = (int)$this->ReadPropertyInteger('InfoMenueSchriftgroesse');
-        $room['InfoMenueSchriftfarbe'] = (int)$this->ReadPropertyInteger('InfoMenueSchriftfarbe');
-        $room['InfoMenueTransparenz'] = (float)$this->ReadPropertyFloat('InfoMenueTransparenz');
-        $room['InfoMenueHintergrundfarbe'] = (int)$this->ReadPropertyInteger('InfoMenueHintergrundfarbe');
+        $room['ImageTransparency'] = (float)$this->ReadPropertyFloat('ImageTransparency');
+        $room['TileBackgroundColor'] = (int)$this->ReadPropertyInteger('TileBackgroundColor');
+        $room['RoomNameFontColor'] = (int)$this->ReadPropertyInteger('RoomNameFontColor');
+        $room['RoomNameFontSize'] = (int)$this->ReadPropertyInteger('RoomNameFontSize');
+        $room['InfoFontSize'] = (int)$this->ReadPropertyInteger('InfoFontSize');
+        $room['InfoFontColor'] = (int)$this->ReadPropertyInteger('InfoFontColor');
+        $room['MenuFontSize'] = (int)$this->ReadPropertyInteger('MenuFontSize');
+        $room['MenuFontColor'] = (int)$this->ReadPropertyInteger('MenuFontColor');
+        $room['MenuTransparency'] = (float)$this->ReadPropertyFloat('MenuTransparency');
+        $room['MenuBackgroundColor'] = (int)$this->ReadPropertyInteger('MenuBackgroundColor');
         $room['UseImageColorsForButtons'] = (bool)$this->ReadPropertyBoolean('UseImageColorsForButtons');
         
-        $room['InfoLinks'] = (int)$this->ReadPropertyInteger('InfoLinks');
-        $room['InfoLinksNameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLinksNameSwitch');
-        $room['InfoLinksIconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLinksIconSwitch');
-        $room['InfoLinksShowValue'] = (bool)$this->ReadPropertyBoolean('InfoLinksShowValue');
-        $room['InfoLinksAltName'] = (string)$this->ReadPropertyString('InfoLinksAltName');
-        $room['InfoLinks2'] = (int)$this->ReadPropertyInteger('InfoLinks2');
-        $room['InfoLinks2NameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLinks2NameSwitch');
-        $room['InfoLinks2IconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLinks2IconSwitch');
-        $room['InfoLinks2ShowValue'] = (bool)$this->ReadPropertyBoolean('InfoLinks2ShowValue');
-        $room['InfoLinks2AltName'] = (string)$this->ReadPropertyString('InfoLinks2AltName');
-        $room['InfoRechts'] = (int)$this->ReadPropertyInteger('InfoRechts');
-        $room['InfoRechtsNameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRechtsNameSwitch');
-        $room['InfoRechtsIconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRechtsIconSwitch');
-        $room['InfoRechtsShowValue'] = (bool)$this->ReadPropertyBoolean('InfoRechtsShowValue');
-        $room['InfoRechtsAltName'] = (string)$this->ReadPropertyString('InfoRechtsAltName');
-        $room['InfoRechts2'] = (int)$this->ReadPropertyInteger('InfoRechts2');
-        $room['InfoRechts2NameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRechts2NameSwitch');
-        $room['InfoRechts2IconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRechts2IconSwitch');
-        $room['InfoRechts2ShowValue'] = (bool)$this->ReadPropertyBoolean('InfoRechts2ShowValue');
-        $room['InfoRechts2AltName'] = (string)$this->ReadPropertyString('InfoRechts2AltName');
+        $room['InfoLeft'] = (int)$this->ReadPropertyInteger('InfoLeft');
+        $room['InfoLeftNameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLeftNameSwitch');
+        $room['InfoLeftIconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLeftIconSwitch');
+        $room['InfoLeftShowValue'] = (bool)$this->ReadPropertyBoolean('InfoLeftShowValue');
+        $room['InfoLeftAltName'] = (string)$this->ReadPropertyString('InfoLeftAltName');
+        $room['InfoLeft2'] = (int)$this->ReadPropertyInteger('InfoLeft2');
+        $room['InfoLeft2NameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLeft2NameSwitch');
+        $room['InfoLeft2IconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoLeft2IconSwitch');
+        $room['InfoLeft2ShowValue'] = (bool)$this->ReadPropertyBoolean('InfoLeft2ShowValue');
+        $room['InfoLeft2AltName'] = (string)$this->ReadPropertyString('InfoLeft2AltName');
+        $room['InfoRight'] = (int)$this->ReadPropertyInteger('InfoRight');
+        $room['InfoRightNameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRightNameSwitch');
+        $room['InfoRightIconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRightIconSwitch');
+        $room['InfoRightShowValue'] = (bool)$this->ReadPropertyBoolean('InfoRightShowValue');
+        $room['InfoRightAltName'] = (string)$this->ReadPropertyString('InfoRightAltName');
+        $room['InfoRight2'] = (int)$this->ReadPropertyInteger('InfoRight2');
+        $room['InfoRight2NameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRight2NameSwitch');
+        $room['InfoRight2IconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoRight2IconSwitch');
+        $room['InfoRight2ShowValue'] = (bool)$this->ReadPropertyBoolean('InfoRight2ShowValue');
+        $room['InfoRight2AltName'] = (string)$this->ReadPropertyString('InfoRight2AltName');
         $room['InfoMiddleLeft'] = (int)$this->ReadPropertyInteger('InfoMiddleLeft');
-        $room['InfoMiddleLeftNameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoMiddleLeftNameSwitch');
-        $room['InfoMiddleLeftIconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoMiddleLeftIconSwitch');
+        $room['InfoMiddleLeftShowName'] = (bool)$this->ReadPropertyBoolean('InfoMiddleLeftShowName');
+        $room['InfoMiddleLeftShowIcon'] = (bool)$this->ReadPropertyBoolean('InfoMiddleLeftShowIcon');
         $room['InfoMiddleLeftShowValue'] = (bool)$this->ReadPropertyBoolean('InfoMiddleLeftShowValue');
         $room['InfoMiddleRight'] = (int)$this->ReadPropertyInteger('InfoMiddleRight');
-        $room['InfoMiddleRightNameSwitch'] = (bool)$this->ReadPropertyBoolean('InfoMiddleRightNameSwitch');
-        $room['InfoMiddleRightIconSwitch'] = (bool)$this->ReadPropertyBoolean('InfoMiddleRightIconSwitch');
+        $room['InfoMiddleRightShowName'] = (bool)$this->ReadPropertyBoolean('InfoMiddleRightShowName');
+        $room['InfoMiddleRightShowIcon'] = (bool)$this->ReadPropertyBoolean('InfoMiddleRightShowIcon');
         $room['InfoMiddleRightShowValue'] = (bool)$this->ReadPropertyBoolean('InfoMiddleRightShowValue');
 
-        $room['InfoMenueSwitch'] = (bool)$this->ReadPropertyBoolean('InfoMenueSwitch');
-        $room['SchalterAlignment'] = (string)$this->ReadPropertyString('SchalterAlignment');
-        $room['SchalterDistribute'] = (bool)$this->ReadPropertyBoolean('SchalterDistribute');
+        $room['MenuSwitch'] = (bool)$this->ReadPropertyBoolean('MenuSwitch');
+        $room['SwitchAlignment'] = (string)$this->ReadPropertyString('SwitchAlignment');
+        $room['SwitchDistribute'] = (bool)$this->ReadPropertyBoolean('SwitchDistribute');
         for ($i = 1; $i <= 5; $i++) {
-            $room['Schalter' . $i] = (int)$this->ReadPropertyInteger('Schalter' . $i);
-            $room['Schalter' . $i . 'NameSwitch'] = (bool)$this->ReadPropertyBoolean('Schalter' . $i . 'NameSwitch');
-            $room['Schalter' . $i . 'IconSwitch'] = (bool)$this->ReadPropertyBoolean('Schalter' . $i . 'IconSwitch');
-            $room['Schalter' . $i . 'ShowValue'] = (bool)$this->ReadPropertyBoolean('Schalter' . $i . 'ShowValue');
-            $room['Schalter' . $i . 'AltName'] = (string)$this->ReadPropertyString('Schalter' . $i . 'AltName');
-            $room['Schalter' . $i . 'Breite'] = (int)$this->ReadPropertyInteger('Schalter' . $i . 'Breite');
-            $room['Schalter' . $i . 'VolleBreite'] = (bool)$this->ReadPropertyBoolean('Schalter' . $i . 'VolleBreite');
+            $room['Switch' . $i] = (int)$this->ReadPropertyInteger('Switch' . $i);
+            $room['Switch' . $i . 'NameSwitch'] = (bool)$this->ReadPropertyBoolean('Switch' . $i . 'NameSwitch');
+            $room['Switch' . $i . 'IconSwitch'] = (bool)$this->ReadPropertyBoolean('Switch' . $i . 'IconSwitch');
+            $room['Switch' . $i . 'ShowValue'] = (bool)$this->ReadPropertyBoolean('Switch' . $i . 'ShowValue');
+            $room['Switch' . $i . 'AltName'] = (string)$this->ReadPropertyString('Switch' . $i . 'AltName');
+            $room['Switch' . $i . 'Width'] = (int)$this->ReadPropertyInteger('Switch' . $i . 'Width');
+            $room['Switch' . $i . 'FullWidth'] = (bool)$this->ReadPropertyBoolean('Switch' . $i . 'FullWidth');
         }
         return [$room];
     }
@@ -1654,7 +1723,6 @@ class RoomTile extends IPSModule
                 if ($norm < 0.0) { $norm = 0.0; }
                 if ($norm > 1.0) { $norm = 1.0; }
                 $dimPercent = $norm * 100.0;
-                $this->SendDebug('computeBgFilterValue', "DimID=$dimId, Raw=$raw, Min=$min, Max=$max, Norm=$norm, DimPercent=$dimPercent", 0);
             } catch (Throwable $e) {}
         }
         $pOut = 0.0;
@@ -1669,7 +1737,6 @@ class RoomTile extends IPSModule
         }
         if ($pOut < 0.0) { $pOut = 0.0; }
         if ($pOut > 100.0) { $pOut = 100.0; }
-        $this->SendDebug('computeBgFilterValue', "BoolID=$boolId (Val=$boolVal), DimID=$dimId (Percent=$dimPercent) => bgfilter=$pOut", 0);
         return $pOut;
     }
 
@@ -1710,12 +1777,12 @@ class RoomTile extends IPSModule
                 $dimPercent = $norm * 100.0;
             } catch (Throwable $e) {}
         }
-        // Fade-Logik: Bild1 wird transparenter, wenn Licht aus bzw. je nach Dimmwert
+        // Fade-Logik: Bild1 wird transparenter, wenn Licht aus bzw. je nach DimValue
         if ($hasBool && $boolVal === false) {
             return 100.0;
         }
         if ($hasDim) {
-            // 100% (hell) => 0% Transparenz, 0% (aus) => 100% Transparenz
+            // 100% (hell) => 0% Transparency, 0% (aus) => 100% Transparency
             $fade = 100.0 - $dimPercent;
             if ($fade < 0.0) $fade = 0.0; if ($fade > 100.0) $fade = 100.0;
             return $fade;
@@ -1879,7 +1946,7 @@ class RoomTile extends IPSModule
         return TileVisuLib::getProfileColorHex($id);
     }
 
-    private function GetColorRGBFrom(int $hexcolor, float $transparenz): string
+    private function GetColorRGBFrom(int $hexcolor, float $transparency): string
     {
         if ($hexcolor === -1) {
             return '';
@@ -1889,7 +1956,7 @@ class RoomTile extends IPSModule
             $r = hexdec(substr($hexColor, 0, 2));
             $g = hexdec(substr($hexColor, 2, 2));
             $b = hexdec(substr($hexColor, 4, 2));
-            return "rgba($r, $g, $b, $transparenz)";
+            return "rgba($r, $g, $b, $transparency)";
         }
         return $hexColor;
     }
@@ -1901,171 +1968,7 @@ class RoomTile extends IPSModule
 
     private function GetIconAdvanced(int $id): string
     {
-        $debug = false;
-        if ($id <= 0 || !@IPS_VariableExists($id)) {
-            if ($debug) $this->SendDebug('GetIconAdvanced', 'Variable does not exist: ' . $id, 0);
-            return 'Transparent';
-        }
-        $variable = @IPS_GetVariable($id);
-        $value = null;
-        try { $value = @GetValue($id); } catch (Throwable $e) {}
-
-        $pres = [];
-        if (isset($variable['VariableCustomPresentation']) && is_array($variable['VariableCustomPresentation'])) {
-            $pres = $variable['VariableCustomPresentation'];
-        } elseif (isset($variable['VariablePresentation']) && is_array($variable['VariablePresentation'])) {
-            $pres = $variable['VariablePresentation'];
-        }
-
-        if (!empty($pres)) {
-            if (!empty($pres['ICON'])) {
-                return (string)$pres['ICON'];
-            }
-            if (!empty($pres['Icon'])) {
-                return (string)$pres['Icon'];
-            }
-            if (isset($variable['VariableType']) && $variable['VariableType'] === 0) {
-                $iconTrueSet = isset($pres['ICON_TRUE']) && trim((string)$pres['ICON_TRUE']) !== '';
-                $iconFalseSet = isset($pres['ICON_FALSE']) && trim((string)$pres['ICON_FALSE']) !== '';
-                if ($iconTrueSet || $iconFalseSet) {
-                    $useFalse = $pres['USE_ICON_FALSE'] ?? true;
-                    $sameBoth = ($iconTrueSet && $iconFalseSet && (string)$pres['ICON_TRUE'] === (string)$pres['ICON_FALSE']);
-                    if ($sameBoth) {
-                        return (string)$pres['ICON_TRUE'];
-                    }
-                    $isTrue = ($value === true) || ((string)$value === '1') || ($value === 1);
-                    $isFalse = ($value === false) || ((string)$value === '0') || ($value === 0) || ((string)$value === '');
-                    if ($iconTrueSet && $isTrue) {
-                        return (string)$pres['ICON_TRUE'];
-                    }
-                    if ($iconFalseSet && $useFalse && $isFalse) {
-                        return (string)$pres['ICON_FALSE'];
-                    }
-                }
-            }
-            if (isset($pres['OPTIONS']) && !empty($pres['OPTIONS'])) {
-                $opts = is_string($pres['OPTIONS']) ? @json_decode($pres['OPTIONS'], true) : $pres['OPTIONS'];
-                if (is_array($opts)) {
-                    $vtLocal = $variable['VariableType'] ?? 0;
-                    $valNorm = ($vtLocal === 0) ? (((($value === true) || ((string)$value === '1') || ($value === 1)) ? '1' : '0')) : (string)$value;
-                    foreach ($opts as $opt) {
-                        if (!is_array($opt)) continue;
-                        if (!array_key_exists('Value', $opt)) continue;
-                        $optVal = $opt['Value'];
-                        $optNorm = ($vtLocal === 0) ? (((($optVal === true) || ($optVal === 1) || ((string)$optVal === '1')) ? '1' : '0')) : (string)$optVal;
-                        if ($vtLocal === 0 ? ($optNorm === $valNorm) : ((string)$optVal === (string)$value)) {
-                            $iconVal = $opt['IconValue'] ?? ($opt['Icon'] ?? '');
-                            if (!empty($iconVal)) return (string)$iconVal;
-                        }
-                    }
-                }
-            }
-            if (isset($pres['TEMPLATE']) && function_exists('IPS_GetTemplate')) {
-                $tpl = @IPS_GetTemplate($pres['TEMPLATE']);
-                // Direct ICON from template default values
-                if (is_array($tpl) && isset($tpl['Values']) && is_array($tpl['Values'])) {
-                    $vals = $tpl['Values'];
-                    if (!empty($vals['ICON'])) { return (string)$vals['ICON']; }
-                    if (!empty($vals['Icon'])) { return (string)$vals['Icon']; }
-                }
-                if (is_array($tpl) && isset($tpl['Values']['OPTIONS'])) {
-                    $optsRaw = $tpl['Values']['OPTIONS'];
-                    $opts = is_string($optsRaw) ? @json_decode($optsRaw, true) : $optsRaw;
-                    if (is_array($opts)) {
-                        $vtLocal = $variable['VariableType'] ?? 0;
-                        $valNorm = ($vtLocal === 0) ? (((($value === true) || ((string)$value === '1') || ($value === 1)) ? '1' : '0')) : (string)$value;
-                        foreach ($opts as $opt) {
-                            if (!is_array($opt)) continue;
-                            if (!array_key_exists('Value', $opt)) continue;
-                            $optVal = $opt['Value'];
-                            $optNorm = ($vtLocal === 0) ? (((($optVal === true) || ($optVal === 1) || ((string)$optVal === '1')) ? '1' : '0')) : (string)$optVal;
-                            if ($vtLocal === 0 ? ($optNorm === $valNorm) : ((string)$optVal === (string)$value)) {
-                                $iconVal = $opt['IconValue'] ?? ($opt['Icon'] ?? '');
-                                if (!empty($iconVal)) return (string)$iconVal;
-                            }
-                        }
-                    }
-                }
-            }
-            if (isset($pres['PRESENTATION']) && !empty($pres['PRESENTATION'])) {
-                $guidRaw = (string)$pres['PRESENTATION'];
-                $guid = $guidRaw;
-                if (strpos($guid, '{') === false) {
-                    $guid = '{' . $guid . '}';
-                }
-                try {
-                    $pdata = null;
-                    $guidExists = false;
-                    if (function_exists('IPS_PresentationExists')) {
-                        $guidExists = @IPS_PresentationExists($guid);
-                    }
-                    if ($guidExists) {
-                        if (function_exists('IPS_GetPresentation')) {
-                            $pdata = IPS_GetPresentation($guid);
-                        }
-                    } else {
-                    }
-                } catch (Exception $e) {
-                }
-                if (is_string($pdata) && !empty($pdata)) {
-                    $arr = @json_decode($pdata, true);
-                    if (is_array($arr)) { $pdata = $arr; }
-                }
-                if (is_array($pdata)) {
-                    $vt = $variable['VariableType'] ?? 0;
-                    $pp = isset($pdata['presentationParameters']) && is_array($pdata['presentationParameters']) ? $pdata['presentationParameters'] : [];
-                    if (!empty($pp)) {
-                        if (!empty($pp['ICON'])) {
-                            return (string)$pp['ICON'];
-                        }
-                        if (!empty($pp['Icon'])) {
-                            return (string)$pp['Icon'];
-                        }
-                        if ($vt === 0) {
-                            $useFalse = $pp['USE_ICON_FALSE'] ?? true;
-                            $iconTrueSet = isset($pp['ICON_TRUE']) && trim((string)$pp['ICON_TRUE']) !== '';
-                            $iconFalseSet = isset($pp['ICON_FALSE']) && trim((string)$pp['ICON_FALSE']) !== '';
-                            if ($iconTrueSet || $iconFalseSet) {
-                                $sameBoth = ($iconTrueSet && $iconFalseSet && (string)$pp['ICON_TRUE'] === (string)$pp['ICON_FALSE']);
-                                if ($sameBoth) {
-                                    return (string)$pp['ICON_TRUE'];
-                                }
-                                $isTrue = ($value === true) || ((string)$value === '1') || ($value === 1);
-                                $isFalse = ($value === false) || ((string)$value === '0') || ($value === 0) || ((string)$value === '');
-                                if ($iconTrueSet && $isTrue) {
-                                    return (string)$pp['ICON_TRUE'];
-                                }
-                                if ($iconFalseSet && $useFalse && $isFalse) {
-                                    return (string)$pp['ICON_FALSE'];
-                                }
-                            }
-                        }
-                        $optsRaw = $pp['OPTIONS'] ?? null;
-                        if ($optsRaw) {
-                            $opts = is_string($optsRaw) ? @json_decode($optsRaw, true) : $optsRaw;
-                            if (is_array($opts)) {
-                                foreach ($opts as $opt) {
-                                    if (!is_array($opt)) continue;
-                                    $optVal = $opt['Value'] ?? null;
-                                    if (array_key_exists('Value', $opt)) {
-                                        $match = ((string)$optVal === (string)$value) || ($vt === 0 && ($optVal === false && (($value === false) || (string)$value === '0' || (string)$value === '')));
-                                        if ($match) {
-                                            $iconVal = $opt['IconValue'] ?? ($opt['Icon'] ?? '');
-                                            if (!empty($iconVal)) {
-                                                return (string)$iconVal;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        $fallback = $this->GetIcon($id, false);
-        return $fallback;
+        return TileVisuLib::getIconAdvanced($id);
     }
 
     private function sendMenuItemDelta(string $itemId, int $varId)

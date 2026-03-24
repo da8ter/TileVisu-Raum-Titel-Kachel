@@ -1,12 +1,39 @@
 # Multi‑Raum Kachel
 
-## Kurzbeschreibung
+### Inhaltsverzeichnis
 
-Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum kann ein eigenes Bild, einen zentralen Raumnamen, Info‑Leisten und eine Menüleiste mit Schaltern besitzen. Globale Standardwerte erleichtern die einheitliche Gestaltung; pro Raum können diese Werte überschrieben werden. Optional: Ein Bildfilter simuliert den Lichtstatus über das Hintergrundbild. Licht aus = abdunkeln des Bildes, Licht an = Dimmwert bestimmt die Intensität (100 ≈ kein Effekt, 0 = maximal).
+1. [Funktionsumfang](#1-funktionsumfang)
+2. [Voraussetzungen](#2-voraussetzungen)
+3. [Software-Installation](#3-software-installation)
+4. [Einrichten der Instanzen in IP-Symcon](#4-einrichten-der-instanzen-in-ip-symcon)
+5. [Kachelkonfiguration](#5-kachelkonfiguration)
 
-## Backend‑Konfiguration
+### 1. Funktionsumfang
 
-### Kachel- und Raster-Einstellungen
+* Stellt mehrere Räume in einem konfigurierbaren Raster dar.
+* Jeder Raum kann ein eigenes Bild, einen zentralen Raumnamen, Info‑Leisten und eine Menüleiste mit Schaltern besitzen.
+* Globale Standardwerte erleichtern die einheitliche Gestaltung; pro Raum können diese Werte überschrieben werden.
+* Optional: Ein Bildfilter simuliert den Lichtstatus über das Hintergrundbild.
+* Dynamisches Hintergrundbild über eine URL‑Variable (z. B. Wetterbild, Webcam).
+
+### 2. Voraussetzungen
+
+- IP-Symcon ab Version 7.1
+
+### 3. Software-Installation
+
+* Über den Module Store, oder
+* Über das Module Control folgende URL hinzufügen:
+  `https://github.com/da8ter/TileVisu-Raum-Titel-Kachel.git`
+
+### 4. Einrichten der Instanzen in IP-Symcon
+
+Unter 'Instanz hinzufügen' kann die Multi‑Raum Kachel mithilfe des Schnellfilters gefunden werden (Suchbegriff: MultiRoomTile, TileVisu oder Kachel).
+- Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
+
+### 5. Kachelkonfiguration
+
+#### Kachel- und Raster-Einstellungen
 - **Volle Kachelhöhe nutzen**: Reduziert den oberen Rand-Abstand auf das gleiche Maß wie der untere Rand-Abstand.
 - **individueller Randabstand**: Setzt einen individuellen Randabstand. -1 = Standardwerte.
 - **Minimale Kachelbreite / -höhe (px)**: Basisgröße der Kacheln für die automatische Spaltenberechnung.
@@ -14,7 +41,7 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
 - **Eckenradius (px)**: Abrundung der Kachelecken.
 - **Spalten (0 = auto)**: Feste Spaltenanzahl, 0 = automatische Verteilung.
 
-### Globale Standardwerte
+#### Globale Standardwerte
 - **Buttonfarben aus Hintergrundbild**: Leitet global Buttonfarben aus dem Kachelbild ab.
 - **Infoleiste**
   - Schriftgröße
@@ -39,9 +66,9 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
   - Schriftgröße
   - Schriftfarbe
 
-### Räume
+#### Räume
 
-#### Info‑Leiste
+__Info‑Leiste__
 - **Zentriert in der Mitte**: Fasst links/rechts zusammen und zentriert.
 - **Schriftgröße / Schriftfarbe**: Per Raum (−1 = globale Defaults übernehmen).
 - **Hintergrund‑Transparenz / Hintergrundfarbe**: Einheitlich für links/mitte/rechts (−1 = global).
@@ -50,13 +77,14 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
  - **Hintergrundfarbe: Status = True**: Überschreibt die Hintergrundfarbe, wenn der Status True ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
  - **Hintergrundfarbe: Status = False**: Überschreibt die Hintergrundfarbe, wenn der Status False ist. Wird z.B. benötigt bei Bool-Variablen mit der Darstellung Schalter/Switch weil dort keine Farben konfiguriert werden können.
 
-#### Raumname
+__Raumname__
 - **Name anzeigen**: Schaltet die Anzeige des Raumnamens pro Raum ein/aus.
 - **Raumname**: Anzeigetext in der Kachel.
 - **Objekt welche beim Klick geöffnet wird**: Zielobjekt bei Klick (optional).
 - **Schriftgröße / Schriftfarbe**: (−1 = globale Defaults übernehmen).
 
-#### Hintergrund
+__Hintergrund__
+- **URL Hintergrundbild (String-Variable)**: Optionale String‑Variable mit einer Bild‑URL. Überschreibt das statische Hintergrundbild. Der Bildfilter wird bei aktivem dynamischen Hintergrundbild automatisch deaktiviert. Anwendungsbeispiele: Wetterbild, Webcam, externe Bilder.
 - **Hintergrundbild Lichtstatus an** (Bild 1) und **Hintergrundbild Lichtstatus aus** (Bild 2):
   - Wenn Bild 2 gesetzt ist, wird der Bild‑Filter deaktiviert.
   - Stattdessen wird Bild 1 über Bild 2 gelegt und abhängig vom Lichtstatus/Dimmwert transparent.
@@ -73,7 +101,7 @@ Die Multi‑Raum Kachel stellt mehrere Räume in einem Raster dar. Jeder Raum ka
   - Kontrast (min/max, 0..1), −1 = global übernehmen
   - Graustufen (min/max, 0..1), −1 = global übernehmen
 
-#### Menü‑Leiste
+__Menü‑Leiste__
 - **Menü anzeigen**: Menüleiste ein-/ausblenden.
 - **Schriftgröße / Schriftfarbe**: (−1 = global).
 - **Hintergrund‑Transparenz / Hintergrundfarbe**: (−1 = global).
