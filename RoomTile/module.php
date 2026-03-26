@@ -861,10 +861,14 @@ class RoomTile extends IPSModule
                 continue;
             }
 
+            // Switch1-5 → 'schalter' Prefix im Frontend
+            $isSwitch = (strpos($prop, 'Switch') === 0 && is_numeric(substr($prop, 6, 1)));
+            $deltaKey = $isSwitch ? ('schalter' . substr($prop, 6)) : strtolower($prop);
+
             // Wert formatiert
             $delta[] = [
                 'idx' => $idx,
-                'key' => strtolower($prop),
+                'key' => $deltaKey,
                 'value' => $this->CheckAndGetValueFormattedFromId($this->ReadInt($room, $prop))
             ];
 
@@ -872,45 +876,47 @@ class RoomTile extends IPSModule
             $col = $this->GetColor($this->ReadInt($room, $prop));
             $delta[] = [
                 'idx' => $idx,
-                'key' => strtolower($prop) . 'color',
+                'key' => $deltaKey . 'color',
                 'value' => ($col !== '') ? ('#' . $col) : ''
             ];
 
             // Name/Icon/Asso/AltName wenn nicht BackgroundImage
             if ($prop !== 'BackgroundImage') {
-                if ($this->ReadBool($room, $prop . 'NameSwitch')) {
+                $isMiddleProp = ($prop === 'InfoMiddleLeft' || $prop === 'InfoMiddleRight');
+                $nameKey = $isMiddleProp ? ($prop . 'ShowName') : ($prop . 'NameSwitch');
+                if ($this->ReadBool($room, $nameKey)) {
                     $delta[] = [
                         'idx' => $idx,
-                        'key' => strtolower($prop) . 'name',
+                        'key' => $deltaKey . 'name',
                         'value' => IPS_GetName($this->ReadInt($room, $prop))
                     ];
                 }
                 $icon = $this->GetIconAdvanced($this->ReadInt($room, $prop));
                 $delta[] = [
                     'idx' => $idx,
-                    'key' => strtolower($prop) . 'icon',
+                    'key' => $deltaKey . 'icon',
                     'value' => $icon
                 ];
                 $delta[] = [
                     'idx' => $idx,
-                    'key' => strtolower($prop) . 'asso',
+                    'key' => $deltaKey . 'asso',
                     'value' => $this->CheckAndGetValueFormattedFromId($this->ReadInt($room, $prop))
                 ];
                 if (isset($room[$prop . 'AltName'])) {
                     $delta[] = [
                         'idx' => $idx,
-                        'key' => strtolower($prop) . 'altname',
+                        'key' => ($isSwitch ? ('switch' . substr($prop, 6)) : strtolower($prop)) . 'altname',
                         'value' => (string)$room[$prop . 'AltName']
                     ];
                 }
             }
 
             // SwitchN raw value as delta for active state
-            if (strpos($prop, 'Switch') === 0 && is_numeric(substr($prop, 6, 1))) {
+            if ($isSwitch) {
                 $n = (int)substr($prop, 6);
                 $delta[] = [
                     'idx' => $idx,
-                    'key' => 'switch' . $n . 'value',
+                    'key' => 'schalter' . $n . 'value',
                     'value' => @GetValue($this->ReadInt($room, $prop))
                 ];
             }
@@ -1302,7 +1308,7 @@ class RoomTile extends IPSModule
                 if (!$useImgCol && $sid > 0 && IPS_VariableExists($sid)) {
                     $col = $this->GetColor($sid);
                     if ($col !== '') {
-                        $r['switch' . $i . 'color'] = '#' . $col;
+                        $r['schalter' . $i . 'color'] = '#' . $col;
                     }
                 }
             }
@@ -1349,11 +1355,14 @@ class RoomTile extends IPSModule
                 $out[$key . 'asso'] = $val;
                 $typeLocal =  null;
                 try { $viTmp = isset($varInfo) ? $varInfo : IPS_GetVariable($id); $typeLocal = $viTmp['VariableType'] ?? null; } catch (Throwable $e) {}
+                $isMiddle = in_array($prop, $middleProps, true);
                 $defaultShowName = ($typeLocal === 0);
-                if (in_array($prop, $middleProps, true)) {
+                if ($isMiddle) {
                     $defaultShowName = true;
                 }
-                if ($this->ReadBoolOrDefault($room, $prop . 'NameSwitch', $defaultShowName)) {
+                // InfoMiddle* verwenden 'ShowName', alle anderen 'NameSwitch'
+                $nameSuffix = $isMiddle ? 'ShowName' : 'NameSwitch';
+                if ($this->ReadBoolOrDefault($room, $prop . $nameSuffix, $defaultShowName)) {
                     $out[$key . 'name'] = IPS_GetName($id);
                 }
                 $icon = $this->GetIconAdvanced($id);
@@ -1362,9 +1371,10 @@ class RoomTile extends IPSModule
                 }
                 // ShowValue flag (default true for Infos)
                 $out[$key . 'showvalue'] = $this->ReadBoolOrDefault($room, $prop . 'ShowValue', true);
-                // ShowIcon flag (default false for Info pairs, true für Info-Mitte)
-                $defaultIcon = in_array($prop, $middleProps, true);
-                $out[$key . 'showicon'] = $this->ReadBoolOrDefault($room, $prop . 'IconSwitch', $defaultIcon);
+                // InfoMiddle* verwenden 'ShowIcon', alle anderen 'IconSwitch'
+                $defaultIcon = $isMiddle;
+                $iconSuffix = $isMiddle ? 'ShowIcon' : 'IconSwitch';
+                $out[$key . 'showicon'] = $this->ReadBoolOrDefault($room, $prop . $iconSuffix, $defaultIcon);
             }
         }
 
@@ -1437,19 +1447,20 @@ class RoomTile extends IPSModule
             $prop = 'Switch' . $i;
             $id = (int)($room[$prop] ?? 0);
             if ($id > 0 && IPS_VariableExists($id) && !TileVisuLib::isObjectHidden($id)) {
-                $key = 'switch' . $i;
+                $sKey = 'schalter' . $i; // Frontend erwartet 'schalter' Prefix
+                $eKey = 'switch' . $i;    // Einige Keys nutzen 'switch' Prefix
                 // aktueller Rohwert (für Active-State im Frontend)
                 try {
-                    $out[$key . 'value'] = GetValue($id);
+                    $out[$sKey . 'value'] = GetValue($id);
                 } catch (Throwable $e) {
                     // ignore
                 }
                 // Markiere als konfiguriert und liefere Variablentyp
                 try {
                     $varInfo = IPS_GetVariable($id);
-                    $out[$key . 'configured'] = true;
+                    $out[$sKey . 'configured'] = true;
                     if (isset($varInfo['VariableType'])) {
-                        $out[$key . 'type'] = $varInfo['VariableType'];
+                        $out[$sKey . 'type'] = $varInfo['VariableType'];
                     }
                     $actionId = 0;
                     if (isset($varInfo['VariableCustomAction']) && $varInfo['VariableCustomAction'] > 0) {
@@ -1458,34 +1469,34 @@ class RoomTile extends IPSModule
                         $actionId = $varInfo['VariableAction'];
                     }
                     $hasValidAction = ($actionId > 0) && (@IPS_InstanceExists($actionId) || @IPS_ScriptExists($actionId));
-                    $out[$key . 'hasaction'] = $hasValidAction;
+                    $out[$sKey . 'hasaction'] = $hasValidAction;
                     if (isset($varInfo['VariableType']) && $varInfo['VariableType'] === 0) {
                         $btnColors = $this->GetButtonColors($id);
                         if ($btnColors['on'] !== '') {
-                            $out[$key . 'colorOn'] = $btnColors['on'];
+                            $out[$sKey . 'colorOn'] = $btnColors['on'];
                         }
                         if ($btnColors['off'] !== '') {
-                            $out[$key . 'colorOff'] = $btnColors['off'];
+                            $out[$sKey . 'colorOff'] = $btnColors['off'];
                         }
                     }
                 } catch (Throwable $e) {
                     // ignore
                 }
-                // IconSwitch-Flag aus den Raumeinstellungen an Frontend durchreichen
+                // IconSwitch-Flag (Frontend erwartet 'switch' Prefix)
                 try {
-                    $out[$key . 'iconswitch'] = $this->ReadBoolOrDefault($room, $prop . 'IconSwitch', false);
+                    $out[$eKey . 'iconswitch'] = $this->ReadBoolOrDefault($room, $prop . 'IconSwitch', false);
                 } catch (Throwable $e) {
                     // ignore
                 }
-                // ShowValue flag (default false for Schalter)
+                // ShowValue flag (Frontend erwartet 'switch' Prefix)
                 try {
-                    $out[$key . 'showvalue'] = $this->ReadBoolOrDefault($room, $prop . 'ShowValue', false);
+                    $out[$eKey . 'showvalue'] = $this->ReadBoolOrDefault($room, $prop . 'ShowValue', false);
                 } catch (Throwable $e) {
                     // ignore
                 }
                 // ShowName flag for labels in multi-button groups
                 try {
-                    $out[$key . 'showname'] = $this->ReadBoolOrDefault($room, $prop . 'NameSwitch', false);
+                    $out[$sKey . 'showname'] = $this->ReadBoolOrDefault($room, $prop . 'NameSwitch', false);
                 } catch (Throwable $e) {
                     // ignore
                 }
@@ -1495,27 +1506,27 @@ class RoomTile extends IPSModule
                     if (isset($varInfo['VariableType'])) {
                         if ($varInfo['VariableType'] === 1) { // INTEGER
                             $opts = TileVisuLib::getIntegerAssociations($id);
-                            if (!empty($opts)) { $out[$key . 'options'] = $opts; }
+                            if (!empty($opts)) { $out[$sKey . 'options'] = $opts; }
                         } elseif ($varInfo['VariableType'] === 3) { // STRING
                             $opts = TileVisuLib::getStringAssociations($id);
-                            if (!empty($opts)) { $out[$key . 'options'] = $opts; }
+                            if (!empty($opts)) { $out[$sKey . 'options'] = $opts; }
                         }
                     }
                 } catch (Throwable $e) {
                     // ignore
                 }
                 $val = GetValueFormatted($id);
-                $out[$key] = $val;
-                $out[$key . 'asso'] = $val;
+                $out[$sKey] = $val;
+                $out[$sKey . 'asso'] = $val;
                 if ($this->ReadBoolOrDefault($room, $prop . 'NameSwitch', false)) {
-                    $out[$key . 'name'] = IPS_GetName($id);
+                    $out[$sKey . 'name'] = IPS_GetName($id);
                 }
                 $icon = $this->GetIconAdvanced($id);
                 if ($icon !== 'Transparent' && $icon !== '') {
-                    $out[$key . 'icon'] = $icon;
+                    $out[$sKey . 'icon'] = $icon;
                 }
-                // ShowIcon flag (default true for Info groups)
-                $out[$key . 'showicon'] = $this->ReadBoolOrDefault($room, $prop . 'IconSwitch', true);
+                // ShowIcon flag
+                $out[$sKey . 'showicon'] = $this->ReadBoolOrDefault($room, $prop . 'IconSwitch', true);
             }
         }
     }

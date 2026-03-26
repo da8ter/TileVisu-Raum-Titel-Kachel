@@ -391,11 +391,13 @@
     .switch.hide-values .info-value { display: none !important; }
     .switch.hide-labels .info-name { display: none !important; }
     .switch:hover { opacity: 0.8; }
+    .switch > *, .switch-option > * { position: relative; z-index: 2; }
+    .switch.inactive > *, .switch-option.inactive > * { opacity: 0.7; }
     .switch.inactive::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.5);
       border-radius: inherit;
       pointer-events: none;
       z-index: 1;
@@ -435,7 +437,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.5);
       border-radius: inherit;
       pointer-events: none;
       z-index: 1;
