@@ -476,6 +476,10 @@ trait TileVisuRoomHelpers
     /**
      * Baut das auszuliefernde Kachel-HTML zusammen.
      * $moduleDir: __DIR__ des aufrufenden Moduls (dort liegt module.html).
+     *
+     * Die Marker im module.html werden serverseitig durch die gemeinsamen
+     * CSS-/JS-Dateien aus libs/html/ ersetzt (fail-soft: bei Lesefehler bleibt
+     * die Kachel mit dem modul-lokalen Bestand lauffähig).
      */
     private function renderVisualizationTile(string $moduleDir): string
     {
@@ -489,9 +493,24 @@ trait TileVisuRoomHelpers
         }
         $initial = '<script>handleMessage(' . json_encode($this->GetFullUpdateMessage()) . ')</script>';
         $module = (string)file_get_contents($moduleDir . '/module.html');
+        $module = $this->injectSharedAsset($module, '/*__TILEVISU_SHARED_CSS__*/', dirname(__DIR__) . '/libs/html/tilevisu-shared.css');
+        $module = $this->injectSharedAsset($module, '/*__TILEVISU_SHARED_JS__*/', dirname(__DIR__) . '/libs/html/tilevisu-shared.js');
         if ($mapping !== '') {
             $module = str_replace('<script src="/icons.js" crossorigin="anonymous"></script>', '<script src="/icons.js" crossorigin="anonymous"></script>' . $mapping, $module);
         }
         return $module . $initial;
+    }
+
+    private function injectSharedAsset(string $html, string $marker, string $assetPath): string
+    {
+        if (strpos($html, $marker) === false) {
+            return $html;
+        }
+        $asset = @file_get_contents($assetPath);
+        if (!is_string($asset)) {
+            $this->SendDebug('renderVisualizationTile', 'Shared-Asset nicht lesbar: ' . $assetPath, 0);
+            $asset = '';
+        }
+        return str_replace($marker, $asset, $html);
     }
 }

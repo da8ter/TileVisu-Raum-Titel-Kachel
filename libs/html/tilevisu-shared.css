@@ -1,0 +1,95 @@
+/*
+ * TileVisu: gemeinsame CSS-Regeln (gemeinsamer Block am Ende beider
+ * module.html-Stylesheets). Wird anstelle des Markers
+ * /*__TILEVISU_SHARED_CSS__* / eingesetzt.
+ */
+    }
+
+    .switch {
+      display: inline-flex;
+      align-items: center;
+      height: var(--button-height, 25px);
+      padding: 0 12px;
+      border: none;
+      border-radius: var(--progress-bar-border-radius, 10px);
+      background-color: var(--accent-color, #f8f9fa);
+      color: var(--menufontcolor, #fff);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: var(--menufontsize, 16px);
+      font-weight: 500;
+      user-select: none;
+      min-width: 80px;
+      justify-content: center;
+      box-sizing: border-box;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      background-clip: padding-box;
+    }
+    .switch.hide-values .info-value { display: none !important; }
+    .switch.hide-labels .info-name { display: none !important; }
+    .switch:hover { opacity: 0.8; }
+    .switch > *, .switch-option > * { position: relative; z-index: 2; }
+    .switch.inactive > *, .switch-option.inactive > * { opacity: 0.7; }
+    .switch.inactive::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .switch-group { display: flex; gap: 1px; align-items: center; }
+    .switch-option {
+      display: inline-flex;
+      align-items: center;
+      height: var(--button-height, 25px);
+      padding: 0 8px;
+      border: none;
+      border-radius: var(--progress-bar-border-radius, 10px);
+      background-color: var(--accent-color, #f8f9fa);
+      color: var(--menufontcolor, #fff);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: var(--menufontsize, 16px);
+      font-weight: 500;
+      user-select: none;
+      min-width: 60px;
+      justify-content: center;
+      box-sizing: border-box;
+      flex: 0 0 auto;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      background-clip: padding-box;
+    }
+    .switch-option:hover { opacity: 0.8; }
+    .switch-option.active { font-weight: 600; }
+    .switch-option.inactive::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .switch-group .switch-option:first-child { border-radius: var(--progress-bar-border-radius, 10px) 0 0 var(--progress-bar-border-radius, 10px); }
+    .switch-group .switch-option:last-child { border-radius: 0 var(--progress-bar-border-radius, 10px) var(--progress-bar-border-radius, 10px) 0; }
+    .switch-group .switch-option:not(:first-child):not(:last-child) { border-radius: 0; }
+    .switch-group .switch-option:only-child { border-radius: var(--progress-bar-border-radius, 10px); }
+    .switch-group.hide-labels .switch-option .info-name { display: none; }
+    .switch-group.hide-values .switch-option .info-value { display: none; }
+    .switch-group.hide-icons .switch-option .switch-icon { display: none; }
