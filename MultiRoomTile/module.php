@@ -662,7 +662,7 @@ class MultiRoomTile extends IPSModule
         }
     }
 
-    private function GetFullUpdateMessage()
+    private function GetFullUpdateMessage(): array
     {
         $result = [];
         $result['grid'] = [
@@ -1432,7 +1432,7 @@ class MultiRoomTile extends IPSModule
         return is_array($arr) ? $arr : [];
     }
 
-    private function parseRoomList($value): array
+    private function parseRoomList(mixed $value): array
     {
         if (is_string($value)) {
             $decoded = @json_decode($value, true);

@@ -1027,7 +1027,7 @@ class RoomTile extends IPSModule
         }
     }
 
-    private function GetFullUpdateMessage()
+    private function GetFullUpdateMessage(): array
     {
         $result = [];
         $result['grid'] = [
@@ -1278,7 +1278,7 @@ class RoomTile extends IPSModule
         return $result;
     }
 
-    private function fillInfoAndButtons(array &$out, array $room)
+    private function fillInfoAndButtons(array &$out, array $room): void
     {
         // InfoSeiten links/rechts + Menü-Infos
         $pairs = [
@@ -1661,7 +1661,7 @@ class RoomTile extends IPSModule
     }
 
     // Handle WebHook requests directly in the module (no script target)
-    private function sendMenuItemDelta(string $itemId, int $varId)
+    private function sendMenuItemDelta(string $itemId, int $varId): void
     {
         if ($varId <= 0 || !@IPS_VariableExists($varId)) return;
         $key = 'menuitem-' . $itemId;

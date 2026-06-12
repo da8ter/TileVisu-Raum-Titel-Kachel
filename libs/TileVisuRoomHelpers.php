@@ -170,7 +170,7 @@ trait TileVisuRoomHelpers
         return $colors;
     }
 
-    private function CheckAndGetValueFormattedFromId(int $id)
+    private function CheckAndGetValueFormattedFromId(int $id): string|false
     {
         if ($id > 0 && IPS_VariableExists($id)) {
             return GetValueFormatted($id);
@@ -278,7 +278,7 @@ trait TileVisuRoomHelpers
     // Raum-Reihenfolge
     // ---------------------------------------------------------------------
 
-    private function ReorderRoom(int $index, string $direction)
+    private function ReorderRoom(int $index, string $direction): void
     {
         $rooms = $this->getRooms();
         $count = count($rooms);
@@ -468,7 +468,7 @@ trait TileVisuRoomHelpers
      * Baut das auszuliefernde Kachel-HTML zusammen.
      * $moduleDir: __DIR__ des aufrufenden Moduls (dort liegt module.html).
      */
-    private function renderVisualizationTile(string $moduleDir)
+    private function renderVisualizationTile(string $moduleDir): string
     {
         $mapping = '';
         $mapPath = dirname(__DIR__) . '/RoomHeader/assets/iconMapping.json';
