@@ -669,21 +669,36 @@ class MultiRoomTile extends IPSModuleStrict
     private function GetFullUpdateMessage(): array
     {
         $result = [];
-        $result['grid'] = [
-            'minWidth' => $this->ReadPropertyInteger('MinWidth'),
-            'minHeight' => $this->ReadPropertyInteger('MinHeight'),
-            'gap' => $this->ReadPropertyInteger('Gap'),
-            'borderRadius' => $this->ReadPropertyInteger('BorderRadius'),
-            'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons'),
-            'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors'),
-            'transparentMenuStatusColors' => $this->ReadPropertyBoolean('TransparentMenuStatusColors'),
-            'groupMenuInfoElements' => $this->ReadPropertyBoolean('GroupMenuInfoElements'),
-            'columns' => $this->ReadPropertyInteger('Columns'),
-            'useFullTileHeight' => $this->ReadPropertyBoolean('UseFullTileHeight'),
-            'customMargin' => $this->ReadPropertyInteger('CustomMargin')
-        ];
+        $result['grid'] = $this->buildGridConfig();
+        $defaults = $this->readGlobalDefaults();
 
-        $rooms = $this->getRooms();
+        $resultRooms = [];
+        foreach ($this->getRooms() as $idx => $room) {
+            $resultRooms[] = $this->buildRoomPayload($room, (int)$idx, $defaults);
+        }
+        $result['rooms'] = $resultRooms;
+        return $result;
+    }
+
+    private function buildGridConfig(): array
+    {
+        return [
+        'minWidth' => $this->ReadPropertyInteger('MinWidth'),
+        'minHeight' => $this->ReadPropertyInteger('MinHeight'),
+        'gap' => $this->ReadPropertyInteger('Gap'),
+        'borderRadius' => $this->ReadPropertyInteger('BorderRadius'),
+        'useImageColorsForButtons' => $this->ReadPropertyBoolean('UseImageColorsForButtons'),
+        'transparentStatusColors' => $this->ReadPropertyBoolean('TransparentStatusColors'),
+        'transparentMenuStatusColors' => $this->ReadPropertyBoolean('TransparentMenuStatusColors'),
+        'groupMenuInfoElements' => $this->ReadPropertyBoolean('GroupMenuInfoElements'),
+        'columns' => $this->ReadPropertyInteger('Columns'),
+        'useFullTileHeight' => $this->ReadPropertyBoolean('UseFullTileHeight'),
+        'customMargin' => $this->ReadPropertyInteger('CustomMargin')
+        ];
+    }
+
+    private function readGlobalDefaults(): array
+    {
         // Lese optionale Defaults aus den separaten Properties und mappe sie auf die Raum-Keys
         // Robust: Infohöhe kann in bestehenden Instanzen noch nicht existieren
         $defInfoHeight = 0;
@@ -741,232 +756,241 @@ class MultiRoomTile extends IPSModuleStrict
         if (isset($defaults['InfoTopBackgroundColor']) && (int)$defaults['InfoTopBackgroundColor'] === -1) {
             $defaults['InfoTopBackgroundColor'] = 0x000000; // Schwarz
         }
-        $resultRooms = [];
+        return $defaults;
+    }
 
-        foreach ($rooms as $idx => $room) {
-            $r = [];
-            $r['idx'] = $idx;
+    private function buildRoomPayload(array $room, int $idx, array $defaults): array
+    {
+        $r = [];
+        $r['idx'] = $idx;
+        $this->applyRoomStyles($r, $room, $defaults);
+        $this->applyRoomImagesAndFilter($r, $room);
+        $this->applyRoomItems($r, $room);
+        return $r;
+    }
 
-            // Styles (kombiniere Defaults + Raum-spezifisch)
-            $inf = null;
-            if (array_key_exists('InfoFontSize', $room)) { $inf = (int)$room['InfoFontSize']; }
-            $r['infofontsize'] = ($inf === null || $inf <= 0) ? (int)($defaults['InfoFontSize'] ?? 16) : $inf;
-            // Höhe der Infoleiste (nur globaler Default)
-            $r['infoheight'] = (int)($defaults['InfoHeight'] ?? 0);
+    private function applyRoomStyles(array &$r, array $room, array $defaults): void
+    {
+        // Styles (kombiniere Defaults + Raum-spezifisch)
+        $inf = null;
+        if (array_key_exists('InfoFontSize', $room)) { $inf = (int)$room['InfoFontSize']; }
+        $r['infofontsize'] = ($inf === null || $inf <= 0) ? (int)($defaults['InfoFontSize'] ?? 16) : $inf;
+        // Höhe der Infoleiste (nur globaler Default)
+        $r['infoheight'] = (int)($defaults['InfoHeight'] ?? 0);
 
-            $imf = null;
-            if (array_key_exists('MenuFontSize', $room)) { $imf = (int)$room['MenuFontSize']; }
-            $r['menufontsize'] = ($imf === null || $imf <= 0) ? (int)($defaults['MenuFontSize'] ?? 16) : $imf;
+        $imf = null;
+        if (array_key_exists('MenuFontSize', $room)) { $imf = (int)$room['MenuFontSize']; }
+        $r['menufontsize'] = ($imf === null || $imf <= 0) ? (int)($defaults['MenuFontSize'] ?? 16) : $imf;
 
-            $kcol = null;
-            if (array_key_exists('TileBackgroundColor', $room)) { $kcol = (int)$room['TileBackgroundColor']; }
-            if ($kcol === null || $kcol === -1) { $kcol = (int)($defaults['TileBackgroundColor'] ?? 0x000000); }
-            $r['tilebackgroundcolor'] = $this->toCssHex($kcol);
+        $kcol = null;
+        if (array_key_exists('TileBackgroundColor', $room)) { $kcol = (int)$room['TileBackgroundColor']; }
+        if ($kcol === null || $kcol === -1) { $kcol = (int)($defaults['TileBackgroundColor'] ?? 0x000000); }
+        $r['tilebackgroundcolor'] = $this->toCssHex($kcol);
 
-            $icol = null;
-            if (array_key_exists('InfoFontColor', $room)) { $icol = (int)$room['InfoFontColor']; }
-            if ($icol === null || $icol === -1) { $icol = (int)($defaults['InfoFontColor'] ?? 0xFFFFFF); }
-            $r['infofontcolor'] = $this->toCssHex($icol);
+        $icol = null;
+        if (array_key_exists('InfoFontColor', $room)) { $icol = (int)$room['InfoFontColor']; }
+        if ($icol === null || $icol === -1) { $icol = (int)($defaults['InfoFontColor'] ?? 0xFFFFFF); }
+        $r['infofontcolor'] = $this->toCssHex($icol);
 
-            $imcol = null;
-            if (array_key_exists('MenuFontColor', $room)) { $imcol = (int)$room['MenuFontColor']; }
-            if ($imcol === null || $imcol === -1) { $imcol = (int)($defaults['MenuFontColor'] ?? 0xFFFFFF); }
-            $r['menufontcolor'] = $this->toCssHex($imcol);
+        $imcol = null;
+        if (array_key_exists('MenuFontColor', $room)) { $imcol = (int)$room['MenuFontColor']; }
+        if ($imcol === null || $imcol === -1) { $imcol = (int)($defaults['MenuFontColor'] ?? 0xFFFFFF); }
+        $r['menufontcolor'] = $this->toCssHex($imcol);
 
-            // Info-Top Layout: Centered in the middle?
-            $r['infotopcentered'] = (bool)($room['InfoTopCentered'] ?? false);
+        // Info-Top Layout: Centered in the middle?
+        $r['infotopcentered'] = (bool)($room['InfoTopCentered'] ?? false);
 
-            // Info-Top Badge Hintergrund (einheitlich für links/mitte/rechts)
-            // Farbe: zuerst neues Feld, sonst alte per-Side Felder als Fallback
-            if (array_key_exists('InfoTopBackgroundColor', $room) && (int)$room['InfoTopBackgroundColor'] !== -1) {
-                $topCol = (int)$room['InfoTopBackgroundColor'];
-            } elseif (array_key_exists('InfoTopLeftBackgroundColor', $room) && (int)$room['InfoTopLeftBackgroundColor'] !== -1) {
-                $topCol = (int)$room['InfoTopLeftBackgroundColor'];
-            } elseif (array_key_exists('InfoTopMidBackgroundColor', $room) && (int)$room['InfoTopMidBackgroundColor'] !== -1) {
-                $topCol = (int)$room['InfoTopMidBackgroundColor'];
-            } elseif (array_key_exists('InfoTopRightBackgroundColor', $room) && (int)$room['InfoTopRightBackgroundColor'] !== -1) {
-                $topCol = (int)$room['InfoTopRightBackgroundColor'];
-            } else {
-                $topCol = (int)($defaults['InfoTopBackgroundColor'] ?? 0x000000);
-            }
-
-            // Transparency: zuerst neues Feld, sonst alte per-Side Felder als Fallback
-            if (array_key_exists('InfoTopTransparency', $room)) {
-                $tmp = (float)$room['InfoTopTransparency'];
-                $topAlphaPercent = ($tmp < 0)
-                    ? $this->normalizePercent((float)($defaults['InfoTopTransparency'] ?? 30.0))
-                    : $this->normalizePercent($tmp);
-            } elseif (array_key_exists('InfoTopLeftTransparency', $room)) {
-                $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopLeftTransparency']);
-            } elseif (array_key_exists('InfoTopMidTransparency', $room)) {
-                $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopMidTransparency']);
-            } elseif (array_key_exists('InfoTopRightTransparency', $room)) {
-                $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopRightTransparency']);
-            } else {
-                $topAlphaPercent = $this->normalizePercent((float)($defaults['InfoTopTransparency'] ?? 30.0));
-            }
-            $topRgba = $this->cssRgba($topCol, $this->percentToAlpha($topAlphaPercent));
-            $r['infotopleftbg'] = $topRgba;
-            $r['infomidbg'] = $topRgba;
-            $r['infotoprightbg'] = $topRgba;
-
-            if (array_key_exists('MenuBackgroundColor', $room) && (int)$room['MenuBackgroundColor'] !== -1) {
-                $bgCol = (int)$room['MenuBackgroundColor'];
-                $alphaVal = null;
-                if (array_key_exists('MenuTransparency', $room)) { $alphaVal = (float)$room['MenuTransparency']; }
-                $bgAlphaPercent = ($alphaVal === null || $alphaVal < 0)
-                    ? $this->normalizePercent((float)($defaults['MenuTransparency'] ?? 30.0))
-                    : $this->normalizePercent($alphaVal);
-            } else {
-                $bgCol = (int)($defaults['MenuBackgroundColor'] ?? 0x000000);
-                $bgAlphaPercent = $this->normalizePercent((float)($defaults['MenuTransparency'] ?? 30.0));
-            }
-            $r['menubackgroundcolor'] = $this->cssRgba((int)$bgCol, $this->percentToAlpha($bgAlphaPercent));
-            $r['menueimagetransparency'] = $bgAlphaPercent; // For menu status color transparency
-            $r['switchalignment'] = (string)($room['SwitchAlignment'] ?? 'left');
-            $r['switchdistribute'] = (bool)($room['SwitchDistribute'] ?? false);
-            $r['imagetransparency'] = $this->percentToAlpha($this->normalizePercent($this->ReadNumOrDefault($room, 'ImageTransparency', $defaults, 70.0)));
-
-            // Background image filter parameters (merged defaults + per-room overrides)
-            $r['bgfilterbrightnessmin'] = (float)$this->ReadNumOrDefault($room, 'BgFilterBrightnessMin', $defaults, 0.2);
-            $r['bgfilterbrightnessmax'] = (float)$this->ReadNumOrDefault($room, 'BgFilterBrightnessMax', $defaults, 1.0);
-            $r['bgfiltercontrastmin']   = (float)$this->ReadNumOrDefault($room, 'BgFilterContrastMin', $defaults, 0.9);
-            $r['bgfiltercontrastmax']   = (float)$this->ReadNumOrDefault($room, 'BgFilterContrastMax', $defaults, 1.0);
-            $r['bgfiltergrayscalemin']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMin', $defaults, 0.0);
-            $r['bgfiltergrayscalemax']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMax', $defaults, 0.5);
-
-            $r['roomname'] = (string)($room['RoomName'] ?? '');
-            $r['targetlink'] = (int)($room['Target'] ?? 0);
-            $r['targetlinkid'] = (int)($room['TargetLinkId'] ?? 0);
-            $r['targetlinkvalue'] = (int)($room['TargetLinkValue'] ?? 0);
-            $rn = null;
-            if (array_key_exists('RoomNameFontSize', $room)) {
-                $rn = (int)$room['RoomNameFontSize'];
-            }
-            if ($rn === null || $rn === -1) {
-                $r['roomnamefontsize'] = (int)($defaults['RoomNameFontSize'] ?? 64);
-            } else {
-                $r['roomnamefontsize'] = $rn;
-            }
-            $rncol = null;
-            if (array_key_exists('RoomNameFontColor', $room)) { $rncol = (int)$room['RoomNameFontColor']; }
-            if ($rncol === null || $rncol === -1) { $rncol = (int)($defaults['RoomNameFontColor'] ?? 0xFFFFFF); }
-            $r['roomnamefontcolor'] = $this->toCssHex($rncol);
-            // Sichtbarkeit des RoomNamens (Default: true)
-            $r['showroomname'] = array_key_exists('ShowRoomName', $room) ? (bool)$room['ShowRoomName'] : true;
-
-            $r['menuswitch'] = (bool)($room['MenuSwitch'] ?? true);
-
-            // Use image colors for buttons per room (fallback to global flag)
-            $useImgCol = array_key_exists('UseImageColorsForButtons', $room)
-                ? (bool)$room['UseImageColorsForButtons']
-                : (bool)$this->ReadPropertyBoolean('UseImageColorsForButtons');
-            $r['useimagecolors'] = $useImgCol || $this->ReadPropertyBoolean('UseImageColorsForButtons');
-
-            // Group menu info elements per room (fallback to global flag)
-            $r['groupmenuinfoelements'] = array_key_exists('GroupMenuInfoElements', $room)
-                ? (bool)$room['GroupMenuInfoElements']
-                : (bool)$this->ReadPropertyBoolean('GroupMenuInfoElements');
-
-            // Dynamic background image URL variable (overrides media images)
-            $bgUrlVarId = (int)($room['BackgroundImageUrl'] ?? 0);
-            $bgUrlActive = ($bgUrlVarId > 0 && @IPS_VariableExists($bgUrlVarId));
-            $bgUrlValue = $bgUrlActive ? (string)@GetValue($bgUrlVarId) : '';
-
-            // Bilder: per WebHook ausliefern (Base64 via JSON)
-            $imageID = (int)($room['BackgroundImage'] ?? 0);
-            $imageID2 = (int)($room['BackgroundImage2'] ?? 0);
-            // Prüfe ob Media-IDs gültig sind
-            if ($imageID2 > 0 && !@IPS_MediaExists($imageID2)) {
-                $imageID2 = 0; // Ungültige Media-ID ignorieren
-            }
-            if ($bgUrlActive && $bgUrlValue !== '') {
-                $r['image1'] = $bgUrlValue;
-                $r['image2enabled'] = false;
-            } else {
-                $r['image1'] = $this->BuildImageHookUrl($imageID);
-                if ($imageID2 > 0) {
-                    $r['image2'] = $this->BuildImageHookUrl($imageID2);
-                    $r['image2enabled'] = true;
-                } else {
-                    $r['image2enabled'] = false;
-                }
-            }
-
-            // Hintergrundfilter aus LightStatus/DimValue
-            try {
-                $boolId = (int)($room['LightStatus'] ?? 0);
-                $dimId = (int)($room['DimValue'] ?? 0);
-                $hasBool = $boolId > 0 && IPS_VariableExists($boolId);
-                $hasDim = $dimId > 0 && IPS_VariableExists($dimId);
-                $boolVal = false;
-                $dimVal = 0.0;
-                if ($hasBool) { try { $boolVal = (bool)@GetValue($boolId); } catch (Throwable $e) { $boolVal = false; } }
-                if ($hasDim) { try { $dimVal = (float)@GetValue($dimId); } catch (Throwable $e) { $dimVal = 0.0; } }
-                if ($dimVal < 0) {
-                    $dimVal = 0.0;
-                } elseif ($dimVal > 100) {
-                    $dimVal = 100.0;
-                }
-
-                $pOut = 0.0;
-                if ($hasBool) {
-                    if ($boolVal === false) {
-                        $pOut = 100.0;
-                    } else {
-                        if ($hasDim) {
-                            $pOut = 100.0 - $dimVal;
-                        }
-                    }
-                } elseif ($hasDim) {
-                    $pOut = 100.0 - $dimVal;
-                }
-
-                if (!$hasBool && !$hasDim) {
-                    // Wenn kein LightStatus/DimValue: Standardfilter nur bei einem Bild
-                    $pOut = ($imageID2 > 0) ? 0.0 : 0.0;
-                }
-                if ($pOut < 0.0) {
-                    $pOut = 0.0;
-                }
-                // Filter deaktivieren wenn URL-Variable aktiv oder Bild 2 konfiguriert
-                if ($bgUrlActive || $imageID2 > 0) { $pOut = 0.0; }
-                $r['bgfilter'] = $pOut;
-                // bgfade nur senden wenn zweites Bild konfiguriert ist (und keine URL-Variable)
-                if (!$bgUrlActive && $imageID2 > 0) {
-                    $fade = 0.0;
-                    if ($hasBool && !$boolVal) { $fade = 100.0; }
-                    elseif ($hasDim) { $fade = 100.0 - $dimVal; }
-                    if ($fade < 0.0) $fade = 0.0; if ($fade > 100.0) $fade = 100.0;
-                    $r['bgfade'] = $fade;
-                } else {
-                    $r['bgfade'] = 0.0;
-                }
-            } catch (Throwable $e) {}
-
-            $roomInfoList = $this->parseRoomList($room['InfoItems'] ?? []);
-            $roomMenuList = $this->parseRoomList($room['MenuItems'] ?? []);
-            $infoItems = $this->buildDynamicInfo($roomInfoList, $r);
-            $menuItems = $this->buildDynamicMenu($roomMenuList, $r);
-
-            if (!empty($infoItems)) {
-                $r['infoitems'] = $infoItems;
-            }
-            if (!empty($menuItems)) {
-                $r['menuitems'] = $menuItems;
-            }
-
-            $needStaticInfo = empty($infoItems);
-            $needStaticMenu = empty($menuItems);
-            if ($needStaticInfo || $needStaticMenu) {
-                $this->fillInfoAndButtons($r, $room, $needStaticInfo, $needStaticMenu);
-            }
-
-            $resultRooms[] = $r;
+        // Info-Top Badge Hintergrund (einheitlich für links/mitte/rechts)
+        // Farbe: zuerst neues Feld, sonst alte per-Side Felder als Fallback
+        if (array_key_exists('InfoTopBackgroundColor', $room) && (int)$room['InfoTopBackgroundColor'] !== -1) {
+            $topCol = (int)$room['InfoTopBackgroundColor'];
+        } elseif (array_key_exists('InfoTopLeftBackgroundColor', $room) && (int)$room['InfoTopLeftBackgroundColor'] !== -1) {
+            $topCol = (int)$room['InfoTopLeftBackgroundColor'];
+        } elseif (array_key_exists('InfoTopMidBackgroundColor', $room) && (int)$room['InfoTopMidBackgroundColor'] !== -1) {
+            $topCol = (int)$room['InfoTopMidBackgroundColor'];
+        } elseif (array_key_exists('InfoTopRightBackgroundColor', $room) && (int)$room['InfoTopRightBackgroundColor'] !== -1) {
+            $topCol = (int)$room['InfoTopRightBackgroundColor'];
+        } else {
+            $topCol = (int)($defaults['InfoTopBackgroundColor'] ?? 0x000000);
         }
 
-        $result['rooms'] = $resultRooms;
-        return $result;
+        // Transparency: zuerst neues Feld, sonst alte per-Side Felder als Fallback
+        if (array_key_exists('InfoTopTransparency', $room)) {
+            $tmp = (float)$room['InfoTopTransparency'];
+            $topAlphaPercent = ($tmp < 0)
+                ? $this->normalizePercent((float)($defaults['InfoTopTransparency'] ?? 30.0))
+                : $this->normalizePercent($tmp);
+        } elseif (array_key_exists('InfoTopLeftTransparency', $room)) {
+            $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopLeftTransparency']);
+        } elseif (array_key_exists('InfoTopMidTransparency', $room)) {
+            $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopMidTransparency']);
+        } elseif (array_key_exists('InfoTopRightTransparency', $room)) {
+            $topAlphaPercent = $this->normalizePercent((float)$room['InfoTopRightTransparency']);
+        } else {
+            $topAlphaPercent = $this->normalizePercent((float)($defaults['InfoTopTransparency'] ?? 30.0));
+        }
+        $topRgba = $this->cssRgba($topCol, $this->percentToAlpha($topAlphaPercent));
+        $r['infotopleftbg'] = $topRgba;
+        $r['infomidbg'] = $topRgba;
+        $r['infotoprightbg'] = $topRgba;
+
+        if (array_key_exists('MenuBackgroundColor', $room) && (int)$room['MenuBackgroundColor'] !== -1) {
+            $bgCol = (int)$room['MenuBackgroundColor'];
+            $alphaVal = null;
+            if (array_key_exists('MenuTransparency', $room)) { $alphaVal = (float)$room['MenuTransparency']; }
+            $bgAlphaPercent = ($alphaVal === null || $alphaVal < 0)
+                ? $this->normalizePercent((float)($defaults['MenuTransparency'] ?? 30.0))
+                : $this->normalizePercent($alphaVal);
+        } else {
+            $bgCol = (int)($defaults['MenuBackgroundColor'] ?? 0x000000);
+            $bgAlphaPercent = $this->normalizePercent((float)($defaults['MenuTransparency'] ?? 30.0));
+        }
+        $r['menubackgroundcolor'] = $this->cssRgba((int)$bgCol, $this->percentToAlpha($bgAlphaPercent));
+        $r['menueimagetransparency'] = $bgAlphaPercent; // For menu status color transparency
+        $r['switchalignment'] = (string)($room['SwitchAlignment'] ?? 'left');
+        $r['switchdistribute'] = (bool)($room['SwitchDistribute'] ?? false);
+        $r['imagetransparency'] = $this->percentToAlpha($this->normalizePercent($this->ReadNumOrDefault($room, 'ImageTransparency', $defaults, 70.0)));
+
+        // Background image filter parameters (merged defaults + per-room overrides)
+        $r['bgfilterbrightnessmin'] = (float)$this->ReadNumOrDefault($room, 'BgFilterBrightnessMin', $defaults, 0.2);
+        $r['bgfilterbrightnessmax'] = (float)$this->ReadNumOrDefault($room, 'BgFilterBrightnessMax', $defaults, 1.0);
+        $r['bgfiltercontrastmin']   = (float)$this->ReadNumOrDefault($room, 'BgFilterContrastMin', $defaults, 0.9);
+        $r['bgfiltercontrastmax']   = (float)$this->ReadNumOrDefault($room, 'BgFilterContrastMax', $defaults, 1.0);
+        $r['bgfiltergrayscalemin']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMin', $defaults, 0.0);
+        $r['bgfiltergrayscalemax']  = (float)$this->ReadNumOrDefault($room, 'BgFilterGrayscaleMax', $defaults, 0.5);
+
+        $r['roomname'] = (string)($room['RoomName'] ?? '');
+        $r['targetlink'] = (int)($room['Target'] ?? 0);
+        $r['targetlinkid'] = (int)($room['TargetLinkId'] ?? 0);
+        $r['targetlinkvalue'] = (int)($room['TargetLinkValue'] ?? 0);
+        $rn = null;
+        if (array_key_exists('RoomNameFontSize', $room)) {
+            $rn = (int)$room['RoomNameFontSize'];
+        }
+        if ($rn === null || $rn === -1) {
+            $r['roomnamefontsize'] = (int)($defaults['RoomNameFontSize'] ?? 64);
+        } else {
+            $r['roomnamefontsize'] = $rn;
+        }
+        $rncol = null;
+        if (array_key_exists('RoomNameFontColor', $room)) { $rncol = (int)$room['RoomNameFontColor']; }
+        if ($rncol === null || $rncol === -1) { $rncol = (int)($defaults['RoomNameFontColor'] ?? 0xFFFFFF); }
+        $r['roomnamefontcolor'] = $this->toCssHex($rncol);
+        // Sichtbarkeit des RoomNamens (Default: true)
+        $r['showroomname'] = array_key_exists('ShowRoomName', $room) ? (bool)$room['ShowRoomName'] : true;
+
+        $r['menuswitch'] = (bool)($room['MenuSwitch'] ?? true);
+
+        // Use image colors for buttons per room (fallback to global flag)
+        $useImgCol = array_key_exists('UseImageColorsForButtons', $room)
+            ? (bool)$room['UseImageColorsForButtons']
+            : (bool)$this->ReadPropertyBoolean('UseImageColorsForButtons');
+        $r['useimagecolors'] = $useImgCol || $this->ReadPropertyBoolean('UseImageColorsForButtons');
+
+        // Group menu info elements per room (fallback to global flag)
+        $r['groupmenuinfoelements'] = array_key_exists('GroupMenuInfoElements', $room)
+            ? (bool)$room['GroupMenuInfoElements']
+            : (bool)$this->ReadPropertyBoolean('GroupMenuInfoElements');
+    }
+
+    private function applyRoomImagesAndFilter(array &$r, array $room): void
+    {
+        // Dynamic background image URL variable (overrides media images)
+        $bgUrlVarId = (int)($room['BackgroundImageUrl'] ?? 0);
+        $bgUrlActive = ($bgUrlVarId > 0 && @IPS_VariableExists($bgUrlVarId));
+        $bgUrlValue = $bgUrlActive ? (string)@GetValue($bgUrlVarId) : '';
+
+        // Bilder: per WebHook ausliefern (Base64 via JSON)
+        $imageID = (int)($room['BackgroundImage'] ?? 0);
+        $imageID2 = (int)($room['BackgroundImage2'] ?? 0);
+        // Prüfe ob Media-IDs gültig sind
+        if ($imageID2 > 0 && !@IPS_MediaExists($imageID2)) {
+            $imageID2 = 0; // Ungültige Media-ID ignorieren
+        }
+        if ($bgUrlActive && $bgUrlValue !== '') {
+            $r['image1'] = $bgUrlValue;
+            $r['image2enabled'] = false;
+        } else {
+            $r['image1'] = $this->BuildImageHookUrl($imageID);
+            if ($imageID2 > 0) {
+                $r['image2'] = $this->BuildImageHookUrl($imageID2);
+                $r['image2enabled'] = true;
+            } else {
+                $r['image2enabled'] = false;
+            }
+        }
+
+        // Hintergrundfilter aus LightStatus/DimValue
+        try {
+            $boolId = (int)($room['LightStatus'] ?? 0);
+            $dimId = (int)($room['DimValue'] ?? 0);
+            $hasBool = $boolId > 0 && IPS_VariableExists($boolId);
+            $hasDim = $dimId > 0 && IPS_VariableExists($dimId);
+            $boolVal = false;
+            $dimVal = 0.0;
+            if ($hasBool) { try { $boolVal = (bool)@GetValue($boolId); } catch (Throwable $e) { $boolVal = false; } }
+            if ($hasDim) { try { $dimVal = (float)@GetValue($dimId); } catch (Throwable $e) { $dimVal = 0.0; } }
+            if ($dimVal < 0) {
+                $dimVal = 0.0;
+            } elseif ($dimVal > 100) {
+                $dimVal = 100.0;
+            }
+
+            $pOut = 0.0;
+            if ($hasBool) {
+                if ($boolVal === false) {
+                    $pOut = 100.0;
+                } else {
+                    if ($hasDim) {
+                        $pOut = 100.0 - $dimVal;
+                    }
+                }
+            } elseif ($hasDim) {
+                $pOut = 100.0 - $dimVal;
+            }
+
+            if (!$hasBool && !$hasDim) {
+                // Wenn kein LightStatus/DimValue: Standardfilter nur bei einem Bild
+                $pOut = ($imageID2 > 0) ? 0.0 : 0.0;
+            }
+            if ($pOut < 0.0) {
+                $pOut = 0.0;
+            }
+            // Filter deaktivieren wenn URL-Variable aktiv oder Bild 2 konfiguriert
+            if ($bgUrlActive || $imageID2 > 0) { $pOut = 0.0; }
+            $r['bgfilter'] = $pOut;
+            // bgfade nur senden wenn zweites Bild konfiguriert ist (und keine URL-Variable)
+            if (!$bgUrlActive && $imageID2 > 0) {
+                $fade = 0.0;
+                if ($hasBool && !$boolVal) { $fade = 100.0; }
+                elseif ($hasDim) { $fade = 100.0 - $dimVal; }
+                if ($fade < 0.0) $fade = 0.0; if ($fade > 100.0) $fade = 100.0;
+                $r['bgfade'] = $fade;
+            } else {
+                $r['bgfade'] = 0.0;
+            }
+        } catch (Throwable $e) {}
+    }
+
+    private function applyRoomItems(array &$r, array $room): void
+    {
+        $roomInfoList = $this->parseRoomList($room['InfoItems'] ?? []);
+        $roomMenuList = $this->parseRoomList($room['MenuItems'] ?? []);
+        $infoItems = $this->buildDynamicInfo($roomInfoList, $r);
+        $menuItems = $this->buildDynamicMenu($roomMenuList, $r);
+
+        if (!empty($infoItems)) {
+            $r['infoitems'] = $infoItems;
+        }
+        if (!empty($menuItems)) {
+            $r['menuitems'] = $menuItems;
+        }
+
+        $needStaticInfo = empty($infoItems);
+        $needStaticMenu = empty($menuItems);
+        if ($needStaticInfo || $needStaticMenu) {
+            $this->fillInfoAndButtons($r, $room, $needStaticInfo, $needStaticMenu);
+        }
     }
 
     private function buildDynamicMenu(array $list, array &$outRoom): array
