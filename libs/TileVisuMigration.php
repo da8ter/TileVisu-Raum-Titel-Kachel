@@ -12,8 +12,10 @@ final class TileVisuMigration
     /**
      * Property-Rename-Migration v2: German → English property names.
      * Returns true if migration was performed (caller should return from ApplyChanges).
+     * Akzeptiert beide Basisklassen: RoomHeader (IPSModule) und die
+     * Module-Strict-Kacheln (IPSModuleStrict).
      */
-    public static function migrateV2(IPSModule $module, int $instanceId): bool
+    public static function migrateV2(IPSModule|IPSModuleStrict $module, int $instanceId): bool
     {
         $map = [
             'Bildtransparenz' => 'ImageTransparency',

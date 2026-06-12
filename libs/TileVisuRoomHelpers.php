@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Gemeinsame Helfer für RoomTile und MultiRoomTile.
  *
@@ -328,7 +330,9 @@ trait TileVisuRoomHelpers
         // Fallback: nutze Placeholder aus RoomHeader/assets
         $fallbackPath = dirname(__DIR__) . '/RoomHeader/assets/placeholder.png';
         if (@file_exists($fallbackPath)) {
-            return 'data:image/png;base64,' . base64_encode(@file_get_contents($fallbackPath));
+            // (string)-Cast: file_get_contents kann false liefern; unter strict_types
+            // würde base64_encode(false) werfen — Cast erhält das bisherige Verhalten
+            return 'data:image/png;base64,' . base64_encode((string)@file_get_contents($fallbackPath));
         }
         return '';
     }
@@ -479,7 +483,7 @@ trait TileVisuRoomHelpers
             }
         }
         $initial = '<script>handleMessage(' . json_encode($this->GetFullUpdateMessage()) . ')</script>';
-        $module = file_get_contents($moduleDir . '/module.html');
+        $module = (string)file_get_contents($moduleDir . '/module.html');
         if ($mapping !== '') {
             $module = str_replace('<script src="/icons.js" crossorigin="anonymous"></script>', '<script src="/icons.js" crossorigin="anonymous"></script>' . $mapping, $module);
         }
