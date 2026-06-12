@@ -1,0 +1,153 @@
+{
+    "getPresentationColorHex": {
+        "custom_assoc_bool_true": "FF0000",
+        "custom_assoc_bool_false": "00FF00",
+        "custom_colortrue_bool_true": "112233",
+        "custom_colorfalse_bool_false": "445566",
+        "custom_usecolorfalse_off": "777777",
+        "custom_options_string_int": "01E240",
+        "custom_options_coloractive_false": "",
+        "custom_assoc_string": "ABCDEF",
+        "custom_assoc_color_numeric_string": "0000FF",
+        "std_assoc_color_numeric_string": "",
+        "std_assoc_color_int": "0000FF",
+        "custom_template": "224466",
+        "custom_presentation_guid_bool": "00AA00",
+        "std_template_colortrue_string": "123456",
+        "std_presentation_guid_color_int": "456789",
+        "std_presentation_guid_color_string": "",
+        "profile_assoc_color": "",
+        "profile_assoc_color_minus1": "",
+        "custom_color_minus1": "",
+        "missing": ""
+    },
+    "getProfileColorHex": {
+        "custom_assoc_bool_true": "FF0000",
+        "custom_assoc_bool_false": "00FF00",
+        "custom_colortrue_bool_true": "112233",
+        "custom_colorfalse_bool_false": "445566",
+        "custom_usecolorfalse_off": "777777",
+        "custom_options_string_int": "01E240",
+        "custom_options_coloractive_false": "",
+        "custom_assoc_string": "ABCDEF",
+        "custom_assoc_color_numeric_string": "0000FF",
+        "std_assoc_color_numeric_string": "",
+        "std_assoc_color_int": "0000FF",
+        "custom_template": "224466",
+        "custom_presentation_guid_bool": "00AA00",
+        "std_template_colortrue_string": "123456",
+        "std_presentation_guid_color_int": "456789",
+        "std_presentation_guid_color_string": "",
+        "profile_assoc_color": "123123",
+        "profile_assoc_color_minus1": "",
+        "custom_color_minus1": "",
+        "missing": ""
+    },
+    "getIcon_varicon": {
+        "obj_icon": "Bulb",
+        "custom_icon_direct": "Transparent",
+        "custom_icontrue_usefalse_off": "Transparent",
+        "profile_assoc_icon": "Transparent"
+    },
+    "getIcon": {
+        "obj_icon": "Transparent",
+        "custom_icon_direct": "Light",
+        "custom_icontrue_usefalse_off": "Transparent",
+        "profile_assoc_icon": "ArrowUp"
+    },
+    "getIconAdvanced": {
+        "custom_icon_direct": "Light",
+        "custom_icontrue_usefalse_off": "Transparent",
+        "adv_legacy_guid_profile_assoc": "ArrowUp",
+        "adv_intervals_float": "BatteryHalf",
+        "adv_options_range": "ArrowUp",
+        "adv_profile_icon_fallback": "Gauge",
+        "profile_assoc_icon": "ArrowUp",
+        "zero": "Transparent",
+        "missing": "Transparent"
+    },
+    "getAssociations": {
+        "assoc_custom": [
+            {
+                "value": 0,
+                "label": "Aus",
+                "icon": "Power",
+                "color": "#808080"
+            },
+            {
+                "value": 1,
+                "label": "An"
+            }
+        ],
+        "assoc_options": [
+            {
+                "value": 0,
+                "label": "Null",
+                "icon": "Hollow",
+                "color": "#010203"
+            },
+            {
+                "value": 1,
+                "label": "Eins"
+            }
+        ],
+        "assoc_profile": [
+            {
+                "value": 1,
+                "label": "Eins",
+                "icon": "ArrowUp",
+                "color": "#111111"
+            },
+            {
+                "value": 2,
+                "label": "Zwei",
+                "color": "#123123"
+            },
+            {
+                "value": 3,
+                "label": "Drei",
+                "icon": "Cross"
+            }
+        ],
+        "missing": []
+    },
+    "getIntegerAssociations": {
+        "assoc_custom": [
+            {
+                "value": 0,
+                "label": "Aus",
+                "icon": "Power",
+                "color": "#808080"
+            },
+            {
+                "value": 1,
+                "label": "An"
+            }
+        ]
+    },
+    "getStringAssociations": {
+        "assoc_options": [
+            {
+                "value": 0,
+                "label": "Null",
+                "icon": "Hollow",
+                "color": "#010203"
+            },
+            {
+                "value": 1,
+                "label": "Eins"
+            }
+        ]
+    },
+    "isObjectHidden": {
+        "hidden_true": true,
+        "hidden_false": false,
+        "zero": false,
+        "missing": false
+    },
+    "rgbaFromHexAlpha": {
+        "minus1": "",
+        "orange": "rgba(255, 128, 0, 0.25)",
+        "black": "rgba(0, 0, 0, 1)"
+    }
+}
