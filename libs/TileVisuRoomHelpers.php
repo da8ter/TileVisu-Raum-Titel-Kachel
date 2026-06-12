@@ -1,0 +1,392 @@
+<?php
+
+/**
+ * Gemeinsame Helfer für RoomTile und MultiRoomTile.
+ *
+ * Enthält ausschließlich Methoden, die in beiden Modulen byte-identisch waren.
+ * Divergenzen sind explizit parametrisiert:
+ *  - deliverImageFromHook($withCorsHeaders): RoomTile sendet CORS-Header,
+ *    MultiRoomTile nicht — beide Module behalten einen ProcessHookData-Wrapper.
+ *  - renderVisualizationTile($moduleDir): module.html liegt im Modulordner,
+ *    nicht in libs/ — der Aufrufer übergibt sein __DIR__.
+ *
+ * Hinweis: dirname(__DIR__) zeigt aus libs/ wie aus den Modulordnern auf das
+ * Library-Wurzelverzeichnis; die RoomHeader/assets-Pfade bleiben daher gültig.
+ */
+trait TileVisuRoomHelpers
+{
+    // ---------------------------------------------------------------------
+    // Property-/Listen-Leser
+    // ---------------------------------------------------------------------
+
+    private function ReadInt(array $room, string $key): int
+    {
+        return (int)($room[$key] ?? 0);
+    }
+
+    private function ReadBool(array $room, string $key): bool
+    {
+        return (bool)($room[$key] ?? false);
+    }
+
+    private function ReadBoolOrDefault(array $room, string $key, bool $default): bool
+    {
+        if (array_key_exists($key, $room)) {
+            return (bool)$room[$key];
+        }
+        return $default;
+    }
+
+    private function ReadNumOrDefault(array $room, string $key, array $defaults, float $fallback): float
+    {
+        if (array_key_exists($key, $room)) {
+            $v = (float)$room[$key];
+            if ($v < 0) {
+                if (array_key_exists($key, $defaults)) {
+                    return (float)$defaults[$key];
+                }
+                return $fallback;
+            }
+            return $v;
+        }
+        if (array_key_exists($key, $defaults)) {
+            return (float)$defaults[$key];
+        }
+        return $fallback;
+    }
+
+    private function ReadIntOrDefault(array $room, string $key, array $defaults, int $fallback): int
+    {
+        if (array_key_exists($key, $room)) {
+            return (int)$room[$key];
+        }
+        if (array_key_exists($key, $defaults)) {
+            return (int)$defaults[$key];
+        }
+        return $fallback;
+    }
+
+    // ---------------------------------------------------------------------
+    // Farb-/Format-Helfer
+    // ---------------------------------------------------------------------
+
+    private function toCssHex(int $rgb): string
+    {
+        return '#' . sprintf('%06X', $rgb);
+    }
+
+    private function cssRgba(int $rgb, float $alpha): string
+    {
+        $r = ($rgb >> 16) & 0xFF;
+        $g = ($rgb >> 8) & 0xFF;
+        $b = $rgb & 0xFF;
+        return 'rgba(' . $r . ', ' . $g . ', ' . $b . ', ' . $alpha . ')';
+    }
+
+    private function percentToAlpha(float $percent): float
+    {
+        if ($percent < 0.0) $percent = 0.0;
+        if ($percent > 100.0) $percent = 100.0;
+        return $percent / 100.0;
+    }
+
+    private function normalizePercent(float $val): float
+    {
+        // Backwards compatibility: if value is in 0..1, interpret as fraction and convert to percent
+        if ($val >= 0.0 && $val <= 1.0) {
+            $val = $val * 100.0;
+        }
+        if ($val < 0.0) $val = 0.0;
+        if ($val > 100.0) $val = 100.0;
+        return $val;
+    }
+
+    private function GetColor(int $id): string
+    {
+        return TileVisuLib::getProfileColorHex($id);
+    }
+
+    private function GetColorRGBFrom(int $hexcolor, float $transparency): string
+    {
+        if ($hexcolor === -1) {
+            return '';
+        }
+        $hexColor = sprintf('%06X', $hexcolor);
+        if (strlen($hexColor) === 6) {
+            $r = hexdec(substr($hexColor, 0, 2));
+            $g = hexdec(substr($hexColor, 2, 2));
+            $b = hexdec(substr($hexColor, 4, 2));
+            return "rgba($r, $g, $b, $transparency)";
+        }
+        return $hexColor;
+    }
+
+    private function GetIcon(int $id, bool $varicon): string
+    {
+        return TileVisuLib::getIcon($id, $varicon);
+    }
+
+    private function GetIconAdvanced(int $id): string
+    {
+        return TileVisuLib::getIconAdvanced($id);
+    }
+
+    private function GetButtonColors(int $id): array
+    {
+        $colors = ['on' => '', 'off' => ''];
+        if (!function_exists('IPS_VariableExists') || !IPS_VariableExists($id)) {
+            return $colors;
+        }
+        $variable = IPS_GetVariable($id);
+        if (!isset($variable['VariableType']) || $variable['VariableType'] !== 0) {
+            return $colors;
+        }
+        $profile = $variable['VariableCustomProfile'] ?: $variable['VariableProfile'];
+        if ($profile && IPS_VariableProfileExists($profile)) {
+            $p = IPS_GetVariableProfile($profile);
+            if (isset($p['Associations']) && is_array($p['Associations'])) {
+                foreach ($p['Associations'] as $a) {
+                    if (isset($a['Value'], $a['Color']) && $a['Color'] !== -1) {
+                        $hex = '#' . sprintf('%06X', (int)$a['Color']);
+                        if ($a['Value'] == 1 || $a['Value'] === true) {
+                            $colors['on'] = $hex;
+                        } elseif ($a['Value'] == 0 || $a['Value'] === false) {
+                            $colors['off'] = $hex;
+                        }
+                    }
+                }
+            }
+        }
+        if (isset($variable['VariableCustomPresentation']) && is_array($variable['VariableCustomPresentation'])) {
+            $pres = $variable['VariableCustomPresentation'];
+            $useFalse = $pres['USE_COLOR_FALSE'] ?? true;
+            if (isset($pres['COLOR_TRUE']) && is_int($pres['COLOR_TRUE']) && $pres['COLOR_TRUE'] !== -1) {
+                $colors['on'] = '#' . sprintf('%06X', (int)$pres['COLOR_TRUE']);
+            }
+            if ($useFalse && isset($pres['COLOR_FALSE']) && is_int($pres['COLOR_FALSE']) && $pres['COLOR_FALSE'] !== -1) {
+                $colors['off'] = '#' . sprintf('%06X', (int)$pres['COLOR_FALSE']);
+            }
+        }
+        return $colors;
+    }
+
+    private function CheckAndGetValueFormattedFromId(int $id)
+    {
+        if ($id > 0 && IPS_VariableExists($id)) {
+            return GetValueFormatted($id);
+        }
+        return false;
+    }
+
+    // ---------------------------------------------------------------------
+    // Raum-Reihenfolge
+    // ---------------------------------------------------------------------
+
+    private function ReorderRoom(int $index, string $direction)
+    {
+        $rooms = $this->getRooms();
+        $count = count($rooms);
+        if ($count === 0 || $index < 0 || $index >= $count) {
+            return;
+        }
+        if ($direction === 'up' && $index > 0) {
+            $tmp = $rooms[$index - 1];
+            $rooms[$index - 1] = $rooms[$index];
+            $rooms[$index] = $tmp;
+        } elseif ($direction === 'down' && $index < $count - 1) {
+            $tmp = $rooms[$index + 1];
+            $rooms[$index + 1] = $rooms[$index];
+            $rooms[$index] = $tmp;
+        } else {
+            return;
+        }
+        IPS_SetProperty($this->InstanceID, 'Rooms', json_encode($rooms));
+        IPS_ApplyChanges($this->InstanceID);
+    }
+
+    // ---------------------------------------------------------------------
+    // Bilder & WebHook
+    // ---------------------------------------------------------------------
+
+    private function GetImageDataURI(int $imageID): string
+    {
+        if ($imageID > 0 && IPS_MediaExists($imageID)) {
+            $image = IPS_GetMedia($imageID);
+            if ($image['MediaType'] === MEDIATYPE_IMAGE) {
+                $imageFile = explode('.', $image['MediaFile']);
+                $imageContent = '';
+                switch (strtolower((string)end($imageFile))) {
+                    case 'bmp': $imageContent = 'data:image/bmp;base64,'; break;
+                    case 'jpg':
+                    case 'jpeg': $imageContent = 'data:image/jpeg;base64,'; break;
+                    case 'gif': $imageContent = 'data:image/gif;base64,'; break;
+                    case 'png': $imageContent = 'data:image/png;base64,'; break;
+                    case 'ico': $imageContent = 'data:image/x-icon;base64,'; break;
+                }
+                if ($imageContent) {
+                    $imageContent .= IPS_GetMediaContent($imageID);
+                    return $imageContent;
+                }
+            }
+        }
+        // Fallback: nutze Placeholder aus RoomHeader/assets
+        $fallbackPath = dirname(__DIR__) . '/RoomHeader/assets/placeholder.png';
+        if (@file_exists($fallbackPath)) {
+            return 'data:image/png;base64,' . base64_encode(@file_get_contents($fallbackPath));
+        }
+        return '';
+    }
+
+    private function BuildImageHookUrl(int $mediaId): string
+    {
+        $base = '/hook/roomgridimages/' . $this->InstanceID;
+        $token = $this->ReadAttributeString('HookToken');
+        $q = '';
+        if ($mediaId > 0) {
+            $q = 'mid=' . (int)$mediaId;
+        } else {
+            $q = 'placeholder=1';
+        }
+        if ($token !== '') {
+            $q .= '&token=' . rawurlencode($token);
+        }
+        $q .= '&ts=' . time();
+        return $base . '?' . $q;
+    }
+
+    private function RegisterHook(string $hookPath): void
+    {
+        $webhookModuleId = '{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}';
+        $ids = @IPS_GetInstanceListByModuleID($webhookModuleId);
+        if (!is_array($ids) || count($ids) === 0) {
+            $this->LogMessage('WebHook Control not found. Skipping hook registration.', KL_WARNING);
+            return;
+        }
+        $whId = $ids[0];
+        $instToken = $this->ReadAttributeString('HookToken');
+        if ($instToken === '') {
+            try {
+                $instToken = bin2hex(random_bytes(16));
+            } catch (Throwable $e) {
+                $instToken = substr(sha1(uniqid('', true)), 0, 32);
+            }
+            $this->WriteAttributeString('HookToken', $instToken);
+        }
+        $hooks = @json_decode(IPS_GetProperty($whId, 'Hooks'), true);
+        if (!is_array($hooks)) {
+            $hooks = [];
+        }
+        $found = false;
+        foreach ($hooks as &$h) {
+            if (isset($h['Hook']) && $h['Hook'] === $hookPath) {
+                $h['TargetID'] = $this->InstanceID;
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $hooks[] = [
+                'Hook' => $hookPath,
+                'TargetID' => $this->InstanceID
+            ];
+        }
+        IPS_SetProperty($whId, 'Hooks', json_encode($hooks));
+        IPS_ApplyChanges($whId);
+    }
+
+    private function ensureHookScript(): int
+    {
+        return 0;
+    }
+
+    /**
+     * Liefert das per Hook angeforderte Media-Bild bzw. den Placeholder aus.
+     * $withCorsHeaders: RoomTile sendet zusätzlich CORS-Header, MultiRoomTile nicht.
+     */
+    private function deliverImageFromHook(bool $withCorsHeaders): void
+    {
+        $instT = $this->ReadAttributeString('HookToken');
+        $token = isset($_GET['token']) ? (string)$_GET['token'] : '';
+        if (!is_string($token) || $token === '' || $instT === '' || !hash_equals($instT, $token)) {
+            http_response_code(403);
+            return;
+        }
+        if ($withCorsHeaders) {
+            header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Methods: GET');
+        }
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+
+        $mid = isset($_GET['mid']) ? (int)$_GET['mid'] : 0;
+        if ($mid > 0 && @IPS_MediaExists($mid)) {
+            $m = @IPS_GetMedia($mid);
+            if (is_array($m) && isset($m['MediaType']) && $m['MediaType'] === MEDIATYPE_IMAGE) {
+                $b64 = @IPS_GetMediaContent($mid);
+                if (is_string($b64) && $b64 !== '') {
+                    $bin = @base64_decode($b64, true);
+                    if ($bin !== false) {
+                        $mime = 'application/octet-stream';
+                        if (strlen($bin) >= 12) {
+                            $hdr = substr($bin, 0, 12);
+                            if (strncmp($hdr, "\xFF\xD8\xFF", 3) === 0) {
+                                $mime = 'image/jpeg';
+                            } elseif (strncmp($hdr, "\x89PNG\x0D\x0A\x1A\x0A", 8) === 0) {
+                                $mime = 'image/png';
+                            } elseif (strncmp($hdr, 'GIF87a', 6) === 0 || strncmp($hdr, 'GIF89a', 6) === 0) {
+                                $mime = 'image/gif';
+                            } elseif (substr($hdr, 0, 4) === 'RIFF' && substr($hdr, 8, 4) === 'WEBP') {
+                                $mime = 'image/webp';
+                            }
+                        }
+                        header('Content-Type: ' . $mime);
+                        header('Content-Length: ' . strlen($bin));
+                        echo $bin;
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (isset($_GET['placeholder'])) {
+            $placeholder = dirname(__DIR__) . '/RoomHeader/assets/placeholder.png';
+            if (@is_file($placeholder)) {
+                $bin = @file_get_contents($placeholder);
+                if ($bin !== false) {
+                    header('Content-Type: image/png');
+                    header('Content-Length: ' . strlen($bin));
+                    echo $bin;
+                    return;
+                }
+            }
+        }
+
+        http_response_code(404);
+    }
+
+    // ---------------------------------------------------------------------
+    // Visualisierungs-Auslieferung
+    // ---------------------------------------------------------------------
+
+    /**
+     * Baut das auszuliefernde Kachel-HTML zusammen.
+     * $moduleDir: __DIR__ des aufrufenden Moduls (dort liegt module.html).
+     */
+    private function renderVisualizationTile(string $moduleDir)
+    {
+        $mapping = '';
+        $mapPath = dirname(__DIR__) . '/RoomHeader/assets/iconMapping.json';
+        if (@file_exists($mapPath)) {
+            $json = @file_get_contents($mapPath);
+            if (is_string($json) && $json !== '') {
+                $mapping = '<script>window.iconMapping=' . $json . ';</script>';
+            }
+        }
+        $initial = '<script>handleMessage(' . json_encode($this->GetFullUpdateMessage()) . ')</script>';
+        $module = file_get_contents($moduleDir . '/module.html');
+        if ($mapping !== '') {
+            $module = str_replace('<script src="/icons.js" crossorigin="anonymous"></script>', '<script src="/icons.js" crossorigin="anonymous"></script>' . $mapping, $module);
+        }
+        return $module . $initial;
+    }
+}
