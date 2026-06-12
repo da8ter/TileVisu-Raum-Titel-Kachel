@@ -39,7 +39,8 @@
             "Background transparency:": "Hintergrund Transparenz:",
             "Background color:": "Hintergrundfarbe:",
             "Donations / Gifts": "Spenden / Schenkung",
-            "Say thank you and support the developer of this module:": "Sag Danke und unterstütze den Entwickler dieses Moduls:"
+            "Say thank you and support the developer of this module:": "Sag Danke und unterstütze den Entwickler dieses Moduls:",
+            "Object to open on click:": "Objekt welche beim Klick geöffnet wird:"
         }
     }
 }

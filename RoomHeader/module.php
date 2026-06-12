@@ -1,4 +1,5 @@
 <?php
+ require_once __DIR__ . '/../libs/TileVisuLib.php';
 class TileVisuRoomHeaderTileEOL extends IPSModule
 {
     public function Create()
@@ -8,114 +9,114 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
 
 
         // Drei Eigenschaften für die dargestellten Zähler
-        $this->RegisterPropertyInteger("bgImage", 1);
+        $this->RegisterPropertyInteger("BackgroundImage", 1);
         $this->RegisterPropertyInteger("Target", 1);
-        $this->RegisterPropertyInteger("InfoLinks", 1);
-        $this->RegisterPropertyBoolean('InfoLinksNameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinksIconSwitch', true);
-        $this->RegisterPropertyBoolean('InfoLinksVarIconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinksAssoSwitch', true);
-        $this->RegisterPropertyString('InfoLinksAltName', '');
-        $this->RegisterPropertyInteger("InfoLinks2", 1);
-        $this->RegisterPropertyBoolean('InfoLinks2NameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinks2IconSwitch', true);
-        $this->RegisterPropertyBoolean('InfoLinks2VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoLinks2AssoSwitch', true);
-        $this->RegisterPropertyString('InfoLinks2AltName', '');
-        $this->RegisterPropertyInteger("InfoRechts", 1);
-        $this->RegisterPropertyBoolean('InfoRechtsNameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechtsIconSwitch', true);
-        $this->RegisterPropertyBoolean('InfoRechtsVarIconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechtsAssoSwitch', true);
-        $this->RegisterPropertyString('InfoRechtsAltName', '');
-        $this->RegisterPropertyInteger("InfoRechts2", 1);
-        $this->RegisterPropertyBoolean('InfoRechts2NameSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechts2IconSwitch', true);
-        $this->RegisterPropertyBoolean('InfoRechts2VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('InfoRechts2AssoSwitch', true);
-        $this->RegisterPropertyString('InfoRechts2AltName', '');
-        $this->RegisterPropertyFloat('InfoSchriftgroesse', 30);
-        $this->RegisterPropertyBoolean('InfoMenueSwitch', true);
-        $this->RegisterPropertyFloat('InfoMenueSchriftgroesse', 20);
-        $this->RegisterPropertyFloat('InfoMenueTransparenz', 0.3);
-        $this->RegisterPropertyInteger('InfoMenueHintergrundfarbe', 0x000000);
-        $this->RegisterPropertyFloat('Bildtransparenz', 0.7);
-        $this->RegisterPropertyInteger('Kachelhintergrundfarbe', 0x000000);
-        $this->RegisterPropertyInteger('InfoSchriftfarbe', 0xFFFFFF);
-        $this->RegisterPropertyInteger('InfoMenueSchriftfarbe', 0xFFFFFF);
-        $this->RegisterPropertyString('Raumname', 'Raumname');
-        $this->RegisterPropertyFloat('RaumnameSchriftgroesse', 70);
-        $this->RegisterPropertyInteger('RaumnameSchriftfarbe', 0xFFFFFF);
-        $this->RegisterPropertyInteger('Schalter1', 1);
-        $this->RegisterPropertyFloat('Schalter1Schriftgroesse', 20);
-        $this->RegisterPropertyFloat('Schalter1Breite', 100);
-        $this->RegisterPropertyString('Schalter1AltName', '');
-        $this->RegisterPropertyInteger('Schalter2', 1);
-        $this->RegisterPropertyFloat('Schalter2Schriftgroesse', 20);
-        $this->RegisterPropertyFloat('Schalter2Breite', 100);
-        $this->RegisterPropertyString('Schalter2AltName', '');
-        $this->RegisterPropertyInteger('Schalter3', 1);
-        $this->RegisterPropertyFloat('Schalter3Schriftgroesse', 20);
-        $this->RegisterPropertyFloat('Schalter3Breite', 100);
-        $this->RegisterPropertyString('Schalter3AltName', '');
-        $this->RegisterPropertyInteger('Schalter4', 1);
-        $this->RegisterPropertyFloat('Schalter4Schriftgroesse', 20);
-        $this->RegisterPropertyFloat('Schalter4Breite', 100);
-        $this->RegisterPropertyString('Schalter4AltName', '');
-        $this->RegisterPropertyInteger('Schalter5', 1);
-        $this->RegisterPropertyFloat('Schalter5Schriftgroesse', 20);
-        $this->RegisterPropertyFloat('Schalter5Breite', 100);
-        $this->RegisterPropertyString('Schalter5AltName', '');
+        $this->RegisterPropertyInteger("InfoLeft", 1);
+        $this->RegisterPropertyBoolean('InfoLeftNameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeftIconSwitch', true);
+        $this->RegisterPropertyBoolean('InfoLeftVarIconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeftAssoSwitch', true);
+        $this->RegisterPropertyString('InfoLeftAltName', '');
+        $this->RegisterPropertyInteger("InfoLeft2", 1);
+        $this->RegisterPropertyBoolean('InfoLeft2NameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeft2IconSwitch', true);
+        $this->RegisterPropertyBoolean('InfoLeft2VarIconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoLeft2AssoSwitch', true);
+        $this->RegisterPropertyString('InfoLeft2AltName', '');
+        $this->RegisterPropertyInteger("InfoRight", 1);
+        $this->RegisterPropertyBoolean('InfoRightNameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRightIconSwitch', true);
+        $this->RegisterPropertyBoolean('InfoRightVarIconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRightAssoSwitch', true);
+        $this->RegisterPropertyString('InfoRightAltName', '');
+        $this->RegisterPropertyInteger("InfoRight2", 1);
+        $this->RegisterPropertyBoolean('InfoRight2NameSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRight2IconSwitch', true);
+        $this->RegisterPropertyBoolean('InfoRight2VarIconSwitch', false);
+        $this->RegisterPropertyBoolean('InfoRight2AssoSwitch', true);
+        $this->RegisterPropertyString('InfoRight2AltName', '');
+        $this->RegisterPropertyFloat('InfoFontSize', 30);
+        $this->RegisterPropertyBoolean('MenuSwitch', true);
+        $this->RegisterPropertyFloat('MenuFontSize', 20);
+        $this->RegisterPropertyFloat('MenuTransparency', 0.3);
+        $this->RegisterPropertyInteger('MenuBackgroundColor', 0x000000);
+        $this->RegisterPropertyFloat('ImageTransparency', 0.7);
+        $this->RegisterPropertyInteger('TileBackgroundColor', 0x000000);
+        $this->RegisterPropertyInteger('InfoFontColor', 0xFFFFFF);
+        $this->RegisterPropertyInteger('MenuFontColor', 0xFFFFFF);
+        $this->RegisterPropertyString('RoomName', '');
+        $this->RegisterPropertyFloat('RoomNameFontSize', 70);
+        $this->RegisterPropertyInteger('RoomNameFontColor', 0xFFFFFF);
+        $this->RegisterPropertyInteger('Switch1', 1);
+        $this->RegisterPropertyFloat('Switch1FontSize', 20);
+        $this->RegisterPropertyFloat('Switch1Width', 100);
+        $this->RegisterPropertyString('Switch1AltName', '');
+        $this->RegisterPropertyInteger('Switch2', 1);
+        $this->RegisterPropertyFloat('Switch2FontSize', 20);
+        $this->RegisterPropertyFloat('Switch2Width', 100);
+        $this->RegisterPropertyString('Switch2AltName', '');
+        $this->RegisterPropertyInteger('Switch3', 1);
+        $this->RegisterPropertyFloat('Switch3FontSize', 20);
+        $this->RegisterPropertyFloat('Switch3Width', 100);
+        $this->RegisterPropertyString('Switch3AltName', '');
+        $this->RegisterPropertyInteger('Switch4', 1);
+        $this->RegisterPropertyFloat('Switch4FontSize', 20);
+        $this->RegisterPropertyFloat('Switch4Width', 100);
+        $this->RegisterPropertyString('Switch4AltName', '');
+        $this->RegisterPropertyInteger('Switch5', 1);
+        $this->RegisterPropertyFloat('Switch5FontSize', 20);
+        $this->RegisterPropertyFloat('Switch5Width', 100);
+        $this->RegisterPropertyString('Switch5AltName', '');
         $this->RegisterPropertyInteger('Info1', 1);
-        $this->RegisterPropertyString('Info1AltName', '');
+        $this->RegisterPropertyString('Info1AltLabel', '');
         $this->RegisterPropertyInteger('Info2', 1);
-        $this->RegisterPropertyString('Info2AltName', '');
+        $this->RegisterPropertyString('Info2AltLabel', '');
         $this->RegisterPropertyInteger('Info3', 1);
-        $this->RegisterPropertyString('Info3AltName', '');
+        $this->RegisterPropertyString('Info3AltLabel', '');
         $this->RegisterPropertyInteger('Info4', 1);
-        $this->RegisterPropertyString('Info4AltName', '');
+        $this->RegisterPropertyString('Info4AltLabel', '');
         $this->RegisterPropertyInteger('Info5', 1);
-        $this->RegisterPropertyString('Info5AltName', '');
-        $this->RegisterPropertyBoolean('Info1NameSwitch', true);
-        $this->RegisterPropertyBoolean('Info2NameSwitch', true);
-        $this->RegisterPropertyBoolean('Info3NameSwitch', true);
-        $this->RegisterPropertyBoolean('Info4NameSwitch', true);
-        $this->RegisterPropertyBoolean('Info5NameSwitch', true);
-        $this->RegisterPropertyBoolean('Info1IconSwitch', true);
-        $this->RegisterPropertyBoolean('Info2IconSwitch', true);
-        $this->RegisterPropertyBoolean('Info3IconSwitch', true);
-        $this->RegisterPropertyBoolean('Info4IconSwitch', true);
-        $this->RegisterPropertyBoolean('Info5IconSwitch', true);
-        $this->RegisterPropertyBoolean('Info1VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Info2VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Info3VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Info4VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Info5VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Info1AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Info2AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Info3AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Info4AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Info5AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter1NameSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter2NameSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter3NameSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter4NameSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter5NameSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter1IconSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter2IconSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter3IconSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter4IconSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter5IconSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter1VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Schalter2VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Schalter3VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Schalter4VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Schalter5VarIconSwitch', false);
-        $this->RegisterPropertyBoolean('Schalter1AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter2AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter3AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter4AssoSwitch', true);
-        $this->RegisterPropertyBoolean('Schalter5AssoSwitch', true);
+        $this->RegisterPropertyString('Info5AltLabel', '');
+        $this->RegisterPropertyBoolean('Info1ShowName', true);
+        $this->RegisterPropertyBoolean('Info2ShowName', true);
+        $this->RegisterPropertyBoolean('Info3ShowName', true);
+        $this->RegisterPropertyBoolean('Info4ShowName', true);
+        $this->RegisterPropertyBoolean('Info5ShowName', true);
+        $this->RegisterPropertyBoolean('Info1ShowIcon', true);
+        $this->RegisterPropertyBoolean('Info2ShowIcon', true);
+        $this->RegisterPropertyBoolean('Info3ShowIcon', true);
+        $this->RegisterPropertyBoolean('Info4ShowIcon', true);
+        $this->RegisterPropertyBoolean('Info5ShowIcon', true);
+        $this->RegisterPropertyBoolean('Info1UseVarIcon', false);
+        $this->RegisterPropertyBoolean('Info2UseVarIcon', false);
+        $this->RegisterPropertyBoolean('Info3UseVarIcon', false);
+        $this->RegisterPropertyBoolean('Info4UseVarIcon', false);
+        $this->RegisterPropertyBoolean('Info5UseVarIcon', false);
+        $this->RegisterPropertyBoolean('Info1ShowAssociation', true);
+        $this->RegisterPropertyBoolean('Info2ShowAssociation', true);
+        $this->RegisterPropertyBoolean('Info3ShowAssociation', true);
+        $this->RegisterPropertyBoolean('Info4ShowAssociation', true);
+        $this->RegisterPropertyBoolean('Info5ShowAssociation', true);
+        $this->RegisterPropertyBoolean('Switch1NameSwitch', true);
+        $this->RegisterPropertyBoolean('Switch2NameSwitch', true);
+        $this->RegisterPropertyBoolean('Switch3NameSwitch', true);
+        $this->RegisterPropertyBoolean('Switch4NameSwitch', true);
+        $this->RegisterPropertyBoolean('Switch5NameSwitch', true);
+        $this->RegisterPropertyBoolean('Switch1IconSwitch', true);
+        $this->RegisterPropertyBoolean('Switch2IconSwitch', true);
+        $this->RegisterPropertyBoolean('Switch3IconSwitch', true);
+        $this->RegisterPropertyBoolean('Switch4IconSwitch', true);
+        $this->RegisterPropertyBoolean('Switch5IconSwitch', true);
+        $this->RegisterPropertyBoolean('Switch1VarIconSwitch', false);
+        $this->RegisterPropertyBoolean('Switch2VarIconSwitch', false);
+        $this->RegisterPropertyBoolean('Switch3VarIconSwitch', false);
+        $this->RegisterPropertyBoolean('Switch4VarIconSwitch', false);
+        $this->RegisterPropertyBoolean('Switch5VarIconSwitch', false);
+        $this->RegisterPropertyBoolean('Switch1AssoSwitch', true);
+        $this->RegisterPropertyBoolean('Switch2AssoSwitch', true);
+        $this->RegisterPropertyBoolean('Switch3AssoSwitch', true);
+        $this->RegisterPropertyBoolean('Switch4AssoSwitch', true);
+        $this->RegisterPropertyBoolean('Switch5AssoSwitch', true);
         // Visualisierungstyp auf 1 setzen, da wir HTML anbieten möchten
         $this->SetVisualizationType(1);
     }
@@ -124,20 +125,28 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
     {
         parent::ApplyChanges();
 
+        if (IPS_GetKernelRunlevel() !== KR_READY) {
+            return;
+        }
+
+        // One-time migration: German → English property names (v2)
+        if (TileVisuLib::migrateV2($this, $this->InstanceID)) {
+            return;
+        }
 
         //Referenzen Registrieren
         $ids = [
             $this->ReadPropertyInteger('Target'),
-            $this->ReadPropertyInteger('bgImage'),
-            $this->ReadPropertyInteger('InfoLinks'),
-            $this->ReadPropertyInteger('InfoLinks2'),
-            $this->ReadPropertyInteger('InfoRechts'),
-            $this->ReadPropertyInteger('InfoRechts2'),
-            $this->ReadPropertyInteger('Schalter1'),
-            $this->ReadPropertyInteger('Schalter2'),
-            $this->ReadPropertyInteger('Schalter3'),
-            $this->ReadPropertyInteger('Schalter4'),
-            $this->ReadPropertyInteger('Schalter5'),
+            $this->ReadPropertyInteger('BackgroundImage'),
+            $this->ReadPropertyInteger('InfoLeft'),
+            $this->ReadPropertyInteger('InfoLeft2'),
+            $this->ReadPropertyInteger('InfoRight'),
+            $this->ReadPropertyInteger('InfoRight2'),
+            $this->ReadPropertyInteger('Switch1'),
+            $this->ReadPropertyInteger('Switch2'),
+            $this->ReadPropertyInteger('Switch3'),
+            $this->ReadPropertyInteger('Switch4'),
+            $this->ReadPropertyInteger('Switch5'),
             $this->ReadPropertyInteger('Info1'),
             $this->ReadPropertyInteger('Info2'),
             $this->ReadPropertyInteger('Info3'),
@@ -165,8 +174,14 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
         }
 
 
-        foreach (['bgImage', 'InfoLinks', 'InfoLinks2', 'InfoRechts', 'InfoRechts2', 'Schalter1', 'Schalter2', 'Schalter3', 'Schalter4', 'Schalter5', 'Info1', 'Info2', 'Info3', 'Info4', 'Info5'] as $VariableProperty)        {
-            $this->RegisterMessage($this->ReadPropertyInteger($VariableProperty), VM_UPDATE);
+        foreach (['BackgroundImage', 'InfoLeft', 'InfoLeft2', 'InfoRight', 'InfoRight2', 'Switch1', 'Switch2', 'Switch3', 'Switch4', 'Switch5', 'Info1', 'Info2', 'Info3', 'Info4', 'Info5'] as $VariableProperty)        {
+            $id = (int)$this->ReadPropertyInteger($VariableProperty);
+            if ($id > 0 && @IPS_ObjectExists($id)) {
+                $this->RegisterMessage($id, OM_CHANGEHIDDEN);
+            }
+            if ($id > 0 && @IPS_VariableExists($id)) {
+                $this->RegisterMessage($id, VM_UPDATE);
+            }
         }
 
         // Schicke eine komplette Update-Nachricht an die Darstellung, da sich ja Parameter geändert haben können
@@ -177,17 +192,25 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
     {
+        if ($Message === OM_CHANGEHIDDEN) {
+            $this->ForceUpdate();
+            return;
+        }
         $properties = [
-            'bgImage', 'InfoLinks', 'InfoLinks2', 'InfoRechts', 'InfoRechts2',
-            'Schalter1', 'Schalter2', 'Schalter3', 'Schalter4', 'Schalter5',
+            'BackgroundImage', 'InfoLeft', 'InfoLeft2', 'InfoRight', 'InfoRight2',
+            'Switch1', 'Switch2', 'Switch3', 'Switch4', 'Switch5',
             'Info1', 'Info2', 'Info3', 'Info4', 'Info5'
         ];
 
-        foreach ($properties as $VariableProperty) // $VariableProperty ist der Name der Eigenschaft, z.B. "Schalter1"
+        foreach ($properties as $VariableProperty) // $VariableProperty ist der Name der Eigenschaft, z.B. "Switch1"
         {
             // Prüfen, ob der Sender (geänderte Variable) zu dieser Eigenschaft gehört
             if ($SenderID === $this->ReadPropertyInteger($VariableProperty))
             {
+                if (TileVisuLib::isObjectHidden($SenderID)) {
+                    $this->ForceUpdate();
+                    return;
+                }
                 // Wenn ja, und es ist eine Aktualisierungsnachricht...
                 if ($Message === VM_UPDATE)
                 {
@@ -202,24 +225,29 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
                     // Verwende SenderID für GetColor
                     $result[$VariableProperty . 'Color'] = $this->GetColor($SenderID);
 
-                    if ($VariableProperty != 'bgImage')
+                    if ($VariableProperty != 'BackgroundImage')
                 {
-                        if ($this->ReadPropertyBoolean($VariableProperty . 'NameSwitch')) {
-                            // Verwende SenderID für IPS_GetName
+                        // Info1-Info5 verwenden andere Property-Suffixe als InfoLeft/Right und Switch1-5
+                        $isInfoN = preg_match('/^Info[1-5]$/', $VariableProperty);
+                        $nameSwitchProp = $isInfoN ? $VariableProperty . 'ShowName' : $VariableProperty . 'NameSwitch';
+                        $iconSwitchProp = $isInfoN ? $VariableProperty . 'ShowIcon' : $VariableProperty . 'IconSwitch';
+                        $varIconProp    = $isInfoN ? $VariableProperty . 'UseVarIcon' : $VariableProperty . 'VarIconSwitch';
+                        $assoSwitchProp = $isInfoN ? $VariableProperty . 'ShowAssociation' : $VariableProperty . 'AssoSwitch';
+                        $altNameProp    = $isInfoN ? $VariableProperty . 'AltLabel' : $VariableProperty . 'AltName';
+
+                        if ($this->ReadPropertyBoolean($nameSwitchProp)) {
                             $result[$VariableProperty . 'name'] = IPS_GetName($SenderID);
                         }
                         
-                        // Verwende SenderID für GetIcon
-                        $iconValue = $this->GetIcon($SenderID, $this->ReadPropertyBoolean($VariableProperty . 'VarIconSwitch'));
-                        if ($this->ReadPropertyBoolean($VariableProperty . 'IconSwitch') && $iconValue !== "Transparent") {
+                        $iconValue = $this->GetIcon($SenderID, $this->ReadPropertyBoolean($varIconProp));
+                        if ($this->ReadPropertyBoolean($iconSwitchProp) && $iconValue !== "Transparent") {
                            $result[$VariableProperty . 'icon'] = $iconValue;
                         }
 
-                        if ($this->ReadPropertyBoolean($VariableProperty . 'AssoSwitch')) {
-                            // CheckAndGetValueFormatted benötigt den Namen der Eigenschaft
+                        if ($this->ReadPropertyBoolean($assoSwitchProp)) {
                             $result[$VariableProperty . 'asso'] = $this->CheckAndGetValueFormatted($VariableProperty);
                                 }
-                                $result[$VariableProperty .'AltName'] =  $this->ReadPropertyString($VariableProperty .'AltName');
+                                $result[$VariableProperty . ($isInfoN ? 'AltLabel' : 'AltName')] = $this->ReadPropertyString($altNameProp);
                             }
 
                     // Zweiter Update-Aufruf: Sendet die assoziierten Eigenschaften.
@@ -238,7 +266,6 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
         // Nachrichten von der HTML-Darstellung schicken immer den Ident passend zur Eigenschaft und im Wert die Differenz, welche auf die Variable gerechnet werden soll
         $variableID = $this->ReadPropertyInteger($Ident);
         if (!IPS_VariableExists($variableID)) {
-            $this->SendDebug('Error in RequestAction', 'Variable to be updated does not exist', 0);
             return;
         }
             // Umschalten des Werts der Variable
@@ -276,49 +303,66 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
     // Generiere eine Nachricht, die alle Elemente in der HTML-Darstellung aktualisiert
     private function GetFullUpdateMessage() {
         $result = [];
+        $result['fullupdate'] = true;
     
-        $infoProperties = ['InfoLinks', 'InfoLinks2', 'InfoRechts', 'InfoRechts2', 'Info1', 'Info2', 'Info3', 'Info4', 'Info5'];
-        $schalterProperties = ['Schalter1', 'Schalter2', 'Schalter3', 'Schalter4', 'Schalter5'];
+        $infoProperties = ['InfoLeft', 'InfoLeft2', 'InfoRight', 'InfoRight2', 'Info1', 'Info2', 'Info3', 'Info4', 'Info5'];
+        $switchProperties = ['Switch1', 'Switch2', 'Switch3', 'Switch4', 'Switch5'];
 
         foreach ($infoProperties as $propName) {
             $this->_addVisualisationProperty($result, $propName, 'info');
         }
 
-        foreach ($schalterProperties as $propName) {
+        foreach ($switchProperties as $propName) {
             $this->_addVisualisationProperty($result, $propName, 'schalter');
         }
 
         // Restliche Properties und Bildbehandlung
             $result['targetlink'] =  $this->ReadPropertyInteger('Target');
-            $result['infofontsize'] =  $this->ReadPropertyFloat('InfoSchriftgroesse');
-            $result['hintergrundfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('Kachelhintergrundfarbe'));
-            $result['infoschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('InfoSchriftfarbe'));
-            $result['infomenueschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('InfoMenueSchriftfarbe'));
-            $result['infomenuefontsize'] =  $this->ReadPropertyFloat('InfoMenueSchriftgroesse');
-            $result['infomenuetransparenz'] =  $this->ReadPropertyFloat('InfoMenueTransparenz');
-            $result['infomenuehintergrundfarbe'] =  $this->GetColorRGB($this->ReadPropertyInteger('InfoMenueHintergrundfarbe'));
-            $result['transparenz'] =  $this->ReadPropertyFloat('Bildtransparenz');
-            $result['raumname'] =  $this->ReadPropertyString('Raumname');
-            $result['raumnameschriftgroesse'] =  $this->ReadPropertyFloat('RaumnameSchriftgroesse');
-            $result['raumnameschriftfarbe'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('RaumnameSchriftfarbe'));
-            $result['schalter1altname'] =  $this->ReadPropertyString('Schalter1AltName');
-            $result['schalter2altname'] =  $this->ReadPropertyString('Schalter2AltName');
-            $result['schalter3altname'] =  $this->ReadPropertyString('Schalter3AltName');
-            $result['schalter4altname'] =  $this->ReadPropertyString('Schalter4AltName');
-            $result['schalter5altname'] =  $this->ReadPropertyString('Schalter5AltName');
-            $result['info1altname'] =  $this->ReadPropertyString('Info1AltName');
-            $result['info2altname'] =  $this->ReadPropertyString('Info2AltName');
-            $result['info3altname'] =  $this->ReadPropertyString('Info3AltName');
-            $result['info4altname'] =  $this->ReadPropertyString('Info4AltName');
-            $result['info5altname'] =  $this->ReadPropertyString('Info5AltName');         
-            $result['infolinksaltname'] =  $this->ReadPropertyString('InfoLinksAltName');
-            $result['inforechtsaltname'] =  $this->ReadPropertyString('InfoRechtsAltName');    
-            $result['infolinks2altname'] =  $this->ReadPropertyString('InfoLinks2AltName');
-            $result['inforechts2altname'] =  $this->ReadPropertyString('InfoRechts2AltName');    
-            $result['infomenueswitch'] =  $this->ReadPropertyBoolean('InfoMenueSwitch');   
+            $result['infofontsize'] =  $this->ReadPropertyFloat('InfoFontSize');
+            $result['tilebackgroundcolor'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('TileBackgroundColor'));
+            $result['infofontcolor'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('InfoFontColor'));
+            $result['menufontcolor'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('MenuFontColor'));
+            $result['menufontsize'] =  $this->ReadPropertyFloat('MenuFontSize');
+            $result['menutransparency'] =  $this->ReadPropertyFloat('MenuTransparency');
+            $result['menubackgroundcolor'] =  $this->GetColorRGB($this->ReadPropertyInteger('MenuBackgroundColor'));
+            $result['imagetransparency'] =  $this->ReadPropertyFloat('ImageTransparency');
+            $result['roomname'] =  $this->ReadPropertyString('RoomName');
+            $result['roomnamefontsize'] =  $this->ReadPropertyFloat('RoomNameFontSize');
+            $result['roomnamefontcolor'] =  '#' . sprintf('%06X', $this->ReadPropertyInteger('RoomNameFontColor'));
+            $s1 = (int)$this->ReadPropertyInteger('Switch1');
+            if (@IPS_VariableExists($s1) && !TileVisuLib::isObjectHidden($s1)) { $result['switch1altname'] =  $this->ReadPropertyString('Switch1AltName'); }
+            $s2 = (int)$this->ReadPropertyInteger('Switch2');
+            if (@IPS_VariableExists($s2) && !TileVisuLib::isObjectHidden($s2)) { $result['switch2altname'] =  $this->ReadPropertyString('Switch2AltName'); }
+            $s3 = (int)$this->ReadPropertyInteger('Switch3');
+            if (@IPS_VariableExists($s3) && !TileVisuLib::isObjectHidden($s3)) { $result['switch3altname'] =  $this->ReadPropertyString('Switch3AltName'); }
+            $s4 = (int)$this->ReadPropertyInteger('Switch4');
+            if (@IPS_VariableExists($s4) && !TileVisuLib::isObjectHidden($s4)) { $result['switch4altname'] =  $this->ReadPropertyString('Switch4AltName'); }
+            $s5 = (int)$this->ReadPropertyInteger('Switch5');
+            if (@IPS_VariableExists($s5) && !TileVisuLib::isObjectHidden($s5)) { $result['switch5altname'] =  $this->ReadPropertyString('Switch5AltName'); }
+
+            $i1 = (int)$this->ReadPropertyInteger('Info1');
+            if (@IPS_VariableExists($i1) && !TileVisuLib::isObjectHidden($i1)) { $result['info1altlabel'] =  $this->ReadPropertyString('Info1AltLabel'); }
+            $i2 = (int)$this->ReadPropertyInteger('Info2');
+            if (@IPS_VariableExists($i2) && !TileVisuLib::isObjectHidden($i2)) { $result['info2altlabel'] =  $this->ReadPropertyString('Info2AltLabel'); }
+            $i3 = (int)$this->ReadPropertyInteger('Info3');
+            if (@IPS_VariableExists($i3) && !TileVisuLib::isObjectHidden($i3)) { $result['info3altlabel'] =  $this->ReadPropertyString('Info3AltLabel'); }
+            $i4 = (int)$this->ReadPropertyInteger('Info4');
+            if (@IPS_VariableExists($i4) && !TileVisuLib::isObjectHidden($i4)) { $result['info4altlabel'] =  $this->ReadPropertyString('Info4AltLabel'); }
+            $i5 = (int)$this->ReadPropertyInteger('Info5');
+            if (@IPS_VariableExists($i5) && !TileVisuLib::isObjectHidden($i5)) { $result['info5altlabel'] =  $this->ReadPropertyString('Info5AltLabel'); }
+
+            $il = (int)$this->ReadPropertyInteger('InfoLeft');
+            if (@IPS_VariableExists($il) && !TileVisuLib::isObjectHidden($il)) { $result['infoleftaltname'] =  $this->ReadPropertyString('InfoLeftAltName'); }
+            $ir = (int)$this->ReadPropertyInteger('InfoRight');
+            if (@IPS_VariableExists($ir) && !TileVisuLib::isObjectHidden($ir)) { $result['inforightaltname'] =  $this->ReadPropertyString('InfoRightAltName'); }
+            $il2 = (int)$this->ReadPropertyInteger('InfoLeft2');
+            if (@IPS_VariableExists($il2) && !TileVisuLib::isObjectHidden($il2)) { $result['infoleft2altname'] =  $this->ReadPropertyString('InfoLeft2AltName'); }
+            $ir2 = (int)$this->ReadPropertyInteger('InfoRight2');
+            if (@IPS_VariableExists($ir2) && !TileVisuLib::isObjectHidden($ir2)) { $result['inforight2altname'] =  $this->ReadPropertyString('InfoRight2AltName'); }
+            $result['menuswitch'] =  $this->ReadPropertyBoolean('MenuSwitch');   
             
             // Prüfe vorweg, ob ein Bild ausgewählt wurde
-            $imageID = $this->ReadPropertyInteger('bgImage');
+            $imageID = $this->ReadPropertyInteger('BackgroundImage');
             if (IPS_MediaExists($imageID))
             {
                 $image = IPS_GetMedia($imageID);
@@ -352,22 +396,28 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
 
     private function _addVisualisationProperty(&$result, $propertyName, $propertyType) {
         $varID = $this->ReadPropertyInteger($propertyName);
-        if (IPS_VariableExists($varID)) {
-            $baseKey = strtolower($propertyName); // e.g., "infolinks", "schalter1"
+        if (IPS_VariableExists($varID) && !TileVisuLib::isObjectHidden($varID)) {
+            $baseKey = strtolower($propertyName); // e.g., "infoleft", "switch1"
 
             $result[$baseKey] = $this->CheckAndGetValueFormatted($propertyName);
 
-            if ($this->ReadPropertyBoolean($propertyName . 'NameSwitch')) {
+            // Info1-Info5 verwenden andere Property-Suffixe als InfoLeft/Right und Switch1-5
+            $isInfoN = preg_match('/^Info[1-5]$/', $propertyName);
+            $nameSwitchProp = $isInfoN ? $propertyName . 'ShowName' : $propertyName . 'NameSwitch';
+            $iconSwitchProp = $isInfoN ? $propertyName . 'ShowIcon' : $propertyName . 'IconSwitch';
+            $varIconProp    = $isInfoN ? $propertyName . 'UseVarIcon' : $propertyName . 'VarIconSwitch';
+            $assoSwitchProp = $isInfoN ? $propertyName . 'ShowAssociation' : $propertyName . 'AssoSwitch';
+
+            if ($this->ReadPropertyBoolean($nameSwitchProp)) {
                 $result[$baseKey . 'name'] = IPS_GetName($varID);
             }
 
-            // GetIcon nur einmal aufrufen und Wert zwischenspeichern
-            $iconValue = $this->GetIcon($varID, $this->ReadPropertyBoolean($propertyName . 'VarIconSwitch'));
-            if ($this->ReadPropertyBoolean($propertyName . 'IconSwitch') && $iconValue !== "Transparent") {
+            $iconValue = $this->GetIcon($varID, $this->ReadPropertyBoolean($varIconProp));
+            if ($this->ReadPropertyBoolean($iconSwitchProp) && $iconValue !== "Transparent") {
                 $result[$baseKey . 'icon'] = $iconValue;
             }
 
-            if ($this->ReadPropertyBoolean($propertyName . 'AssoSwitch')) {
+            if ($this->ReadPropertyBoolean($assoSwitchProp)) {
                 $result[$baseKey . 'asso'] = $this->CheckAndGetValueFormatted($propertyName);
             }
 
@@ -379,7 +429,7 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
     }
     private function CheckAndGetValueFormatted($property) {
         $id = $this->ReadPropertyInteger($property);
-        if (IPS_VariableExists($id)) {
+        if (IPS_VariableExists($id) && !TileVisuLib::isObjectHidden($id)) {
             return GetValueFormatted($id);
         }
         return false;
@@ -406,7 +456,7 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
 
 
     private function GetColorRGB($hexcolor) {
-        $transparenz = $this->ReadPropertyFloat('InfoMenueTransparenz');
+        $imagetransparency = $this->ReadPropertyFloat('MenuTransparency');
         if($hexcolor != "-1")
         {
                 $hexColor = sprintf('%06X', $hexcolor);
@@ -415,7 +465,7 @@ class TileVisuRoomHeaderTileEOL extends IPSModule
                     $r = hexdec(substr($hexColor, 0, 2));
                     $g = hexdec(substr($hexColor, 2, 2));
                     $b = hexdec(substr($hexColor, 4, 2));
-                    return "rgba($r, $g, $b, $transparenz)";
+                    return "rgba($r, $g, $b, $imagetransparency)";
                 } else {
                     // Fallback für ungültige Eingaben
                     return $hexColor;

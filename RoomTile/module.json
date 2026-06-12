@@ -3,10 +3,10 @@
   "name": "Room Tile",
   "type": 3,
   "vendor": "",
-  "aliases": [],
+  "aliases": ["Raum Kachel"],
   "parentRequirements": [],
   "childRequirements": [],
   "implemented": [],
   "prefix": "ROOMTILE",
-  "url": "https://github.com/da8ter/TileVisu-Raum-Titel-Kachel/RoomTile/README.md"
+  "url": "https://github.com/da8ter/TileVisu-Raum-Titel-Kachel/blob/main/RoomTile/README.md"
 }

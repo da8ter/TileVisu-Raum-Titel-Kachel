@@ -26,12 +26,12 @@
                     "items": [
                         {
                             "type": "SelectMedia",
-                            "name": "bgImage",
+                            "name": "BackgroundImage",
                             "caption": "Photo:"
                         },
                         {
                             "type": "NumberSpinner",
-                            "name": "Bildtransparenz",
+                            "name": "ImageTransparency",
                             "caption": "Photo transparency (values from 0 to 1)",
                             "digits": 1,
                             "minimum": 0.0,
@@ -41,7 +41,7 @@
                         {
                             "type": "SelectColor",
                             "allowTransparent": "false",
-                            "name": "Kachelhintergrundfarbe",
+                            "name": "TileBackgroundColor",
                             "caption": "Tile background color"
                         }
                     ]
@@ -51,18 +51,18 @@
                     "items": [
                         {
                             "type": "ValidationTextBox",
-                            "name": "Raumname",
+                            "name": "RoomName",
                             "caption": "Room name (text center):"
                         },
                         {
                             "type": "SelectColor",
                             "allowTransparent": "false",
-                            "name": "RaumnameSchriftfarbe",
+                            "name": "RoomNameFontColor",
                             "caption": "Font color:"
                         },
                         {
                             "type": "NumberSpinner",
-                            "name": "RaumnameSchriftgroesse",
+                            "name": "RoomNameFontSize",
                             "caption": "Font size:",
                             "digits": 1,
                             "minimum": 1,
@@ -78,7 +78,7 @@
                         {
                             "type": "SelectObject",
                             "name": "Target",
-                            "caption": "Objekt welche beim Klick geöffnet wird:"
+                            "caption": "Object to open on click:"
                         }
                     ]
                 }
@@ -104,7 +104,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "InfoLinks",
+                                            "name": "InfoLeft",
                                             "caption": "Variable left 1:",
                                             "validVariableTypes": []
                                         },
@@ -116,27 +116,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinksNameSwitch",
+                                                        "name": "InfoLeftNameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinksIconSwitch",
+                                                        "name": "InfoLeftIconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinksVarIconSwitch",
+                                                        "name": "InfoLeftVarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinksAssoSwitch",
+                                                        "name": "InfoLeftAssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "InfoLinksAltName",
+                                                        "name": "InfoLeftAltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -149,7 +149,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "InfoLinks2",
+                                            "name": "InfoLeft2",
                                             "caption": "Variable left 2:",
                                             "validVariableTypes": []
                                         },
@@ -161,27 +161,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinks2NameSwitch",
+                                                        "name": "InfoLeft2NameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinks2IconSwitch",
+                                                        "name": "InfoLeft2IconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinks2VarIconSwitch",
+                                                        "name": "InfoLeft2VarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoLinks2AssoSwitch",
+                                                        "name": "InfoLeft2AssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "InfoLinks2AltName",
+                                                        "name": "InfoLeft2AltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -191,7 +191,7 @@
                                 },
                                 {
                                     "type": "NumberSpinner",
-                                    "name": "InfoSchriftgroesse",
+                                    "name": "InfoFontSize",
                                     "caption": "Font size:",
                                     "digits": 1,
                                     "minimum": 1,
@@ -213,7 +213,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "InfoRechts",
+                                            "name": "InfoRight",
                                             "caption": "Variable right 1:",
                                             "validVariableTypes": []
                                         },
@@ -225,27 +225,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechtsNameSwitch",
+                                                        "name": "InfoRightNameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechtsIconSwitch",
+                                                        "name": "InfoRightIconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechtsVarIconSwitch",
+                                                        "name": "InfoRightVarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechtsAssoSwitch",
+                                                        "name": "InfoRightAssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "InfoRechtsAltName",
+                                                        "name": "InfoRightAltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -258,7 +258,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "InfoRechts2",
+                                            "name": "InfoRight2",
                                             "caption": "Variable right 2:",
                                             "validVariableTypes": []
                                         },
@@ -270,27 +270,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechts2NameSwitch",
+                                                        "name": "InfoRight2NameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechts2IconSwitch",
+                                                        "name": "InfoRight2IconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechts2VarIconSwitch",
+                                                        "name": "InfoRight2VarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "InfoRechts2AssoSwitch",
+                                                        "name": "InfoRight2AssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "InfoRechts2AltName",
+                                                        "name": "InfoRight2AltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -301,7 +301,7 @@
                                 {
                                     "type": "SelectColor",
                                     "allowTransparent": "false",
-                                    "name": "InfoSchriftfarbe",
+                                    "name": "InfoFontColor",
                                     "caption": "Font color:"
                                 }
                             ]
@@ -316,7 +316,7 @@
             "items": [
                 {
                     "type": "CheckBox",
-                    "name": "InfoMenueSwitch",
+                    "name": "MenuSwitch",
                     "caption": ""
                 },
                 {
@@ -347,27 +347,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info1NameSwitch",
+                                                        "name": "Info1ShowName",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info1IconSwitch",
+                                                        "name": "Info1ShowIcon",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info1VarIconSwitch",
+                                                        "name": "Info1UseVarIcon",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info1AssoSwitch",
+                                                        "name": "Info1ShowAssociation",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Info1AltName",
+                                                        "name": "Info1AltLabel",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -392,27 +392,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info2NameSwitch",
+                                                        "name": "Info2ShowName",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info2IconSwitch",
+                                                        "name": "Info2ShowIcon",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info2VarIconSwitch",
+                                                        "name": "Info2UseVarIcon",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info2AssoSwitch",
+                                                        "name": "Info2ShowAssociation",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Info2AltName",
+                                                        "name": "Info2AltLabel",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -437,27 +437,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info3NameSwitch",
+                                                        "name": "Info3ShowName",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info3IconSwitch",
+                                                        "name": "Info3ShowIcon",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info3VarIconSwitch",
+                                                        "name": "Info3UseVarIcon",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info3AssoSwitch",
+                                                        "name": "Info3ShowAssociation",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Info3AltName",
+                                                        "name": "Info3AltLabel",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -482,27 +482,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info4NameSwitch",
+                                                        "name": "Info4ShowName",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info4IconSwitch",
+                                                        "name": "Info4ShowIcon",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info4VarIconSwitch",
+                                                        "name": "Info4UseVarIcon",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info4AssoSwitch",
+                                                        "name": "Info4ShowAssociation",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Info4AltName",
+                                                        "name": "Info4AltLabel",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -527,27 +527,27 @@
                                                 "items": [
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info5NameSwitch",
+                                                        "name": "Info5ShowName",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info5IconSwitch",
+                                                        "name": "Info5ShowIcon",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info5VarIconSwitch",
+                                                        "name": "Info5UseVarIcon",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Info5AssoSwitch",
+                                                        "name": "Info5ShowAssociation",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Info5AltName",
+                                                        "name": "Info5AltLabel",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -570,7 +570,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "Schalter1",
+                                            "name": "Switch1",
                                             "caption": "Switch1:",
                                             "validVariableTypes": [
                                                 0
@@ -584,7 +584,7 @@
                                                 "items": [
                                                     {
                                                         "type": "NumberSpinner",
-                                                        "name": "Schalter1Breite",
+                                                        "name": "Switch1Width",
                                                         "caption": "Width",
                                                         "digits": 0,
                                                         "minimum": 10,
@@ -593,27 +593,27 @@
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter1NameSwitch",
+                                                        "name": "Switch1NameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter1IconSwitch",
+                                                        "name": "Switch1IconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter1VarIconSwitch",
+                                                        "name": "Switch1VarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter1AssoSwitch",
+                                                        "name": "Switch1AssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Schalter1AltName",
+                                                        "name": "Switch1AltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -626,7 +626,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "Schalter2",
+                                            "name": "Switch2",
                                             "caption": "Switch2:",
                                             "validVariableTypes": [
                                                 0
@@ -640,7 +640,7 @@
                                                 "items": [
                                                     {
                                                         "type": "NumberSpinner",
-                                                        "name": "Schalter2Breite",
+                                                        "name": "Switch2Width",
                                                         "caption": "Width",
                                                         "digits": 0,
                                                         "minimum": 10,
@@ -649,27 +649,27 @@
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter2NameSwitch",
+                                                        "name": "Switch2NameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter2IconSwitch",
+                                                        "name": "Switch2IconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter2VarIconSwitch",
+                                                        "name": "Switch2VarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter2AssoSwitch",
+                                                        "name": "Switch2AssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Schalter2AltName",
+                                                        "name": "Switch2AltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -682,7 +682,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "Schalter3",
+                                            "name": "Switch3",
                                             "caption": "Switch3:",
                                             "validVariableTypes": [
                                                 0
@@ -696,7 +696,7 @@
                                                 "items": [
                                                     {
                                                         "type": "NumberSpinner",
-                                                        "name": "Schalter3Breite",
+                                                        "name": "Switch3Width",
                                                         "caption": "Width",
                                                         "digits": 0,
                                                         "minimum": 10,
@@ -705,27 +705,27 @@
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter3NameSwitch",
+                                                        "name": "Switch3NameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter3IconSwitch",
+                                                        "name": "Switch3IconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter3VarIconSwitch",
+                                                        "name": "Switch3VarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter3AssoSwitch",
+                                                        "name": "Switch3AssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Schalter3AltName",
+                                                        "name": "Switch3AltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -738,7 +738,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "Schalter4",
+                                            "name": "Switch4",
                                             "caption": "Switch4:",
                                             "validVariableTypes": [
                                                 0
@@ -752,7 +752,7 @@
                                                 "items": [
                                                     {
                                                         "type": "NumberSpinner",
-                                                        "name": "Schalter4Breite",
+                                                        "name": "Switch4Width",
                                                         "caption": "Width",
                                                         "digits": 0,
                                                         "minimum": 10,
@@ -761,27 +761,27 @@
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter4NameSwitch",
+                                                        "name": "Switch4NameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter4IconSwitch",
+                                                        "name": "Switch4IconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter4VarIconSwitch",
+                                                        "name": "Switch4VarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter4AssoSwitch",
+                                                        "name": "Switch4AssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Schalter4AltName",
+                                                        "name": "Switch4AltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -794,7 +794,7 @@
                                     "items": [
                                         {
                                             "type": "SelectVariable",
-                                            "name": "Schalter5",
+                                            "name": "Switch5",
                                             "caption": "Switch5:",
                                             "validVariableTypes": [
                                                 0
@@ -808,7 +808,7 @@
                                                 "items": [
                                                     {
                                                         "type": "NumberSpinner",
-                                                        "name": "Schalter5Breite",
+                                                        "name": "Switch5Width",
                                                         "caption": "Width",
                                                         "digits": 0,
                                                         "minimum": 10,
@@ -817,27 +817,27 @@
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter5NameSwitch",
+                                                        "name": "Switch5NameSwitch",
                                                         "caption": "Display variable name"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter5IconSwitch",
+                                                        "name": "Switch5IconSwitch",
                                                         "caption": "Display icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter5VarIconSwitch",
+                                                        "name": "Switch5VarIconSwitch",
                                                         "caption": "Use variable icon"
                                                     },
                                                     {
                                                         "type": "CheckBox",
-                                                        "name": "Schalter5AssoSwitch",
+                                                        "name": "Switch5AssoSwitch",
                                                         "caption": "Display value"
                                                     },
                                                     {
                                                         "type": "ValidationTextBox",
-                                                        "name": "Schalter5AltName",
+                                                        "name": "Switch5AltName",
                                                         "caption": "Overwrite variable name:"
                                                     }
                                                 ]
@@ -851,7 +851,7 @@
                 },
                 {
                     "type": "NumberSpinner",
-                    "name": "InfoMenueSchriftgroesse",
+                    "name": "MenuFontSize",
                     "caption": "Font size:",
                     "digits": 1,
                     "minimum": 1,
@@ -861,12 +861,12 @@
                 {
                     "type": "SelectColor",
                     "allowTransparent": "false",
-                    "name": "InfoMenueSchriftfarbe",
+                    "name": "MenuFontColor",
                     "caption": "Font color:"
                 },
                 {
                     "type": "NumberSpinner",
-                    "name": "InfoMenueTransparenz",
+                    "name": "MenuTransparency",
                     "caption": "Background transparency:",
                     "digits": 1,
                     "minimum": 0.1,
@@ -876,7 +876,7 @@
                 {
                     "type": "SelectColor",
                     "allowTransparent": "false",
-                    "name": "InfoMenueHintergrundfarbe",
+                    "name": "MenuBackgroundColor",
                     "caption": "Background color:"
                 }
             ]
@@ -910,6 +910,7 @@
                     "onClick": "echo 'https://www.amazon.de/hz/wishlist/ls/2LE6P493HMWT0';",
                     "image": "data:image/jpeg;base64,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"
                 }
+                
             ]
         }
     ]

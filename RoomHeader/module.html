@@ -18,7 +18,7 @@
             position: fixed;
             width: 100%;
             height: 100%;
-            background-color: var(--hintergrundfarbe);
+            background-color: var(--tilebackgroundcolor);
 
         }
 
@@ -59,7 +59,7 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            opacity: var(--transparenz);
+            opacity: var(--imagetransparency);
             background: var(--background-image, none) bottom / cover no-repeat;
             background-repeat: no-repeat;
             background-size: cover;
@@ -140,10 +140,10 @@
             box-sizing: border-box;
         }
 
-        .menueleiste {
+        .menubar {
             backdrop-filter: blur(10px) brightness(1);
             -webkit-backdrop-filter: blur(10px) brightness(1);
-            background-color: var(--infomenuehintergrundfarbe);
+            background-color: var(--menubackgroundcolor);
             width: 100%;
 
             position: relative;
@@ -159,7 +159,7 @@
 
         }
 
-        .menueleistelinks {
+        .menubarlinks {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -171,7 +171,7 @@
             box-sizing: border-box;
         }
 
-        .menueleisterechts {
+        .menubarrechts {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -185,14 +185,14 @@
 
 
 
-        .infolinks,
-        .inforechts,
-        .infolinksasso,
-        .inforechtsasso,
-        .infolinksname,
-        .inforechtsname {
+        .infoleft,
+        .inforight,
+        .infoleftasso,
+        .inforightasso,
+        .infoleftname,
+        .inforightname {
             font-size: var(--infofontsize);
-            color: var(--infoschriftfarbe);
+            color: var(--infofontcolor);
             opacity: 1;
             white-space: nowrap;
         }
@@ -210,8 +210,8 @@
 
             padding-right: 1px;
             padding-left: 1px;
-            font-size: var(--infomenuefontsize);
-            color: var(--infomenueschriftfarbe);
+            font-size: var(--menufontsize);
+            color: var(--menufontcolor);
             white-space: nowrap;
         }
 
@@ -223,49 +223,49 @@
 
             padding-right: 1px;
             padding-left: 1px;
-            font-size: var(--infomenuefontsize);
-            color: var(--infomenueschriftfarbe);
+            font-size: var(--menufontsize);
+            color: var(--menufontcolor);
             white-space: nowrap;
         }
 
-        .schalter1name,
-        .schalter2name,
-        .schalter3name,
-        .schalter4name,
-        .schalter5name {
-            font-size: var(--infomenuefontsize);
+        .switch1name,
+        .switch2name,
+        .switch3name,
+        .switch4name,
+        .switch5name {
+            font-size: var(--menufontsize);
             padding-right: 1px;
             padding-left: 1px;
             white-space: nowrap;
         }
 
 
-        .schalter1name,
-        .schalter2name,
-        .schalter3name,
-        .schalter4name,
-        .schalter5name,
-        .schalter1asso,
-        .schalter2asso,
-        .schalter3asso,
-        .schalter4asso,
-        .schalter5asso {
-            font-size: var(--infomenuefontsize);
+        .switch1name,
+        .switch2name,
+        .switch3name,
+        .switch4name,
+        .switch5name,
+        .switch1asso,
+        .switch2asso,
+        .switch3asso,
+        .switch4asso,
+        .switch5asso {
+            font-size: var(--menufontsize);
             padding-right: 1px;
             padding-left: 1px;
             white-space: nowrap;
         }
 
         .infoicon,
-        .schaltericon {
+        .switchicon {
             color: #ffffff;
-            font-size: calc(var(--infomenuefontsize) * 0.7);
+            font-size: calc(var(--menufontsize) * 0.7);
             opacity: 1;
         }
 
         .infotrenner,
         .infotrennerstart,
-        .infolinkstrenner {
+        .infolefttrenner {
             height: 60%;
             width: 1px;
             background-color: #28CDAB;
@@ -281,9 +281,9 @@
         }
 
 
-        .raumname {
-            font-size: var(--raumnamefontsize);
-            color: var(--raumnameschriftfarbe);
+        .roomname {
+            font-size: var(--roomnamefontsize);
+            color: var(--roomnamefontcolor);
         }
 
         p {
@@ -306,11 +306,11 @@
         }
 
 
-        .schalter1,
-        .schalter2,
-        .schalter3,
-        .schalter4,
-        .schalter5 {
+        .switch1,
+        .switch2,
+        .switch3,
+        .switch4,
+        .switch5 {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -323,36 +323,36 @@
             border-radius: 5px;
             cursor: pointer;
             border-width: 0px;
-            font-size: var(--schalterschriftgroesse);
+            font-size: var(--switchfontsize);
             box-sizing: border-box;
             height: 100%;
             white-space: nowrap;
 
         }
 
-        .schalter1 {
-            background-color: var(--schalter1color);
-            min-width: var(--schalter1breite);
+        .switch1 {
+            background-color: var(--switch1color);
+            min-width: var(--switch1width);
         }
 
-        .schalter2 {
-            background-color: var(--schalter2color);
-            min-width: var(--schalter2breite);
+        .switch2 {
+            background-color: var(--switch2color);
+            min-width: var(--switch2width);
         }
 
-        .schalter3 {
-            background-color: var(--schalter3color);
-            min-width: var(--schalter3breite);
+        .switch3 {
+            background-color: var(--switch3color);
+            min-width: var(--switch3width);
         }
 
-        .schalter4 {
-            background-color: var(--schalter4color);
-            min-width: var(--schalter4breite);
+        .switch4 {
+            background-color: var(--switch4color);
+            min-width: var(--switch4width);
         }
 
-        .schalter5 {
-            background-color: var(--schalter5color);
-            min-width: var(--schalter5breite);
+        .switch5 {
+            background-color: var(--switch5color);
+            min-width: var(--switch5width);
         }
     </style>
 
@@ -739,12 +739,53 @@
 
             const decodedData = JSON.parse(data);
 
+            if (decodedData && decodedData.fullupdate === true) {
+                const hide = (id) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.classList.add('hidden');
+                        if (Object.prototype.hasOwnProperty.call(el, 'textContent')) {
+                            el.textContent = '';
+                        }
+                    }
+                };
+                const hideBtn = (id) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.classList.add('hidden');
+                    }
+                };
+                for (const p of ['infoleft','infoleft2','inforight','inforight2']) {
+                    hide(p + 'name');
+                    hide(p + 'doppelpunkt');
+                    hide(p + 'asso');
+                }
+                for (const p of ['infoleft1icon','infoleft2icon','inforighticon','inforight2icon']) {
+                    hide(p);
+                }
+                for (let i = 1; i <= 5; i++) {
+                    hide('info' + i + 'icon');
+                    hide('info' + i + 'name');
+                    hide('info' + i + 'doppelpunkt');
+                    hide('info' + i + 'asso');
+                    hide('info' + i + 'trenner');
+                }
+                hide('info1trennerstart');
+                for (let i = 1; i <= 5; i++) {
+                    hideBtn('schalter' + i);
+                    hide('schalter' + i + 'icon');
+                    hide('schalter' + i + 'name');
+                    hide('schalter' + i + 'doppelpunkt');
+                    hide('schalter' + i + 'asso');
+                }
+            }
+
             console.log('Decodierte Daten:', decodedData);
 
             for (const parameter in decodedData) {
                 //console.log('Aktueller Parameter:', parameter, 'Wert:', decodedData[parameter]);
 
-	            const element = document.getElementById(parameter.toLowerCase());
+                const element = document.getElementById(parameter.toLowerCase());
                 const parameter2 = String(parameter).toLowerCase();
 
 
@@ -766,21 +807,21 @@
                         const mainDiv = document.querySelector('.maindiv1');
                         mainDiv.style.setProperty('--background-image', 'url(' + decodedData[parameter] + ')');
                         break;
-                    case 'infomenueswitch':
+                    case 'menuswitch':
                         if (decodedData[parameter] == true) {
-                            menueleiste.className = 'menueleiste';
+                            menubar.className = 'menubar';
                         }
                         else {
-                            menueleiste.className = 'hidden';
+                            menubar.className = 'hidden';
                         }
                         break;
-                    case 'infolinksasso':
-                        element.className = 'infolinksasso';
+                    case 'infoleftasso':
+                        element.className = 'infoleftasso';
                         element.textContent = decodedData[parameter];
-                        if (infolinksname != "" && infolinks1icon == "") infolinksdoppelpunkt.className = 'infolinksasso';
-                        if (!document.getElementById("infolinksname").classList.contains("hidden")) infolinksdoppelpunkt.className = 'infolinksasso';
+                        if (infoleftname != "" && infoleft1icon == "") infoleftdoppelpunkt.className = 'infoleftasso';
+                        if (!document.getElementById("infoleftname").classList.contains("hidden")) infoleftdoppelpunkt.className = 'infoleftasso';
                         break;
-                    case 'infolinksicon':
+                    case 'infolefticon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
@@ -788,36 +829,36 @@
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
 
                             // Element sichtbar machen und Klassen hinzufügen
-                            infolinks1icon.classList.remove('hidden');
-                            infolinks1icon.classList.add('iconrechts');
+                            infoleft1icon.classList.remove('hidden');
+                            infoleft1icon.classList.add('iconrechts');
                             iconlinks1.classList.add('fa-light');
                             iconlinks1.classList.add('fa-' + mappedIcon.toLowerCase());
 
 
                         } else {
                             // Element ausblenden, wenn Transparent
-                            infolinks1icon.classList.add('hidden');
+                            infoleft1icon.classList.add('hidden');
                         }
 
                         break;
-                    case 'infolinksname':
-                        element.className = 'infolinksname';
+                    case 'infoleftname':
+                        element.className = 'infoleftname';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'infolinksaltname':
+                    case 'infoleftaltname':
                         if (decodedData[parameter] != '') {
-                            infolinksname.className = 'infolinksname';
-                            infolinksname.textContent = decodedData[parameter];
+                            infoleftname.className = 'infoleftname';
+                            infoleftname.textContent = decodedData[parameter];
                         }
                         break;
 
-                    case 'infolinks2asso':
-                        element.className = 'infolinksasso';
+                    case 'infoleft2asso':
+                        element.className = 'infoleftasso';
                         element.textContent = decodedData[parameter];
-                        if (infolinks2name != "" && infolinks2icon == "") infolinks2doppelpunkt.className = 'infolinksasso';
-                        if (!document.getElementById("infolinks2name").classList.contains("hidden")) infolinks2doppelpunkt.className = 'infolinksasso';
+                        if (infoleft2name != "" && infoleft2icon == "") infoleft2doppelpunkt.className = 'infoleftasso';
+                        if (!document.getElementById("infoleft2name").classList.contains("hidden")) infoleft2doppelpunkt.className = 'infoleftasso';
                         break;
-                    case 'infolinks2icon':
+                    case 'infoleft2icon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
@@ -825,37 +866,37 @@
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
 
                             // Element sichtbar machen und Klassen hinzufügen
-                            infolinks2icon.classList.remove('hidden');
-                            infolinks2icon.classList.add('iconrechts');
+                            infoleft2icon.classList.remove('hidden');
+                            infoleft2icon.classList.add('iconrechts');
                             iconlinks2.classList.add('fa-light');
                             iconlinks2.classList.add('fa-' + mappedIcon.toLowerCase());
 
 
                         } else {
                             // Element ausblenden, wenn Transparent
-                            infolinks2icon.classList.add('hidden');
+                            infoleft2icon.classList.add('hidden');
                         }
 
                         break;
-                    case 'infolinks2name':
-                        element.className = 'infolinksname';
+                    case 'infoleft2name':
+                        element.className = 'infoleftname';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'infolinks2altname':
+                    case 'infoleft2altname':
                         if (decodedData[parameter] != '') {
-                            infolinks2name.className = 'infolinksname';
-                            infolinks2name.textContent = decodedData[parameter];
+                            infoleft2name.className = 'infoleftname';
+                            infoleft2name.textContent = decodedData[parameter];
                         }
                         break;
 
-                    case 'inforechtsasso':
-                        element.className = 'inforechtsasso';
+                    case 'inforightasso':
+                        element.className = 'inforightasso';
                         element.textContent = decodedData[parameter];
-                        if (inforechtsname != "" && inforechtsicon == "") inforechtsdoppelpunkt.className = 'inforechtsasso';
-                        if (!document.getElementById("inforechtsname").classList.contains("hidden")) inforechtsdoppelpunkt.className = 'inforechtsasso';
+                        if (inforightname != "" && inforighticon == "") inforightdoppelpunkt.className = 'inforightasso';
+                        if (!document.getElementById("inforightname").classList.contains("hidden")) inforightdoppelpunkt.className = 'inforightasso';
                         break;
-                    case 'inforechtsicon':
-                            const inforechts1icon = document.getElementById('inforechts1icon'); // Sicherstellen, dass die Variable definiert ist
+                    case 'inforighticon':
+                            const inforight1icon = document.getElementById('inforight1icon'); // Sicherstellen, dass die Variable definiert ist
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
@@ -863,36 +904,36 @@
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
 
                             // Element sichtbar machen und Klassen hinzufügen
-                            inforechtsicon.classList.remove('hidden');
-                            inforechtsicon.classList.add('iconrechts');
+                            inforighticon.classList.remove('hidden');
+                            inforighticon.classList.add('iconrechts');
                             iconrechts1.classList.add('fa-light');
                             iconrechts1.classList.add('fa-' + mappedIcon.toLowerCase());
 
 
                         } else {
                             // Element ausblenden, wenn Transparent
-                            inforechtsicon.classList.add('hidden');
+                            inforighticon.classList.add('hidden');
                         }
 
                         break;
-                    case 'inforechtsname':
-                        element.className = 'inforechtsname';
+                    case 'inforightname':
+                        element.className = 'inforightname';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'inforechtsaltname':
+                    case 'inforightaltname':
                         if (decodedData[parameter] != '') {
-                            inforechtsname.className = 'inforechtsname';
-                            inforechtsname.textContent = decodedData[parameter];
+                            inforightname.className = 'inforightname';
+                            inforightname.textContent = decodedData[parameter];
                         }
                         break;
 
-                    case 'inforechts2asso':
-                        element.className = 'inforechtsasso';
+                    case 'inforight2asso':
+                        element.className = 'inforightasso';
                         element.textContent = decodedData[parameter];
-                        if (inforechts2name != "" && inforechts2icon == "") inforechts2doppelpunkt.className = 'inforechtsasso';
-                        if (!document.getElementById("inforechts2name").classList.contains("hidden")) inforechts2doppelpunkt.className = 'inforechtsasso';
+                        if (inforight2name != "" && inforight2icon == "") inforight2doppelpunkt.className = 'inforightasso';
+                        if (!document.getElementById("inforight2name").classList.contains("hidden")) inforight2doppelpunkt.className = 'inforightasso';
                         break;
-                    case 'inforechts2icon':
+                    case 'inforight2icon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
@@ -900,290 +941,290 @@
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
 
                             // Element sichtbar machen und Klassen hinzufügen
-                            inforechts2icon.classList.remove('hidden');
-                            inforechts2icon.classList.add('iconrechts');
+                            inforight2icon.classList.remove('hidden');
+                            inforight2icon.classList.add('iconrechts');
                             iconrechts2.classList.add('fa-light');
                             iconrechts2.classList.add('fa-' + mappedIcon.toLowerCase());
 
 
                         } else {
                             // Element ausblenden, wenn Transparent
-                            inforechts2icon.classList.add('hidden');
+                            inforight2icon.classList.add('hidden');
                         }
 
 
                         break;
-                    case 'inforechts2name':
-                        element.className = 'inforechtsname';
+                    case 'inforight2name':
+                        element.className = 'inforightname';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'inforechts2altname':
+                    case 'inforight2altname':
                         if (decodedData[parameter] != '') {
-                            inforechts2name.className = 'inforechtsname';
-                            inforechts2name.textContent = decodedData[parameter];
+                            inforight2name.className = 'inforightname';
+                            inforight2name.textContent = decodedData[parameter];
                         }
                         break;
 
 
 
-                    case 'schalter1asso':
-                        element.className = 'schalter1asso';
-                        schalter1.className = 'schalter1';
+                    case 'switch1asso':
+                        element.className = 'switch1asso';
+                        switch1.className = 'switch1';
                         element.textContent = decodedData[parameter];
-                        if (!document.getElementById("schalter1name").classList.contains("hidden")) schalter1doppelpunkt.className = 'schalter1asso';
-                        document.getElementById("schalter1icon").style.marginRight = "8px";
+                        if (!document.getElementById("switch1name").classList.contains("hidden")) switch1doppelpunkt.className = 'switch1asso';
+                        document.getElementById("switch1icon").style.marginRight = "8px";
                         break;
-                    case 'schalter1icon':
+                    case 'switch1icon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
-                            schalter1.className = 'schalter1';
+                            switch1.className = 'switch1';
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
                         }
 
                         break;
-                    case 'schalter1name':
-                        element.className = 'schalter1name';
-                        schalter1.className = 'schalter1';
+                    case 'switch1name':
+                        element.className = 'switch1name';
+                        switch1.className = 'switch1';
                         element.textContent = decodedData[parameter];
-                        document.getElementById("schalter1icon").style.marginRight = "8px";
+                        document.getElementById("switch1icon").style.marginRight = "8px";
                         break;
-                    case 'schalter1altname':
+                    case 'switch1altname':
                         if (decodedData[parameter] != '') {
-                            schalter1name.className = 'schalter1name';
-                            schalter1.className = 'schalter1';
-                            schalter1name.textContent = decodedData[parameter];
-                            document.getElementById("schalter1icon").style.marginRight = "8px";
+                            switch1name.className = 'switch1name';
+                            switch1.className = 'switch1';
+                            switch1name.textContent = decodedData[parameter];
+                            document.getElementById("switch1icon").style.marginRight = "8px";
                         }
                         break;
-                    case 'schalter2asso':
-                        element.className = 'schalter2asso';
-                        schalter2.className = 'schalter2';
+                    case 'switch2asso':
+                        element.className = 'switch2asso';
+                        switch2.className = 'switch2';
                         element.textContent = decodedData[parameter];
-                        if (!document.getElementById("schalter2name").classList.contains("hidden")) schalter2doppelpunkt.className = 'schalter2asso';
-                        document.getElementById("schalter2icon").style.marginRight = "8px";
+                        if (!document.getElementById("switch2name").classList.contains("hidden")) switch2doppelpunkt.className = 'switch2asso';
+                        document.getElementById("switch2icon").style.marginRight = "8px";
                         break;
-                    case 'schalter2icon':
+                    case 'switch2icon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
-                            schalter2.className = 'schalter2';
+                            switch2.className = 'switch2';
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
                         }
 
                         break;
-                    case 'schalter2name':
-                        element.className = 'schalter2name';
+                    case 'switch2name':
+                        element.className = 'switch2name';
                         element.textContent = decodedData[parameter];
-                        schalter2.className = 'schalter2';
-                        document.getElementById("schalter2icon").style.marginRight = "8px";
+                        switch2.className = 'switch2';
+                        document.getElementById("switch2icon").style.marginRight = "8px";
                         break;
-                    case 'schalter2altname':
+                    case 'switch2altname':
                         if (decodedData[parameter] != '') {
-                            schalter2name.className = 'schalter2name';
-                            schalter2.className = 'schalter2';
-                            schalter2name.textContent = decodedData[parameter];
-                            document.getElementById("schalter2icon").style.marginRight = "8px";
+                            switch2name.className = 'switch2name';
+                            switch2.className = 'switch2';
+                            switch2name.textContent = decodedData[parameter];
+                            document.getElementById("switch2icon").style.marginRight = "8px";
                         }
                         break;
-                    case 'schalter3asso':
-                        element.className = 'schalter3asso';
-                        schalter3.className = 'schalter3';
+                    case 'switch3asso':
+                        element.className = 'switch3asso';
+                        switch3.className = 'switch3';
                         element.textContent = decodedData[parameter];
-                        if (!document.getElementById("schalter3name").classList.contains("hidden")) schalter3doppelpunkt.className = 'schalter3asso';
-                        document.getElementById("schalter3icon").style.marginRight = "8px";
+                        if (!document.getElementById("switch3name").classList.contains("hidden")) switch3doppelpunkt.className = 'switch3asso';
+                        document.getElementById("switch3icon").style.marginRight = "8px";
                         break;
-                    case 'schalter3icon':
+                    case 'switch3icon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
-                            schalter3.className = 'schalter3';
+                            switch3.className = 'switch3';
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
                         }
                         break;
-                    case 'schalter3name':
-                        element.className = 'schalter3name';
-                        schalter3.className = 'schalter3';
+                    case 'switch3name':
+                        element.className = 'switch3name';
+                        switch3.className = 'switch3';
                         element.textContent = decodedData[parameter];
-                        document.getElementById("schalter3icon").style.marginRight = "8px";
+                        document.getElementById("switch3icon").style.marginRight = "8px";
                         break;
-                    case 'schalter3altname':
+                    case 'switch3altname':
                         if (decodedData[parameter] != '') {
-                            schalter3name.className = 'schalter3name';
-                            schalter3.className = 'schalter3';
-                            schalter3name.textContent = decodedData[parameter];
-                            document.getElementById("schalter3icon").style.marginRight = "8px";
+                            switch3name.className = 'switch3name';
+                            switch3.className = 'switch3';
+                            switch3name.textContent = decodedData[parameter];
+                            document.getElementById("switch3icon").style.marginRight = "8px";
                         }
                         break;
-                    case 'schalter4asso':
-                        element.className = 'schalter4asso';
-                        schalter4.className = 'schalter4';
+                    case 'switch4asso':
+                        element.className = 'switch4asso';
+                        switch4.className = 'switch4';
                         element.textContent = decodedData[parameter];
-                        if (!document.getElementById("schalter4name").classList.contains("hidden")) schalter4doppelpunkt.className = 'schalter4asso';
-                        document.getElementById("schalter4icon").style.marginRight = "8px";
+                        if (!document.getElementById("switch4name").classList.contains("hidden")) switch4doppelpunkt.className = 'switch4asso';
+                        document.getElementById("switch4icon").style.marginRight = "8px";
                         break;
-                    case 'schalter4icon':
+                    case 'switch4icon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
-                            schalter4.className = 'schalter4';
+                            switch4.className = 'switch4';
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
                         }
 
                         break;
-                    case 'schalter4name':
-                        element.className = 'schalter4name';
+                    case 'switch4name':
+                        element.className = 'switch4name';
                         element.textContent = decodedData[parameter];
-                        schalter4.className = 'schalter4';
-                        document.getElementById("schalter4icon").style.marginRight = "8px";
+                        switch4.className = 'switch4';
+                        document.getElementById("switch4icon").style.marginRight = "8px";
                         break;
-                    case 'schalter4altname':
+                    case 'switch4altname':
                         if (decodedData[parameter] != '') {
-                            schalter4name.className = 'schalter4name';
-                            schalter4.className = 'schalter4';
-                            schalter4name.textContent = decodedData[parameter];
-                            document.getElementById("schalter4icon").style.marginRight = "8px";
+                            switch4name.className = 'switch4name';
+                            switch4.className = 'switch4';
+                            switch4name.textContent = decodedData[parameter];
+                            document.getElementById("switch4icon").style.marginRight = "8px";
                         }
                         break;
-                        case 'schalter5asso':
-                        element.className = 'schalter5asso';
-                        schalter4.className = 'schalter5';
+                        case 'switch5asso':
+                        element.className = 'switch5asso';
+                        switch4.className = 'switch5';
                         element.textContent = decodedData[parameter];
-                        if (!document.getElementById("schalter5name").classList.contains("hidden")) schalter5doppelpunkt.className = 'schalter5asso';
-                        document.getElementById("schalter5icon").style.marginRight = "8px";
+                        if (!document.getElementById("switch5name").classList.contains("hidden")) switch5doppelpunkt.className = 'switch5asso';
+                        document.getElementById("switch5icon").style.marginRight = "8px";
                         break;
-                    case 'schalter5icon':
+                    case 'switch5icon':
 
                         if (decodedData[parameter] !== "Transparent") {
                             // Hole das Icon-Mapping
                             const originalIcon = decodedData[parameter];
                             const mappedIcon = iconMapping[originalIcon] || originalIcon; // Fallback auf das Original, wenn kein Mapping vorhanden
                             // Element sichtbar machen und Klassen hinzufügen
-                            schalter5.className = 'schalter5';
+                            switch5.className = 'switch5';
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
                         }
 
                         break;
-                    case 'schalter5name':
-                        element.className = 'schalter5name';
+                    case 'switch5name':
+                        element.className = 'switch5name';
                         element.textContent = decodedData[parameter];
-                        schalter5.className = 'schalter5';
-                        document.getElementById("schalter5icon").style.marginRight = "8px";
+                        switch5.className = 'switch5';
+                        document.getElementById("switch5icon").style.marginRight = "8px";
                         break;
-                    case 'schalter5altname':
+                    case 'switch5altname':
                         if (decodedData[parameter] != '') {
-                            schalter5name.className = 'schalter5name';
-                            schalter5.className = 'schalter5';
-                            schalter5name.textContent = decodedData[parameter];
-                            document.getElementById("schalter5icon").style.marginRight = "8px";
+                            switch5name.className = 'switch5name';
+                            switch5.className = 'switch5';
+                            switch5name.textContent = decodedData[parameter];
+                            document.getElementById("switch5icon").style.marginRight = "8px";
                         }
                         break;
-                    case 'schalterschriftgroesse':
-                        root.style.setProperty('--schalterschriftgroesse', decodedData[parameter] + 'px');
+                    case 'switchfontsize':
+                        root.style.setProperty('--switchfontsize', decodedData[parameter] + 'px');
                         break;
-                    case 'schalter1breite':
-                        root.style.setProperty('--schalter1breite', decodedData[parameter] + 'px');
+                    case 'switch1width':
+                        root.style.setProperty('--switch1width', decodedData[parameter] + 'px');
                         break;
-                    case 'schalter2breite':
-                        root.style.setProperty('--schalter2breite', decodedData[parameter] + 'px');
+                    case 'switch2width':
+                        root.style.setProperty('--switch2width', decodedData[parameter] + 'px');
                         break;
-                    case 'schalter3breite':
-                        root.style.setProperty('--schalter3breite', decodedData[parameter] + 'px');
+                    case 'switch3width':
+                        root.style.setProperty('--switch3width', decodedData[parameter] + 'px');
                         break;
-                    case 'schalter4breite':
-                        root.style.setProperty('--schalter4breite', decodedData[parameter] + 'px');
+                    case 'switch4width':
+                        root.style.setProperty('--switch4width', decodedData[parameter] + 'px');
                         break;
-                    case 'schalter5breite':
-                        root.style.setProperty('--schalter5breite', decodedData[parameter] + 'px');
+                    case 'switch5width':
+                        root.style.setProperty('--switch5width', decodedData[parameter] + 'px');
                         break;
-                    case 'schalter1color':
-                        root.style.setProperty('--schalter1color', decodedData[parameter]);
+                    case 'switch1color':
+                        root.style.setProperty('--switch1color', decodedData[parameter]);
                         break;
-                    case 'schalter2color':
-                        root.style.setProperty('--schalter2color', decodedData[parameter]);
+                    case 'switch2color':
+                        root.style.setProperty('--switch2color', decodedData[parameter]);
                         break;
-                    case 'schalter3color':
-                        root.style.setProperty('--schalter3color', decodedData[parameter]);
+                    case 'switch3color':
+                        root.style.setProperty('--switch3color', decodedData[parameter]);
                         break;
-                    case 'schalter4color':
-                        root.style.setProperty('--schalter4color', decodedData[parameter]);
+                    case 'switch4color':
+                        root.style.setProperty('--switch4color', decodedData[parameter]);
                         break;
-                    case 'schalter5color':
-                        root.style.setProperty('--schalter5color', decodedData[parameter]);
+                    case 'switch5color':
+                        root.style.setProperty('--switch5color', decodedData[parameter]);
                         break;
                     case 'infofontsize':
                         root.style.setProperty('--infofontsize', decodedData[parameter] + 'px');
                         //console.log('Setze innerHTML für', parameter);
                         break;
-                    case 'hintergrundfarbe':
-                        root.style.setProperty('--hintergrundfarbe', decodedData[parameter]);
+                    case 'tilebackgroundcolor':
+                        root.style.setProperty('--tilebackgroundcolor', decodedData[parameter]);
                         break;
-                    case 'infoschriftfarbe':
-                        root.style.setProperty('--infoschriftfarbe', decodedData[parameter]);
+                    case 'infofontcolor':
+                        root.style.setProperty('--infofontcolor', decodedData[parameter]);
                         break;
-                    case 'infomenuefontsize':
-                        root.style.setProperty('--infomenuefontsize', decodedData[parameter] + 'px');
+                    case 'menufontsize':
+                        root.style.setProperty('--menufontsize', decodedData[parameter] + 'px');
                         break;
-                    case 'infomenueschriftfarbe':
-                        root.style.setProperty('--infomenueschriftfarbe', decodedData[parameter]);
+                    case 'menufontcolor':
+                        root.style.setProperty('--menufontcolor', decodedData[parameter]);
                         break;
-                    case 'infomenuehintergrundfarbe':
-                        root.style.setProperty('--infomenuehintergrundfarbe', decodedData[parameter]);
+                    case 'menubackgroundcolor':
+                        root.style.setProperty('--menubackgroundcolor', decodedData[parameter]);
 
                         break;
-                    case 'transparenz':
-                        root.style.setProperty('--transparenz', decodedData[parameter]);
+                    case 'imagetransparency':
+                        root.style.setProperty('--imagetransparency', decodedData[parameter]);
                         break;
-                    case 'raumname':
+                    case 'roomname':
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'raumnameschriftgroesse':
-                        root.style.setProperty('--raumnamefontsize', decodedData[parameter] + 'px');
+                    case 'roomnamefontsize':
+                        root.style.setProperty('--roomnamefontsize', decodedData[parameter] + 'px');
                         break;
-                    case 'raumnameschriftfarbe':
-                        root.style.setProperty('--raumnameschriftfarbe', decodedData[parameter]);
+                    case 'roomnamefontcolor':
+                        root.style.setProperty('--roomnamefontcolor', decodedData[parameter]);
                         break;
                     case 'info1asso':
                         element.className = 'info1asso';
@@ -1203,7 +1244,7 @@
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
 
                             // Trenner-Klasse nur setzen, wenn mindestens ein assoziiertes Element vorhanden ist
                             if (info2asso !== "" || info3asso !== "" || info4asso !== "" || info5asso !== "") {
@@ -1219,7 +1260,7 @@
                         element.textContent = decodedData[parameter];
                         if (info2asso != "" || info3asso != "" || info4asso != "" || info5asso != "") info1trenner.className = 'infotrenner';
                         break;
-                    case 'info1altname':
+                    case 'info1altlabel':
                         if (decodedData[parameter] != '') {
                             info1name.className = 'info1name';
                             info1name.textContent = decodedData[parameter];
@@ -1242,7 +1283,7 @@
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
 
                             // Trenner-Klasse nur setzen, wenn nötig
                             if (info3asso !== "" || info4asso !== "" || info5asso !== "") {
@@ -1257,7 +1298,7 @@
                         element.className = 'info2name';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'info2altname':
+                    case 'info2altlabel':
                         if (decodedData[parameter] != '') {
                             info2name.className = 'info2name';
                             info2name.textContent = decodedData[parameter];
@@ -1280,7 +1321,7 @@
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
@@ -1290,7 +1331,7 @@
                         element.className = 'info3name';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'info3altname':
+                    case 'info3altlabel':
                         if (decodedData[parameter] != '') {
                             info3name.className = 'info3name';
                             info3name.textContent = decodedData[parameter];
@@ -1313,7 +1354,7 @@
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
@@ -1323,7 +1364,7 @@
                         element.className = 'info4name';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'info4altname':
+                    case 'info4altlabel':
                         if (decodedData[parameter] != '') {
                             info4name.className = 'info4name';
                             info4name.textContent = decodedData[parameter];
@@ -1345,7 +1386,7 @@
                             element.classList.remove('hidden');
                             element.classList.add('fa-light');
                             element.classList.add('fa-' + mappedIcon.toLowerCase());
-                            element.classList.add('schaltericon');
+                            element.classList.add('switchicon');
                         } else {
                             // Element ausblenden
                             element.classList.add('hidden');
@@ -1355,7 +1396,7 @@
                         element.className = 'info5name';
                         element.textContent = decodedData[parameter];
                         break;
-                    case 'info5altname':
+                    case 'info5altlabel':
                         if (decodedData[parameter] != '') {
                             info5name.className = 'info5name';
                             info5name.textContent = decodedData[parameter];
@@ -1377,47 +1418,47 @@
         <div class="maindiv2">
             <div class="left-aligned">
                 <div class="left-aligned2" style="align-items: flex-start">
-                    <div class="hidden" id="infolinks1icon"><i class="fa-light" id="iconlinks1"></i></div>
+                    <div class="hidden" id="infoleft1icon"><i class="fa-light" id="iconlinks1"></i></div>
                     <div class="infotext">
-                        <span class="hidden" id="infolinksname"></span>
-                        <span class="hidden" id="infolinksdoppelpunkt">:&nbsp;</span>
-                        <span class="hidden" id="infolinksasso"></span>
+                        <span class="hidden" id="infoleftname"></span>
+                        <span class="hidden" id="infoleftdoppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="infoleftasso"></span>
                     </div>
                 </div>
 
                 <div class="left-aligned2" style="align-items: center">
-                    <div class="hidden" id="infolinks2icon"><i class="fa-light" id="iconlinks2"></i></div>
+                    <div class="hidden" id="infoleft2icon"><i class="fa-light" id="iconlinks2"></i></div>
                     <div class="infotext">
-                        <span class="hidden" id="infolinks2name"></span>
-                        <span class="hidden" id="infolinks2doppelpunkt">:&nbsp;</span>
-                        <span class="hidden" id="infolinks2asso">test</span>
+                        <span class="hidden" id="infoleft2name"></span>
+                        <span class="hidden" id="infoleft2doppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="infoleft2asso">test</span>
                     </div>
                 </div>
             </div>
             <div class="center-aligned">
-                <p class="raumname" id="raumname">Info</p>
+                <p class="roomname" id="roomname">Info</p>
             </div>
             <div class="right-aligned">
                 <div class="right-aligned2" style="align-items: center">
-                    <div class="hidden" id="inforechtsicon"><i class="fa-light" id="iconrechts1"></i></div>
+                    <div class="hidden" id="inforighticon"><i class="fa-light" id="iconrechts1"></i></div>
                     <div class="infotext">
-                        <span class="hidden" id="inforechtsname"></span>
-                        <span class="hidden" id="inforechtsdoppelpunkt">:&nbsp;</span>
-                        <span class="hidden" id="inforechtsasso"></span>
+                        <span class="hidden" id="inforightname"></span>
+                        <span class="hidden" id="inforightdoppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="inforightasso"></span>
                     </div>
                 </div>
                 <div class="right-aligned2" style="align-items: flex-end">
-                    <div class="hidden" id="inforechts2icon"><i class="fa-light" id="iconrechts2"></i></div>
+                    <div class="hidden" id="inforight2icon"><i class="fa-light" id="iconrechts2"></i></div>
                     <div class="infotext">
-                        <span class="hidden" id="inforechts2name"></span>
-                        <span class="hidden" id="inforechts2doppelpunkt">:&nbsp;</span>
-                        <span class="hidden" id="inforechts2asso">test</span>
+                        <span class="hidden" id="inforight2name"></span>
+                        <span class="hidden" id="inforight2doppelpunkt">:&nbsp;</span>
+                        <span class="hidden" id="inforight2asso">test</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="hidden" id="menueleiste">
-            <div class="menueleistelinks">
+        <div class="hidden" id="menubar">
+            <div class="menubarlinks">
 
                 <div class="hidden" id="info1trennerstart"></div>
                 <i class="hidden" id="info1icon" style="margin-right: 5px;"></i>
@@ -1450,41 +1491,41 @@
                 <p class="hidden" id="info5asso"></p>
             </div>
 
-            <div class="menueleisterechts">
+            <div class="menubarrechts">
 
-                <button id="schalter1" class="hidden" onclick="requestAction('Schalter1', 1);">
-                    <i class="hidden" id="schalter1icon" style="margin-right: 0px;"></i>
-                    <p class="hidden" id="schalter1name"></p>
-                    <p class="hidden" id="schalter1doppelpunkt">:&nbsp;</p>
-                    <p class="hidden" id="schalter1asso"></p>
+                <button id="switch1" class="hidden" onclick="requestAction('Switch1', 1);">
+                    <i class="hidden" id="switch1icon" style="margin-right: 0px;"></i>
+                    <p class="hidden" id="switch1name"></p>
+                    <p class="hidden" id="switch1doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="switch1asso"></p>
                 </button>
 
-                <button id="schalter2" class="hidden" onclick="requestAction('Schalter2', 1);">
-                    <i class="hidden" id="schalter2icon" style="margin-right: 0px;"></i>
-                    <p class="hidden" id="schalter2name"></p>
-                    <p class="hidden" id="schalter2doppelpunkt">:&nbsp;</p>
-                    <p class="hidden" id="schalter2asso"></p>
+                <button id="switch2" class="hidden" onclick="requestAction('Switch2', 1);">
+                    <i class="hidden" id="switch2icon" style="margin-right: 0px;"></i>
+                    <p class="hidden" id="switch2name"></p>
+                    <p class="hidden" id="switch2doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="switch2asso"></p>
                 </button>
 
-                <button id="schalter3" class="hidden" onclick="requestAction('Schalter3', 1);">
-                    <i class="hidden" id="schalter3icon" style="margin-right: 0px;"></i>
-                    <p class="hidden" id="schalter3name"></p>
-                    <p class="hidden" id="schalter3doppelpunkt">:&nbsp;</p>
-                    <p class="hidden" id="schalter3asso"></p>
+                <button id="switch3" class="hidden" onclick="requestAction('Switch3', 1);">
+                    <i class="hidden" id="switch3icon" style="margin-right: 0px;"></i>
+                    <p class="hidden" id="switch3name"></p>
+                    <p class="hidden" id="switch3doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="switch3asso"></p>
                 </button>
 
-                <button id="schalter4" class="hidden" onclick="requestAction('Schalter4', 1);">
-                    <i class="hidden" id="schalter4icon" style="margin-right: 0px;"></i>
-                    <p class="hidden" id="schalter4name"></p>
-                    <p class="hidden" id="schalter4doppelpunkt">:&nbsp;</p>
-                    <p class="hidden" id="schalter4asso"></p>
+                <button id="switch4" class="hidden" onclick="requestAction('Switch4', 1);">
+                    <i class="hidden" id="switch4icon" style="margin-right: 0px;"></i>
+                    <p class="hidden" id="switch4name"></p>
+                    <p class="hidden" id="switch4doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="switch4asso"></p>
                 </button>
 
-                <button id="schalter5" class="hidden" onclick="requestAction('Schalter5', 1);">
-                    <i class="hidden" id="schalter5icon" style="margin-right: 0px;"></i>
-                    <p class="hidden" id="schalter5name"></p>
-                    <p class="hidden" id="schalter5doppelpunkt">:&nbsp;</p>
-                    <p class="hidden" id="schalter5asso"></p>
+                <button id="switch5" class="hidden" onclick="requestAction('Switch5', 1);">
+                    <i class="hidden" id="switch5icon" style="margin-right: 0px;"></i>
+                    <p class="hidden" id="switch5name"></p>
+                    <p class="hidden" id="switch5doppelpunkt">:&nbsp;</p>
+                    <p class="hidden" id="switch5asso"></p>
                 </button>
             </div>
         </div>
