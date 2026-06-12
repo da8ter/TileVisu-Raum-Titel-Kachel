@@ -463,7 +463,7 @@ class RoomTile extends IPSModule
         }
 
         // WebHook für Bildauslieferung registrieren
-        $this->RegisterHook('/hook/roomgridimages/' . $this->InstanceID);
+        $this->registerImageHook('/hook/roomgridimages/' . $this->InstanceID);
 
         // Referenzen säubern
         foreach ($this->GetReferenceList() as $ref) {
@@ -593,7 +593,7 @@ class RoomTile extends IPSModule
         $this->SendDebug('MessageSink', 'Sender=' . $SenderID . ' Message=' . $Message . ' Data=' . @json_encode($Data), 0);
         if ($Message === IPS_KERNELMESSAGE) {
             if (isset($Data[0]) && $Data[0] === KR_READY) {
-                $this->RegisterHook('/hook/roomgridimages/' . $this->InstanceID);
+                $this->registerImageHook('/hook/roomgridimages/' . $this->InstanceID);
             }
             return;
         }

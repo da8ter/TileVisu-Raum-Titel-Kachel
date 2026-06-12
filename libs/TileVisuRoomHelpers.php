@@ -354,7 +354,12 @@ trait TileVisuRoomHelpers
         return $base . '?' . $q;
     }
 
-    private function RegisterHook(string $hookPath): void
+    /**
+     * Eigene Hook-Registrierung inkl. HookToken-Erzeugung. Bewusst NICHT
+     * RegisterHook genannt: IPSModuleStrict bringt nativ ein protected
+     * RegisterHook(string): bool mit, das kein Token-Handling kennt.
+     */
+    private function registerImageHook(string $hookPath): void
     {
         $webhookModuleId = '{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}';
         $ids = @IPS_GetInstanceListByModuleID($webhookModuleId);

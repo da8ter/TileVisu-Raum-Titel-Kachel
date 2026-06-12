@@ -1,21 +1,25 @@
 <?php
- require_once __DIR__ . '/../libs/TileVisuLib.php';
- require_once __DIR__ . '/../libs/TileVisuRoomHelpers.php';
-class MultiRoomTile extends IPSModule
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../libs/TileVisuLib.php';
+require_once __DIR__ . '/../libs/TileVisuRoomHelpers.php';
+
+class MultiRoomTile extends IPSModuleStrict
 {
     use TileVisuRoomHelpers;
 
-    public function GetVisualizationTile()
+    public function GetVisualizationTile(): string
     {
         return $this->renderVisualizationTile(__DIR__);
     }
 
-    protected function ProcessHookData()
+    protected function ProcessHookData(): void
     {
         $this->deliverImageFromHook(false);
     }
 
-    public function Create()
+    public function Create(): void
     {
         parent::Create();
 
@@ -71,7 +75,7 @@ class MultiRoomTile extends IPSModule
         $this->RegisterMessage(0, IPS_KERNELMESSAGE);
     }
 
-    public function GetConfigurationForm()
+    public function GetConfigurationForm(): string
     {
         // Ensure property migration runs before form is displayed
         TileVisuLib::migrateV2($this, $this->InstanceID);
@@ -135,7 +139,7 @@ class MultiRoomTile extends IPSModule
         return json_encode($form);
     }
 
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         parent::ApplyChanges();
         $this->SendDebug('ApplyChanges', 'triggered', 0);
@@ -151,7 +155,7 @@ class MultiRoomTile extends IPSModule
         }
 
         // WebHook für Bildauslieferung registrieren
-        $this->RegisterHook('/hook/roomgridimages/' . $this->InstanceID);
+        $this->registerImageHook('/hook/roomgridimages/' . $this->InstanceID);
 
         // Referenzen säubern
         foreach ($this->GetReferenceList() as $ref) {
@@ -319,12 +323,12 @@ class MultiRoomTile extends IPSModule
         $this->UpdateVisualizationValue(json_encode($this->GetFullUpdateMessage()));
     }
 
-    public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void
     {
         $this->SendDebug('MessageSink', 'Sender=' . $SenderID . ' Message=' . $Message . ' Data=' . @json_encode($Data), 0);
         if ($Message === IPS_KERNELMESSAGE) {
             if (isset($Data[0]) && $Data[0] === KR_READY) {
-                $this->RegisterHook('/hook/roomgridimages/' . $this->InstanceID);
+                $this->registerImageHook('/hook/roomgridimages/' . $this->InstanceID);
             }
             return;
         }
@@ -518,7 +522,7 @@ class MultiRoomTile extends IPSModule
         } catch (Throwable $e) {}
     }
 
-    public function RequestAction($Ident, $Value)
+    public function RequestAction(string $Ident, mixed $Value): void
     {
         // Reorder Buttons aus der Form
         if ($Ident === 'reorder' && is_string($Value)) {
@@ -682,10 +686,13 @@ class MultiRoomTile extends IPSModule
         $rooms = $this->getRooms();
         // Lese optionale Defaults aus den separaten Properties und mappe sie auf die Raum-Keys
         // Robust: Infohöhe kann in bestehenden Instanzen noch nicht existieren
-        $defInfoHeight = @($this->ReadPropertyInteger('Default_InfoHeight'));
+        $defInfoHeight = 0;
+        try { $defInfoHeight = @($this->ReadPropertyInteger('Default_InfoHeight')); } catch (Throwable $e) {}
         if (!is_int($defInfoHeight) || $defInfoHeight <= 0) {
-            // Fallback auf evtl. ältere Schreibweise mit Umlaut
-            $alt = @($this->ReadPropertyInteger('Default_Infohöhe'));
+            // Fallback auf evtl. ältere Schreibweise mit Umlaut; unter Module Strict
+            // kann der Lesezugriff auf die unregistrierte Property werfen
+            $alt = 0;
+            try { $alt = @($this->ReadPropertyInteger('Default_Infohöhe')); } catch (Throwable $e) {}
             if (is_int($alt) && $alt > 0) {
                 $defInfoHeight = $alt;
             } else {
