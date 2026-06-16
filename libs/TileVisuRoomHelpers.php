@@ -350,8 +350,57 @@ trait TileVisuRoomHelpers
         if ($token !== '') {
             $q .= '&token=' . rawurlencode($token);
         }
-        $q .= '&ts=' . time();
+        // Content-adressierte Versionierung statt time(): die URL wechselt nur, wenn sich der
+        // Media-Inhalt ändert. Dadurch kann der Browser das Bild cachen und lädt es nur bei
+        // echter Änderung neu (vorher: bei jedem Render eine neue URL -> immer Neu-Download).
+        $q .= '&v=' . rawurlencode($this->getMediaCacheVersion($mediaId));
         return $base . '?' . $q;
+    }
+
+    /**
+     * Cache-Version eines Media-Objekts: bevorzugt MediaCRC (ändert sich nur bei
+     * Inhaltsänderung), sonst MediaUpdated; für den Placeholder die Datei-mtime.
+     * Dient als Cache-Buster in der Hook-URL und als ETag bei der Auslieferung.
+     */
+    private function getMediaCacheVersion(int $mediaId): string
+    {
+        if ($mediaId > 0 && @IPS_MediaExists($mediaId)) {
+            try {
+                $m = @IPS_GetMedia($mediaId);
+                if (is_array($m)) {
+                    $crc = (string)($m['MediaCRC'] ?? '');
+                    if ($crc !== '') {
+                        return $crc;
+                    }
+                    $upd = (int)($m['MediaUpdated'] ?? 0);
+                    if ($upd > 0) {
+                        return (string)$upd;
+                    }
+                }
+            } catch (Throwable $e) {}
+            return '0';
+        }
+        $placeholder = dirname(__DIR__) . '/RoomHeader/assets/placeholder.png';
+        $mt = @filemtime($placeholder);
+        return $mt !== false ? (string)$mt : 'ph';
+    }
+
+    /**
+     * Setzt cachebare Header (ETag + lange max-age, immutable) für die Bildauslieferung und
+     * beantwortet ein passendes If-None-Match direkt mit 304. Rückgabe true = 304 gesendet,
+     * der Aufrufer muss dann ohne Body zurückkehren.
+     */
+    private function emitImageCacheHeaders(string $version): bool
+    {
+        $etag = '"' . $version . '"';
+        header('ETag: ' . $etag);
+        header('Cache-Control: private, max-age=31536000, immutable');
+        $inm = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim((string)$_SERVER['HTTP_IF_NONE_MATCH']) : '';
+        if ($inm !== '' && $inm === $etag) {
+            http_response_code(304);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -420,9 +469,6 @@ trait TileVisuRoomHelpers
             header('Access-Control-Allow-Origin: *');
             header('Access-Control-Allow-Methods: GET');
         }
-        header('Cache-Control: no-cache, no-store, must-revalidate');
-        header('Pragma: no-cache');
-
         $mid = isset($_GET['mid']) ? (int)$_GET['mid'] : 0;
         if ($mid > 0 && @IPS_MediaExists($mid)) {
             $m = @IPS_GetMedia($mid);
@@ -431,6 +477,12 @@ trait TileVisuRoomHelpers
                 if (is_string($b64) && $b64 !== '') {
                     $bin = @base64_decode($b64, true);
                     if ($bin !== false) {
+                        // Cachebar ausliefern: URL ist über ?v= inhaltsadressiert. Bei passendem
+                        // If-None-Match sofort 304. Header erst hier setzen (nach erfolgreichem
+                        // Dekodieren), damit Fehlerpfade (404/Placeholder) nicht cachebar werden.
+                        if ($this->emitImageCacheHeaders($this->getMediaCacheVersion($mid))) {
+                            return;
+                        }
                         $mime = 'application/octet-stream';
                         if (strlen($bin) >= 12) {
                             $hdr = substr($bin, 0, 12);
@@ -458,6 +510,9 @@ trait TileVisuRoomHelpers
             if (@is_file($placeholder)) {
                 $bin = @file_get_contents($placeholder);
                 if ($bin !== false) {
+                    if ($this->emitImageCacheHeaders($this->getMediaCacheVersion(0))) {
+                        return;
+                    }
                     header('Content-Type: image/png');
                     header('Content-Length: ' . strlen($bin));
                     echo $bin;

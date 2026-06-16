@@ -38,8 +38,9 @@ const MODULES = [
 
 function normalize(string $s): string
 {
-    // Hook-URLs enthalten einen time()-Cachebuster
-    return preg_replace('/&ts=\d+/', '&ts=TS', $s);
+    // Hook-URLs enthalten einen Cache-Buster: früher &ts=<time()>, jetzt &v=<MediaCRC|mtime>.
+    $s = preg_replace('/&ts=\d+/', '&ts=TS', $s);
+    return preg_replace('/&v=[^&"]*/', '&v=V', $s);
 }
 
 function payloadOf(string $tile): string
