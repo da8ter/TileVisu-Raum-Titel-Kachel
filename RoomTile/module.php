@@ -456,6 +456,14 @@ class RoomTile extends IPSModuleStrict
         parent::ApplyChanges();
         $this->SendDebug('ApplyChanges', 'triggered', 0);
 
+        // Heavy Work erst bei bereitem Kernel: registerImageHook ruft IPS_ApplyChanges()
+        // auf der WebHook-Control auf. Vor KR_READY (z.B. beim Symcon-Start) greift das
+        // nicht zuverlässig -> der Bild-Hook bleibt unregistriert und Media-Hintergründe
+        // werden nicht ausgeliefert. MessageSink ruft ApplyChanges() bei KR_READY erneut.
+        if (IPS_GetKernelRunlevel() !== KR_READY) {
+            return;
+        }
+
         // One-time migration: German → English property names (v2)
         if (TileVisuLib::migrateV2($this, $this->InstanceID)) {
             return;
@@ -597,7 +605,9 @@ class RoomTile extends IPSModuleStrict
         $this->SendDebug('MessageSink', 'Sender=' . $SenderID . ' Message=' . $Message . ' Data=' . @json_encode($Data), 0);
         if ($Message === IPS_KERNELMESSAGE) {
             if (isset($Data[0]) && $Data[0] === KR_READY) {
-                $this->registerImageHook('/hook/roomgridimages/' . $this->InstanceID);
+                // Volle Initialisierung wie bei manuellem Neuladen nachholen, damit der
+                // Bild-Hook bei bereitem Kernel zuverlässig registriert wird.
+                $this->ApplyChanges();
             }
             return;
         }
@@ -752,6 +762,9 @@ class RoomTile extends IPSModuleStrict
                             $delta[] = ['idx' => $idx, 'key' => 'menuitem-' . $itemId . 'name', 'value' => $nm];
                         }
                     }
+                    // Status-Hintergrundfarbe (useVarColor) live nachführen — sonst nur Wert/Icon
+                    $ce = $this->buildMenuStatusColorDelta($itemId, $varId);
+                    if ($ce !== null) { $delta[] = $ce; }
                 }
                 continue;
             }
@@ -1694,6 +1707,56 @@ class RoomTile extends IPSModuleStrict
     }
 
     // Handle WebHook requests directly in the module (no script target)
+    /**
+     * Status-Hintergrundfarbe eines Menü-Items als Delta-Eintrag (oder null, wenn useVarColor
+     * deaktiviert ist). Spiegelt die Voll-Render-Logik aus buildDynamicMenu: GetColor, für
+     * Bool zusätzlich ColorTrue/ColorFalse-Override. Key passt zu dataset.statusbgcolor im Frontend.
+     */
+    private function buildMenuStatusColorDelta(string $itemId, int $varId): ?array
+    {
+        if ($varId <= 0 || !@IPS_VariableExists($varId)) {
+            return null;
+        }
+        $useVarColor = false; $colorTrue = -1; $colorFalse = -1; $found = false;
+        try {
+            $menuList = @json_decode($this->ReadPropertyString('MenuItems'), true);
+            if (is_array($menuList)) {
+                foreach ($menuList as $row) {
+                    if (!is_array($row) || (string)($row['Id'] ?? '') !== $itemId) {
+                        continue;
+                    }
+                    $useVarColor = isset($row['UseVarColor']) ? (bool)$row['UseVarColor'] : false;
+                    $colorTrue = isset($row['ColorTrue']) ? (int)$row['ColorTrue'] : -1;
+                    $colorFalse = isset($row['ColorFalse']) ? (int)$row['ColorFalse'] : -1;
+                    $found = true;
+                    break;
+                }
+            }
+        } catch (Throwable $e) {}
+        if (!$found || !$useVarColor) {
+            return null;
+        }
+        $statusBgColor = '';
+        try {
+            $c = (string)$this->GetColor($varId);
+            if ($c !== '') {
+                $statusBgColor = '#' . $c;
+            }
+            $vt = null;
+            try { $vi = @IPS_GetVariable($varId); if (is_array($vi)) { $vt = $vi['VariableType'] ?? null; } } catch (Throwable $e) {}
+            if ($vt === 0 && ($colorTrue !== -1 || $colorFalse !== -1)) {
+                $isOn = false;
+                try { $isOn = (bool)@GetValue($varId); } catch (Throwable $e) {}
+                if ($isOn && $colorTrue !== -1) {
+                    $statusBgColor = '#' . sprintf('%06X', $colorTrue);
+                } elseif (!$isOn && $colorFalse !== -1) {
+                    $statusBgColor = '#' . sprintf('%06X', $colorFalse);
+                }
+            }
+        } catch (Throwable $e) {}
+        return ['idx' => 0, 'key' => 'menuitem-' . $itemId . 'statusbgcolor', 'value' => $statusBgColor];
+    }
+
     private function sendMenuItemDelta(string $itemId, int $varId): void
     {
         if ($varId <= 0 || !@IPS_VariableExists($varId)) return;
@@ -1738,6 +1801,9 @@ class RoomTile extends IPSModuleStrict
                     $delta[] = ['idx' => 0, 'key' => $key . 'name', 'value' => $nm];
                 }
             }
+            // Status-Hintergrundfarbe (useVarColor) live nachführen — sonst nur Wert/Icon
+            $ce = $this->buildMenuStatusColorDelta($itemId, $varId);
+            if ($ce !== null) { $delta[] = $ce; }
             $this->UpdateVisualizationValue(json_encode(['delta' => $delta]));
         } catch (Throwable $e) {
             // ignore

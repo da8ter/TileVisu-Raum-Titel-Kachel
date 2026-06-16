@@ -2005,6 +2005,24 @@
         }
         return;
       }
+      // Dynamic menu item status background color (useVarColor) updates
+      if (key.startsWith('menuitem-') && key.endsWith('statusbgcolor')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'statusbgcolor'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const grp = document.getElementById(baseId + '-inner') || document.getElementById(baseId + '-group');
+        if (grp) {
+          if (value) {
+            grp.dataset.statusbgcolor = value;
+            grp.classList.add('has-status-bg');
+            applyMenuBadgeBg(grp, value);
+          } else {
+            delete grp.dataset.statusbgcolor;
+            grp.classList.remove('has-status-bg');
+            applyMenuBadgeBg(grp, '');
+          }
+        }
+        return;
+      }
       // Dynamic menu item asso (formatted value) updates
       if (key.startsWith('menuitem-') && key.endsWith('asso')) {
         const itemId = key.substring('menuitem-'.length, key.length - 'asso'.length);

@@ -1170,6 +1170,9 @@
       if (!root) return;
 
       root.dataset.useimagecolors = (room.useimagecolors === true || GRID_FLAGS.useImageColorsForButtons) ? '1' : '0';
+      // Menü-Transparenz am Root hinterlegen, damit der statusbgcolor-Delta-Handler die
+      // Badge-Farbe mit korrektem Alpha nachziehen kann (ohne Voll-Render).
+      root.dataset.menutransparency = String((room.menueimagetransparency !== undefined && room.menueimagetransparency !== null) ? room.menueimagetransparency : 30);
 
       // Click-Handling: nur der freie Bereich zwischen Infoleiste (row-top) und Menüleiste
       root.onclick = null;
@@ -1756,6 +1759,30 @@
             const fb = single.dataset ? single.dataset.fallbackcolor : undefined;
             let bg = isOn ? (colOn || fb || '') : (colOff || fb || '');
             if (bg) single.style.backgroundColor = bg;
+          }
+        }
+        return;
+      }
+      // Dynamic menu item status background color (useVarColor) updates
+      if (key.startsWith('menuitem-') && key.endsWith('statusbgcolor')) {
+        const itemId = key.substring('menuitem-'.length, key.length - 'statusbgcolor'.length);
+        const baseId = id + '-menuitem-' + itemId;
+        const grp = document.getElementById(baseId + '-inner') || document.getElementById(baseId + '-group');
+        if (grp) {
+          const root = document.getElementById(id);
+          let mt = 30;
+          if (root && root.dataset && root.dataset.menutransparency !== undefined && root.dataset.menutransparency !== '') {
+            const parsed = Number(root.dataset.menutransparency);
+            if (!isNaN(parsed)) mt = parsed;
+          }
+          if (value) {
+            grp.dataset.statusbgcolor = value;
+            grp.classList.add('has-status-bg');
+            applyMenuBadgeBg(grp, value, mt);
+          } else {
+            delete grp.dataset.statusbgcolor;
+            grp.classList.remove('has-status-bg');
+            applyMenuBadgeBg(grp, '', mt);
           }
         }
         return;
