@@ -303,15 +303,15 @@ class MultiRoomTile extends IPSModuleStrict
             }
             // BackgroundImage ist Media, nicht Variable -> keine Message
 
-            // TargetLinkId reference - TEMPORARILY DISABLED FOR DEBUG
-            // $tLinkId = (int)($room['TargetLinkId'] ?? 0);
-            // if ($tLinkId > 0 && @IPS_LinkExists($tLinkId)) {
-            //     $this->RegisterReference($tLinkId);
-            // }
-            // $tLinkTarget = (int)($room['TargetLinkValue'] ?? 0);
-            // if ($tLinkTarget > 0 && @IPS_ObjectExists($tLinkTarget)) {
-            //     $this->RegisterReference($tLinkTarget);
-            // }
+            // TargetLinkId reference
+            $tLinkId = (int)($room['TargetLinkId'] ?? 0);
+            if ($tLinkId > 0 && @IPS_LinkExists($tLinkId)) {
+                $this->RegisterReference($tLinkId);
+            }
+            $tLinkTarget = (int)($room['TargetLinkValue'] ?? 0);
+            if ($tLinkTarget > 0 && @IPS_ObjectExists($tLinkTarget)) {
+                $this->RegisterReference($tLinkTarget);
+            }
 
             // Dynamic background image URL variable
             $bgUrlVarId = (int)($room['BackgroundImageUrl'] ?? 0);
@@ -552,9 +552,13 @@ class MultiRoomTile extends IPSModuleStrict
                 $linkId = (int)($payload['linkId'] ?? 0);
                 $targetId = (int)($payload['targetId'] ?? 0);
                 $this->SendDebug('setlink', 'linkId=' . $linkId . ' targetId=' . $targetId, 0);
-                if ($linkId > 0 && $targetId > 0 && @IPS_LinkExists($linkId) && @IPS_ObjectExists($targetId)) {
-                    $this->SendDebug('setlink', 'TEST: IPS_SetLinkTargetID NOT called (disabled for test)', 0);
-                    // @IPS_SetLinkTargetID($linkId, $targetId);
+                if (
+                    $this->isConfiguredTargetLinkPair($linkId, $targetId)
+                    && @IPS_LinkExists($linkId)
+                    && @IPS_ObjectExists($targetId)
+                ) {
+                    @IPS_SetLinkTargetID($linkId, $targetId);
+                    $this->SendDebug('setlink', 'IPS_SetLinkTargetID executed', 0);
                 }
             }
             return;
@@ -1471,6 +1475,28 @@ class MultiRoomTile extends IPSModuleStrict
         $json = $this->ReadPropertyString('Rooms');
         $arr = json_decode($json, true);
         return is_array($arr) ? $arr : [];
+    }
+
+    private function isConfiguredTargetLinkPair(int $linkId, int $targetId): bool
+    {
+        if ($linkId <= 0 || $targetId <= 0) {
+            return false;
+        }
+
+        foreach ($this->getRooms() as $room) {
+            if (!is_array($room)) {
+                continue;
+            }
+
+            if (
+                $linkId === (int)($room['TargetLinkId'] ?? 0)
+                && $targetId === (int)($room['TargetLinkValue'] ?? 0)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function parseRoomList(mixed $value): array

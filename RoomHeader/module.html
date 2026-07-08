@@ -735,8 +735,6 @@
         };
 
         async function handleMessage(data) {
-            //console.log('Rohdaten empfangen:', data);
-
             const decodedData = JSON.parse(data);
 
             if (decodedData && decodedData.fullupdate === true) {
@@ -780,16 +778,10 @@
                 }
             }
 
-            console.log('Decodierte Daten:', decodedData);
-
             for (const parameter in decodedData) {
-                //console.log('Aktueller Parameter:', parameter, 'Wert:', decodedData[parameter]);
-
                 const element = document.getElementById(parameter.toLowerCase());
                 const parameter2 = String(parameter).toLowerCase();
 
-
-                //console.log('Aktueller Parameter:', parameter, 'Wert:', decodedData[parameter]);
                 var root = document.documentElement;
                 // Abhängig vom Parameter werden allerdings verschiedene Werte angepasst
                 switch (parameter2) {
@@ -1196,7 +1188,6 @@
                         break;
                     case 'infofontsize':
                         root.style.setProperty('--infofontsize', decodedData[parameter] + 'px');
-                        //console.log('Setze innerHTML für', parameter);
                         break;
                     case 'tilebackgroundcolor':
                         root.style.setProperty('--tilebackgroundcolor', decodedData[parameter]);
@@ -1403,7 +1394,6 @@
                         }
                         break;
                     default:
-                        //console.log('Setze innerHTML für', parameter);
                         // Setze innerHTML nur, wenn das Element gefunden wurde
                         //element.innerHTML = decodedData[parameter];<i id="temp_icon" class="fa-solid fa-house-chimney-user icon"></i>
                         break;

@@ -2375,7 +2375,6 @@
       }
 
       if (decoded.delta) {
-        console.log('[RoomTile] Received Delta:', decoded.delta);
         for (const d of decoded.delta) {
           updateRoomKey(d.idx, d.key, d.value);
         }

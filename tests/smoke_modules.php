@@ -51,6 +51,20 @@ function payloadOf(string $tile): string
     return 'NICHT GEFUNDEN';
 }
 
+function assertSameValue(string $label, mixed $expected, mixed $actual): void
+{
+    if ($expected !== $actual) {
+        throw new RuntimeException(sprintf(
+            '%s failed: expected %s, got %s',
+            $label,
+            json_encode($expected),
+            json_encode($actual)
+        ));
+    }
+
+    echo $label . "=ok\n";
+}
+
 $ifaces = [];
 foreach (MODULES as $name => $module) {
     $id = IPS\ObjectManager::registerObject(1 /* Instance */);
@@ -122,12 +136,13 @@ $rt->SetProperty('MenuItems', json_encode($menuItems));
 $rt->ApplyChanges();
 
 $mr = $ifaces['MultiRoomTile'];
-$mr->SetProperty('Rooms', json_encode([[
+$multiRooms = [[
     'RoomName'  => 'Küche',
     'Switch1'   => $light,
     'InfoItems' => $infoItems,
     'MenuItems' => $menuItems,
-]]));
+]];
+$mr->SetProperty('Rooms', json_encode($multiRooms));
 $mr->ApplyChanges();
 ob_end_clean();
 
@@ -138,3 +153,37 @@ foreach (['RoomTile' => $rt, 'MultiRoomTile' => $mr] as $name => $iface) {
     echo "== $name (konfiguriert) ==\n";
     echo 'payload=' . normalize(payloadOf($tile)) . "\n\n";
 }
+
+// ---------------------------------------------------------------------------
+// Link-Object Aktion: Nur konfigurierte Link/Ziel-Paare dürfen den Link
+// umhängen.
+// ---------------------------------------------------------------------------
+
+$roomLink = IPS_CreateLink();
+$otherRoomLink = IPS_CreateLink();
+ob_start();
+$rt->SetProperty('TargetLinkId', $roomLink);
+$rt->SetProperty('TargetLinkValue', $temp);
+$rt->ApplyChanges();
+$rt->RequestAction('setlink', json_encode(['linkId' => $roomLink, 'targetId' => $temp]));
+$rt->RequestAction('setlink', json_encode(['linkId' => $roomLink, 'targetId' => $dim]));
+$rt->RequestAction('setlink', json_encode(['linkId' => $otherRoomLink, 'targetId' => $temp]));
+ob_end_clean();
+
+$multiLink = IPS_CreateLink();
+$otherMultiLink = IPS_CreateLink();
+$multiRooms[0]['TargetLinkId'] = $multiLink;
+$multiRooms[0]['TargetLinkValue'] = $dim;
+ob_start();
+$mr->SetProperty('Rooms', json_encode($multiRooms));
+$mr->ApplyChanges();
+$mr->RequestAction('setlink', json_encode(['linkId' => $multiLink, 'targetId' => $dim]));
+$mr->RequestAction('setlink', json_encode(['linkId' => $multiLink, 'targetId' => $temp]));
+$mr->RequestAction('setlink', json_encode(['linkId' => $otherMultiLink, 'targetId' => $dim]));
+ob_end_clean();
+
+echo "== Link-Object Aktion ==\n";
+assertSameValue('roomtile_configured_pair', $temp, IPS_GetLink($roomLink)['TargetID']);
+assertSameValue('roomtile_rejects_foreign_link', 0, IPS_GetLink($otherRoomLink)['TargetID']);
+assertSameValue('multiroom_configured_pair', $dim, IPS_GetLink($multiLink)['TargetID']);
+assertSameValue('multiroom_rejects_foreign_link', 0, IPS_GetLink($otherMultiLink)['TargetID']);

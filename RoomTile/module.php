@@ -577,15 +577,15 @@ class RoomTile extends IPSModuleStrict
             // BackgroundImage ist Media, nicht Variable -> keine Message
         }
 
-        // TargetLinkId reference - TEMPORARILY DISABLED FOR DEBUG
-        // $linkId = (int)$this->ReadPropertyInteger('TargetLinkId');
-        // if ($linkId > 0 && @IPS_LinkExists($linkId)) {
-        //     $this->RegisterReference($linkId);
-        // }
-        // $linkTarget = (int)$this->ReadPropertyInteger('TargetLinkValue');
-        // if ($linkTarget > 0 && @IPS_ObjectExists($linkTarget)) {
-        //     $this->RegisterReference($linkTarget);
-        // }
+        // TargetLinkId reference
+        $linkId = (int)$this->ReadPropertyInteger('TargetLinkId');
+        if ($linkId > 0 && @IPS_LinkExists($linkId)) {
+            $this->RegisterReference($linkId);
+        }
+        $linkTarget = (int)$this->ReadPropertyInteger('TargetLinkValue');
+        if ($linkTarget > 0 && @IPS_ObjectExists($linkTarget)) {
+            $this->RegisterReference($linkTarget);
+        }
 
         // Dynamic background image URL variable
         $bgUrlVarId = (int)$this->ReadPropertyInteger('BackgroundImageUrl');
@@ -977,9 +977,13 @@ class RoomTile extends IPSModuleStrict
                 $linkId = (int)($payload['linkId'] ?? 0);
                 $targetId = (int)($payload['targetId'] ?? 0);
                 $this->SendDebug('setlink', 'linkId=' . $linkId . ' targetId=' . $targetId, 0);
-                if ($linkId > 0 && $targetId > 0 && @IPS_LinkExists($linkId) && @IPS_ObjectExists($targetId)) {
-                    $this->SendDebug('setlink', 'TEST: IPS_SetLinkTargetID NOT called (disabled for test)', 0);
-                    // @IPS_SetLinkTargetID($linkId, $targetId);
+                if (
+                    $this->isConfiguredTargetLinkPair($linkId, $targetId)
+                    && @IPS_LinkExists($linkId)
+                    && @IPS_ObjectExists($targetId)
+                ) {
+                    @IPS_SetLinkTargetID($linkId, $targetId);
+                    $this->SendDebug('setlink', 'IPS_SetLinkTargetID executed', 0);
                 }
             }
             return;
@@ -1602,6 +1606,16 @@ class RoomTile extends IPSModuleStrict
             $room['Switch' . $i . 'FullWidth'] = (bool)$this->ReadPropertyBoolean('Switch' . $i . 'FullWidth');
         }
         return [$room];
+    }
+
+    private function isConfiguredTargetLinkPair(int $linkId, int $targetId): bool
+    {
+        if ($linkId <= 0 || $targetId <= 0) {
+            return false;
+        }
+
+        return $linkId === (int)$this->ReadPropertyInteger('TargetLinkId')
+            && $targetId === (int)$this->ReadPropertyInteger('TargetLinkValue');
     }
 
     private function computeBgFilterValue(int $boolId, int $dimId): float

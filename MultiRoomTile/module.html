@@ -1108,7 +1108,6 @@
         }
         const hasLeft1 = isGroupVisible(prefixId, 'infoleft');
         const hasLeft2 = isGroupVisible(prefixId, 'infoleft2');
-        console.log('[SEP] ' + prefixId + ' Left1:', hasLeft1, 'Left2:', hasLeft2, 'Show sep:', (hasLeft1 && hasLeft2));
         const leftGroups = left.querySelectorAll('.group');
         if (leftGroups[0]) leftGroups[0].style.display = hasLeft1 ? '' : 'none';
         if (leftGroups[1]) leftGroups[1].style.display = hasLeft2 ? '' : 'none';
@@ -1134,7 +1133,6 @@
         }
         const hasRight1 = isGroupVisible(prefixId, 'inforight');
         const hasRight2 = isGroupVisible(prefixId, 'inforight2');
-        console.log('[SEP] ' + prefixId + ' Right1:', hasRight1, 'Right2:', hasRight2, 'Show sep:', (hasRight1 && hasRight2));
         const rightGroups = right.querySelectorAll('.group');
         if (rightGroups[0]) rightGroups[0].style.display = hasRight1 ? '' : 'none';
         if (rightGroups[1]) rightGroups[1].style.display = hasRight2 ? '' : 'none';
